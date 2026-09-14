@@ -1,0 +1,247 @@
+{
+  "schema_version": 1,
+  "program_schema_version": 1,
+  "id": "13-acceptance-sql-ack-failure",
+  "title": "Provider acceptance and SQL acknowledgement are distinct claims",
+  "provenance": {
+    "kind": "synthetic",
+    "source": "hand-authored semantic control",
+    "seeded_fault": "sql-ack-failed-after-provider-acceptance"
+  },
+  "context": {
+    "tenant": "tenant-a",
+    "run": "run-13",
+    "event": "evt-13",
+    "recipient": "a@example.test",
+    "attempt": "attempt-13"
+  },
+  "rules": [{"name":"provider_from_smtp_acceptance","claim_id":"claim-provider","premises":[{"relation":"smtp_accepted","bindings":[{"claim_column":"tenant","evidence_column":"tenant","type":"symbol"},{"claim_column":"event","evidence_column":"event","type":"symbol"},{"claim_column":"recipient","evidence_column":"recipient","type":"symbol"},{"claim_column":"run","evidence_column":"run","type":"symbol"}]}]},{"name":"terminal_requires_sql_state","claim_id":"claim-terminal","premises":[{"relation":"smtp_accepted","bindings":[{"claim_column":"tenant","evidence_column":"tenant","type":"symbol"},{"claim_column":"event","evidence_column":"event","type":"symbol"},{"claim_column":"recipient","evidence_column":"recipient","type":"symbol"},{"claim_column":"run","evidence_column":"run","type":"symbol"},{"claim_column":"attempt","evidence_column":"attempt","type":"symbol"}]},{"relation":"sql_terminal_state","bindings":[{"claim_column":"tenant","evidence_column":"tenant","type":"symbol"},{"claim_column":"event","evidence_column":"event","type":"symbol"},{"claim_column":"recipient","evidence_column":"recipient","type":"symbol"},{"claim_column":"run","evidence_column":"run","type":"symbol"}]}]}],
+  "outputs": [{"kind":"observed","claim_id":"claim-provider","evidence_id":"fact-mail-250"},{"kind":"observed","claim_id":"claim-terminal","evidence_id":"fact-mail-250"},{"kind":"observed","claim_id":"claim-terminal","evidence_id":"fact-sql-ack"},{"kind":"forbidden","claim_id":"claim-terminal","evidence_id":"fact-sql-ack"},{"kind":"discrepancy","claim_id":"claim-terminal","fields":{"kind":{"value":"sql-ack-failure"}}},{"kind":"missing_premise","claim_id":"claim-terminal","relation":"sql_terminal_ack","fields":{"reason":{"value":"provider acceptance does not imply application acknowledgement"}}}],
+  "claims": [
+    {
+      "id": "claim-provider",
+      "arguments": {
+        "tenant": "tenant-a",
+        "event": "evt-13",
+        "recipient": "a@example.test",
+        "run": "run-13"
+      },
+      "relation": "provider_accepted",
+      "args": [
+        "tenant-a",
+        "evt-13",
+        "a@example.test",
+        "run-13"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-13",
+        "event": "evt-13",
+        "recipient": "a@example.test",
+        "attempt": "attempt-13"
+      },
+      "provenance": {
+        "source": "reviewed-claim",
+        "depends_on": []
+      },
+      "arg_order": [
+        "tenant",
+        "event",
+        "recipient",
+        "run"
+      ],
+      "quantifier": "exists",
+      "domain": null,
+      "mappings": [{"evidence_relation":"smtp_accepted","effect":"support","context_indices":["tenant","event","recipient","run"],"bindings":[["tenant","tenant"],["event","event"],["recipient","recipient"],["run","run"]]}], "diagnostics": []
+    },
+    {
+      "id": "claim-terminal",
+      "arguments": {
+        "tenant": "tenant-a",
+        "event": "evt-13",
+        "recipient": "a@example.test",
+        "run": "run-13",
+        "attempt": "attempt-13"
+      },
+      "relation": "notification_delivery_terminal",
+      "args": [
+        "tenant-a",
+        "evt-13",
+        "a@example.test",
+        "run-13",
+        "attempt-13"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-13",
+        "event": "evt-13",
+        "recipient": "a@example.test",
+        "attempt": "attempt-13"
+      },
+      "provenance": {
+        "source": "reviewed-claim",
+        "depends_on": []
+      },
+      "arg_order": [
+        "tenant",
+        "event",
+        "recipient",
+        "run",
+        "attempt"
+      ],
+      "quantifier": "exists",
+      "domain": null,
+      "mappings": [{"evidence_relation":"sql_ack_failed","effect":"observation","context_indices":["tenant","event","recipient","run"],"bindings":[["tenant","tenant"],["event","event"],["recipient","recipient"],["run","run"]]}], "diagnostics": [{"trigger_relation":"sql_ack_failed","effect":"observation","operational_status":"complete","context_indices":["tenant","event","recipient","run"],"required":true},{"trigger_relation":"sql_terminal_state","effect":"observation","operational_status":"complete","context_indices":["tenant","event","recipient","run"],"when_missing":true,"required":true},{"trigger_relation":"provider_acceptance_implies_terminal__rejected","effect":"forbidden","operational_status":"invalid-input","context_indices":[],"required":true}]
+    }
+  ],
+  "facts": [
+    {
+      "id": "fact-mail-250",
+      "arguments": {
+        "tenant": "tenant-a",
+        "event": "evt-13",
+        "recipient": "a@example.test",
+        "run": "run-13",
+        "attempt": "attempt-13"
+      },
+      "source": "smtp",
+      "relation": "smtp_accepted",
+      "args": [
+        "tenant-a",
+        "evt-13",
+        "a@example.test",
+        "run-13",
+        "attempt-13"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-13",
+        "event": "evt-13",
+        "recipient": "a@example.test",
+        "attempt": "attempt-13"
+      },
+      "provenance": {
+        "source": "smtp",
+        "depends_on": []
+      },
+      "arg_order": [
+        "tenant",
+        "event",
+        "recipient",
+        "run",
+        "attempt"
+      ]
+    },
+    {
+      "id": "fact-sql-ack",
+      "arguments": {
+        "tenant": "tenant-a",
+        "event": "evt-13",
+        "recipient": "a@example.test",
+        "run": "run-13"
+      },
+      "source": "sql",
+      "relation": "sql_ack_failed",
+      "args": [
+        "tenant-a",
+        "evt-13",
+        "a@example.test",
+        "run-13"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-13",
+        "event": "evt-13",
+        "recipient": "a@example.test",
+        "attempt": "attempt-13"
+      },
+      "provenance": {
+        "source": "sql",
+        "depends_on": []
+      },
+      "arg_order": [
+        "tenant",
+        "event",
+        "recipient",
+        "run"
+      ]
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "assumption-provider-implies-terminal",
+      "arguments": {
+        "provider": "smtp"
+      },
+      "relation": "provider_acceptance_implies_terminal__rejected",
+      "args": [
+        "smtp"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-13",
+        "event": "evt-13",
+        "recipient": "a@example.test",
+        "attempt": "attempt-13"
+      },
+      "provenance": {
+        "source": "reviewed-assumption",
+        "depends_on": []
+      },
+      "subject_relation": "provider_acceptance_implies_terminal",
+      "arg_order": [
+        "provider"
+      ]
+    }
+  ],
+  "expected": {
+    "claims": {
+      "claim-provider": {
+        "semantic_verdict": "supported",
+        "operational_status": "complete",
+        "support_leaves": [
+          "fact-mail-250"
+        ],
+        "refutation_leaves": [],
+        "observed_leaves": [
+          "fact-mail-250"
+        ],
+        "forbidden_leaves": [],
+        "discrepancies": [],
+        "missing_premises": []
+      },
+      "claim-terminal": {
+        "semantic_verdict": "unresolved",
+        "operational_status": "complete",
+        "support_leaves": [],
+        "refutation_leaves": [],
+        "observed_leaves": [
+          "fact-mail-250",
+          "fact-sql-ack"
+        ],
+        "forbidden_leaves": [
+          "fact-sql-ack"
+        ],
+        "discrepancies": [
+          {
+            "kind": "sql-ack-failure"
+          }
+        ],
+        "missing_premises": [
+          {
+            "reason": "provider acceptance does not imply application acknowledgement",
+            "relation": "sql_terminal_ack"
+          }
+        ]
+      }
+    }
+  },
+  "schema_ref": "schema-v1",
+  "context_indices": [
+    "tenant",
+    "run",
+    "event",
+    "recipient",
+    "attempt"
+  ]
+}

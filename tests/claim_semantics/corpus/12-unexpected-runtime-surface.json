@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "program_schema_version": 1,
+  "id": "12-unexpected-runtime-surface",
+  "title": "Unknown runtime surface blocks whole-model completeness",
+  "provenance": {
+    "kind": "synthetic",
+    "source": "hand-authored semantic control",
+    "seeded_fault": "unmodeled-surface"
+  },
+  "context": {
+    "tenant": "tenant-a",
+    "run": "run-12",
+    "event": "evt-12",
+    "attempt": "attempt-12"
+  },
+  "rules": [],
+  "outputs": [{"kind":"observed","claim_id":"claim-model-complete","evidence_id":"fact-known-surface"},{"kind":"observed","claim_id":"claim-model-complete","evidence_id":"fact-unknown-surface"},{"kind":"discrepancy","claim_id":"claim-model-complete","fields":{"kind":{"value":"unknown-runtime-surface"},"surface":{"value":"surface-unmodeled"}}},{"kind":"missing_premise","claim_id":"claim-model-complete","relation":"model_complete","fields":{"reason":{"value":"runtime surface is outside the closed model"}}}],
+  "claims": [
+    {
+      "id": "claim-model-complete",
+      "arguments": {
+        "tenant": "tenant-a",
+        "run": "run-12"
+      },
+      "relation": "model_complete",
+      "args": [
+        "tenant-a",
+        "run-12"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-12",
+        "event": "evt-12",
+        "attempt": "attempt-12"
+      },
+      "provenance": {
+        "source": "reviewed-claim",
+        "depends_on": []
+      },
+      "arg_order": [
+        "tenant",
+        "run"
+      ],
+      "quantifier": "exists",
+      "domain": null,
+      "mappings": [{"evidence_relation":"runtime_surface_observed","effect":"observation","context_indices":["tenant","run"],"bindings":[["tenant","tenant"],["run","run"]]}], "diagnostics": [{"trigger_relation":"runtime_surface_observed","effect":"forbidden","operational_status":"out-of-scope","context_indices":["tenant","run"],"predicate":{"column":"surface","operator":"not-in","value":["route-known"]},"required":true}]
+    }
+  ],
+  "facts": [
+    {
+      "id": "fact-known-surface",
+      "arguments": {
+        "tenant": "tenant-a",
+        "surface": "route-known",
+        "run": "run-12"
+      },
+      "source": "runtime",
+      "relation": "runtime_surface_observed",
+      "args": [
+        "tenant-a",
+        "route-known",
+        "run-12"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-12",
+        "event": "evt-12",
+        "attempt": "attempt-12"
+      },
+      "provenance": {
+        "source": "runtime",
+        "depends_on": []
+      },
+      "arg_order": [
+        "tenant",
+        "surface",
+        "run"
+      ]
+    },
+    {
+      "id": "fact-unknown-surface",
+      "arguments": {
+        "tenant": "tenant-a",
+        "surface": "surface-unmodeled",
+        "run": "run-12"
+      },
+      "source": "runtime",
+      "relation": "runtime_surface_observed",
+      "args": [
+        "tenant-a",
+        "surface-unmodeled",
+        "run-12"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-12",
+        "event": "evt-12",
+        "attempt": "attempt-12"
+      },
+      "provenance": {
+        "source": "runtime",
+        "depends_on": []
+      },
+      "arg_order": [
+        "tenant",
+        "surface",
+        "run"
+      ]
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "assumption-closed-surface-inventory",
+      "arguments": {
+        "tenant": "tenant-a",
+        "run": "run-12"
+      },
+      "relation": "surface_inventory_closed__rejected",
+      "args": [
+        "tenant-a",
+        "run-12"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-12",
+        "event": "evt-12",
+        "attempt": "attempt-12"
+      },
+      "provenance": {
+        "source": "reviewed-assumption",
+        "depends_on": []
+      },
+      "subject_relation": "surface_inventory_closed",
+      "arg_order": [
+        "tenant",
+        "run"
+      ]
+    }
+  ],
+  "expected": {
+    "claims": {
+      "claim-model-complete": {
+        "semantic_verdict": "unresolved",
+        "operational_status": "out-of-scope",
+        "support_leaves": [],
+        "refutation_leaves": [],
+        "observed_leaves": [
+          "fact-known-surface",
+          "fact-unknown-surface"
+        ],
+        "forbidden_leaves": [],
+        "discrepancies": [
+          {
+            "kind": "unknown-runtime-surface",
+            "surface": "surface-unmodeled"
+          }
+        ],
+        "missing_premises": [
+          {
+            "reason": "runtime surface is outside the closed model",
+            "relation": "model_complete"
+          }
+        ]
+      }
+    }
+  },
+  "schema_ref": "schema-v1",
+  "context_indices": [
+    "tenant",
+    "run",
+    "event",
+    "attempt"
+  ]
+}
