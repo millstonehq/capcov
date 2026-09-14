@@ -1,0 +1,23 @@
+[[exempt]]
+entity = "boundary:python:called-function-branches"
+cell = "unresolved"
+date = "2026-09-14"
+reason = "This shallow route experiment claims HTTP surface behavior, not branches in functions called by handlers."
+
+[[exempt]]
+entity = "boundary:python:mounted-route-confirmation"
+cell = "unresolved"
+date = "2026-09-14"
+reason = "The runner DECLARES the two surfaces it drives; the fixture server does not enumerate its mux, so this is not an observed census and the core reconciliation path does not discharge this static boundary."
+
+[[exempt]]
+entity = "boundary:python:roles-and-configurations"
+cell = "unresolved"
+date = "2026-09-14"
+reason = "The example has one unprivileged actor and no role or feature configuration surface."
+
+[[exempt]]
+entity = "boundary:python:external-effects"
+cell = "unresolved"
+date = "2026-09-14"
+reason = "The bounded outcome is HTTP acceptance followed by an independently observed read from the same Go process."

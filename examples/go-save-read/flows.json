@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "scope": "go-save-read",
+  "facts": ["note-saved"],
+  "initial": [],
+  "transitions": [
+    {
+      "id": "save-note",
+      "requires": [],
+      "adds": ["note-saved"],
+      "actor": "operator",
+      "outcome": "a submitted note is accepted",
+      "evidence": [{"file": "main.go", "line": 21}],
+      "obligations": ["http:POST /notes/create"],
+      "mutations": [{"kind": "idempotency", "note": "acknowledge the write without retaining it"}],
+      "bindings": {"browser": {"commands": [
+        {"op": "assert", "id": "created", "mode": "http", "method": "POST", "path": "/notes/create", "form": {"title": "capcov-real-flow"}, "expect_status": 201, "text": "created"}
+      ]}}
+    },
+    {
+      "id": "read-saved-note",
+      "requires": ["note-saved"],
+      "actor": "operator",
+      "outcome": "the accepted note is visible on a later read",
+      "evidence": [{"file": "main.go", "line": 29}],
+      "obligations": ["http:GET /notes"],
+      "bindings": {"browser": {"commands": [
+        {"op": "assert", "id": "persisted", "mode": "http", "method": "GET", "path": "/notes", "expect_status": 200, "text": "capcov-real-flow"}
+      ]}}
+    }
+  ]
+}
