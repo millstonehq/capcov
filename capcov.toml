@@ -1,0 +1,20 @@
+[capcov]
+adapter = "python-fastapi-sqlalchemy"
+source = "src"
+
+# Reviewed CLI entry points for this bounded self-qualification. This is not an
+# inventory of every capcov capability or a whole-package coverage percentage.
+[[entry_points]]
+id = "cli:capcov outcomes check"
+symbol = "capcov.outcomes:main"
+kind = "cli"
+
+[[entry_points]]
+id = "cli:capcov observe browser"
+symbol = "capcov.probes.browser_probe:main"
+kind = "cli"
+
+[[entry_points]]
+id = "cli:capcov gate"
+symbol = "capcov.cli:cmd_gate"
+kind = "cli"
