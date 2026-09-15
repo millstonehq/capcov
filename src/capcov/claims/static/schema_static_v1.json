@@ -1,0 +1,1643 @@
+{
+  "description": "Frozen primitive static relation declarations for SCIP Datalog v1; merge with derived declarations before bundle validation.",
+  "relations": [
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "indexer",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "indexer_version",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "language",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "project_root",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "digest_kind",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": true,
+      "modality": "observation",
+      "name": "scip_index",
+      "nonempty": true,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "tree_digest",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "file_count",
+          "type": "unsigned"
+        },
+        {
+          "context": false,
+          "name": "pattern",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "scip_index_tree",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "commit",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "scip_index_commit",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "scope_kind",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "scope_value",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "static_scope",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "language",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "static_language_covered",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "path",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "language",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "occurrence_count",
+          "type": "unsigned"
+        },
+        {
+          "context": false,
+          "name": "symbol_count",
+          "type": "unsigned"
+        },
+        {
+          "context": false,
+          "name": "enclosing_synthesized",
+          "type": "boolean"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "scip_document",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "path",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "language",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "static_source_file",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "symbol",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "kind",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "category",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "display_name",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "scip_symbol",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "symbol",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "node",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "scip_symbol_node",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "symbol",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "reason",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "scip_symbol_unrooted",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "symbol",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "related",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "kind",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "scip_relationship",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "path",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "line",
+          "type": "unsigned"
+        },
+        {
+          "context": false,
+          "name": "symbol",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "scip_definition_site",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "path",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "line",
+          "type": "unsigned"
+        },
+        {
+          "context": false,
+          "name": "symbol",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "scip_generated_site",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "path",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "line",
+          "type": "unsigned"
+        },
+        {
+          "context": false,
+          "name": "symbol",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "scip_test_site",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "path",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "line",
+          "type": "unsigned"
+        },
+        {
+          "context": false,
+          "name": "symbol",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "scip_import_site",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "path",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "line",
+          "type": "unsigned"
+        },
+        {
+          "context": false,
+          "name": "symbol",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "scip_write_site",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "path",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "line",
+          "type": "unsigned"
+        },
+        {
+          "context": false,
+          "name": "symbol",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "scip_read_site",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "symbol",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "path",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "start_line",
+          "type": "unsigned"
+        },
+        {
+          "context": false,
+          "name": "end_line",
+          "type": "unsigned"
+        },
+        {
+          "context": false,
+          "name": "synthesized",
+          "type": "boolean"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "scip_enclosing",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "path",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "line",
+          "type": "unsigned"
+        },
+        {
+          "context": false,
+          "name": "symbol",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "static_site_owner",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "caller",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "callee",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "path",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "line",
+          "type": "unsigned"
+        },
+        {
+          "context": false,
+          "name": "occurrence",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "caller_synthesized",
+          "type": "boolean"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "scip_may_reference",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "callee",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "path",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "line",
+          "type": "unsigned"
+        },
+        {
+          "context": false,
+          "name": "occurrence",
+          "type": "digest"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "scip_module_scope_reference",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "referrer",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "type_symbol",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "path",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "line",
+          "type": "unsigned"
+        },
+        {
+          "context": false,
+          "name": "occurrence",
+          "type": "digest"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "scip_type_reference",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "surface",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "path",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "line",
+          "type": "unsigned"
+        },
+        {
+          "context": false,
+          "name": "handler_name",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "route_site",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "surface",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "path",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "line",
+          "type": "unsigned"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "route_handler_location",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "surface",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "reason",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "route_site_excluded",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "path",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "line",
+          "type": "unsigned"
+        },
+        {
+          "context": false,
+          "name": "verb",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "entity",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "static_op_site",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "entity",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "path",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "line",
+          "type": "unsigned"
+        },
+        {
+          "context": false,
+          "name": "table",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "static_entity",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "path",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "line",
+          "type": "unsigned"
+        },
+        {
+          "context": false,
+          "name": "kind",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "reason",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "static_blind_spot",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "path",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "line",
+          "type": "unsigned"
+        },
+        {
+          "context": false,
+          "name": "callee_text",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "kind",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "scip_unresolved_site",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "kind",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "node",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "path",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "line",
+          "type": "unsigned"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "static_unresolved",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "symbol",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "change_kind",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "changed_symbol",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "symbol",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "defined_in",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "static_scope_leak",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "symbol",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "assumption",
+      "name": "authz_symbol__accepted",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": false,
+          "name": "tree_digest",
+          "type": "digest"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [],
+      "finite": false,
+      "modality": "observation",
+      "name": "source_tree_observed",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "runtime",
+      "columns": [
+        {
+          "context": true,
+          "name": "run",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "commit",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "run"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "run_built_from_commit",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": "scip_document_path",
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "completeness",
+      "name": "scip_documents_closed",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "path",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": "scip_definition_site_at",
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "completeness",
+      "name": "scip_definitions_closed",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "path",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": "scip_may_reference",
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "completeness",
+      "name": "scip_references_closed",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": "static_route_declared_surface",
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "completeness",
+      "name": "static_route_inventory_closed",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": "static_scope",
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "completeness",
+      "name": "static_scope_closed",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": "static_reaches",
+      "context_indices": [
+        "index"
+      ],
+      "finite": false,
+      "modality": "completeness",
+      "name": "static_reachability_closed",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "static",
+      "columns": [
+        {
+          "context": false,
+          "name": "index_a",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "index_b",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "basis",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [
+        "index_a",
+        "index_b"
+      ],
+      "compatibility_targets": [
+        "scip_index",
+        "scip_index_tree",
+        "scip_index_commit",
+        "static_scope",
+        "static_language_covered",
+        "scip_document",
+        "static_source_file",
+        "scip_symbol",
+        "scip_symbol_node",
+        "scip_symbol_unrooted",
+        "scip_relationship",
+        "scip_definition_site",
+        "scip_generated_site",
+        "scip_test_site",
+        "scip_import_site",
+        "scip_write_site",
+        "scip_read_site",
+        "scip_enclosing",
+        "static_site_owner",
+        "scip_may_reference",
+        "scip_module_scope_reference",
+        "scip_type_reference",
+        "route_site",
+        "route_handler_location",
+        "route_site_excluded",
+        "static_op_site",
+        "static_entity",
+        "static_blind_spot",
+        "scip_unresolved_site",
+        "static_unresolved",
+        "changed_symbol",
+        "static_scope_leak",
+        "authz_symbol__accepted",
+        "source_tree_observed",
+        "scip_documents_closed",
+        "scip_definitions_closed",
+        "scip_references_closed",
+        "static_route_inventory_closed",
+        "static_scope_closed",
+        "static_reachability_closed"
+      ],
+      "completes": null,
+      "context_indices": [],
+      "finite": false,
+      "modality": "compatibility",
+      "name": "scip_index_comparable",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    },
+    {
+      "binding": "runtime",
+      "columns": [
+        {
+          "context": true,
+          "name": "index",
+          "type": "digest"
+        },
+        {
+          "context": true,
+          "name": "run",
+          "type": "symbol"
+        }
+      ],
+      "compatibility_context_indices": [
+        "index",
+        "run"
+      ],
+      "compatibility_targets": [
+        "authz_symbol__accepted",
+        "changed_symbol",
+        "route_handler_location",
+        "route_site",
+        "route_site_excluded",
+        "run_built_from_commit",
+        "runtime_function_entered",
+        "runtime_route_completed",
+        "runtime_route_observed",
+        "runtime_route_reaches_sql_on_index",
+        "runtime_sql_executed",
+        "runtime_tx_committed",
+        "scip_definition_site",
+        "scip_definitions_closed",
+        "scip_document",
+        "scip_documents_closed",
+        "scip_enclosing",
+        "scip_generated_site",
+        "scip_import_site",
+        "scip_index",
+        "scip_index_commit",
+        "scip_index_tree",
+        "scip_may_reference",
+        "scip_module_scope_reference",
+        "scip_read_site",
+        "scip_references_closed",
+        "scip_relationship",
+        "scip_symbol",
+        "scip_symbol_node",
+        "scip_symbol_unrooted",
+        "scip_test_site",
+        "scip_type_reference",
+        "scip_unresolved_site",
+        "scip_write_site",
+        "source_tree_observed",
+        "static_blind_spot",
+        "static_entity",
+        "static_language_covered",
+        "static_op_site",
+        "static_reachability_closed",
+        "static_route_declared_surface",
+        "static_route_inventory_closed",
+        "static_scope",
+        "static_scope_closed",
+        "static_scope_leak",
+        "static_site_owner",
+        "static_source_file",
+        "static_unresolved"
+      ],
+      "completes": null,
+      "context_indices": [
+        "index",
+        "run"
+      ],
+      "finite": false,
+      "modality": "compatibility",
+      "name": "index_describes_run",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": []
+    }
+  ],
+  "schema_version": 1
+}
