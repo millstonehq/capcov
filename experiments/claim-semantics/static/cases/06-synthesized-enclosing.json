@@ -1,0 +1,903 @@
+{
+  "schema_version": 1,
+  "id": "06-synthesized-enclosing",
+  "title": "Synthesized enclosing ranges (scip-php shape): caller attribution is synthesized",
+  "rule_pack": "rules-static-v1",
+  "provenance": {
+    "kind": "synthetic",
+    "source": "hand-authored adversarial static case shaped after a scip-php index",
+    "seeded_fault": null
+  },
+  "context": {
+    "index": "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3"
+  },
+  "review_notes": [
+    "scip-php emits no enclosing ranges; the exporter synthesized them (scip_document.enclosing_synthesized = true, scip_enclosing.synthesized = true) and every edge has caller_synthesized = true.",
+    "The positive capability is supported (the path exists) with the discrepancy caller-attribution-synthesized; it is an attribution risk, not a refutation.",
+    "Every completeness witness is withheld for synthesized documents, so the authorization gap and the runtime gap both stay unresolved."
+  ],
+  "facts": [
+    {
+      "id": "scip:50d48462d04f:scip_index:77e3c298243f",
+      "kind": "fact",
+      "relation": "scip_index",
+      "arg_order": [
+        "index",
+        "indexer",
+        "indexer_version",
+        "language",
+        "project_root",
+        "digest_kind"
+      ],
+      "args": [
+        "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3",
+        "scip-php",
+        "0.5.0",
+        "php",
+        "tests/fixtures/php_app",
+        "json"
+      ],
+      "context": {
+        "index": "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3"
+      },
+      "source": "capcov.claims.static.scip_facts v1",
+      "provenance": {
+        "depends_on": []
+      }
+    },
+    {
+      "id": "scip:50d48462d04f:scip_index_tree:b1bcdc9fbd75",
+      "kind": "fact",
+      "relation": "scip_index_tree",
+      "arg_order": [
+        "index",
+        "tree_digest",
+        "file_count",
+        "pattern"
+      ],
+      "args": [
+        "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3",
+        "1fb8884082e393b99887a50ee63d3cc004dcf8451c66f41ca69ea76aa1f60cb4",
+        3,
+        "**/*.php"
+      ],
+      "context": {
+        "index": "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3"
+      },
+      "source": "capcov.claims.static.scip_facts v1",
+      "provenance": {
+        "depends_on": [
+          "scip:50d48462d04f:scip_index:77e3c298243f"
+        ]
+      }
+    },
+    {
+      "id": "static:claim-time:source_tree_observed:e5832404c78f",
+      "kind": "fact",
+      "relation": "source_tree_observed",
+      "arg_order": [
+        "tree_digest"
+      ],
+      "args": [
+        "1fb8884082e393b99887a50ee63d3cc004dcf8451c66f41ca69ea76aa1f60cb4"
+      ],
+      "context": {},
+      "source": "reviewer claim-time observation",
+      "provenance": {
+        "depends_on": []
+      }
+    },
+    {
+      "id": "static:50d48462d04f:static_language_covered:8d6a59ae83f0",
+      "kind": "fact",
+      "relation": "static_language_covered",
+      "arg_order": [
+        "index",
+        "language"
+      ],
+      "args": [
+        "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3",
+        "php"
+      ],
+      "context": {
+        "index": "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3"
+      },
+      "source": "capcov.claims.static.scip_facts v1",
+      "provenance": {
+        "depends_on": [
+          "scip:50d48462d04f:scip_index:77e3c298243f"
+        ]
+      }
+    },
+    {
+      "id": "scip:50d48462d04f:scip_document:12509bf77065",
+      "kind": "fact",
+      "relation": "scip_document",
+      "arg_order": [
+        "index",
+        "path",
+        "language",
+        "occurrence_count",
+        "symbol_count",
+        "enclosing_synthesized"
+      ],
+      "args": [
+        "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3",
+        "app/Http/JobsController.php",
+        "php",
+        6,
+        2,
+        true
+      ],
+      "context": {
+        "index": "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3"
+      },
+      "source": "scip-php 0.5.0",
+      "provenance": {
+        "depends_on": [
+          "scip:50d48462d04f:scip_index:77e3c298243f"
+        ]
+      }
+    },
+    {
+      "id": "scip:50d48462d04f:scip_document:749de4702db9",
+      "kind": "fact",
+      "relation": "scip_document",
+      "arg_order": [
+        "index",
+        "path",
+        "language",
+        "occurrence_count",
+        "symbol_count",
+        "enclosing_synthesized"
+      ],
+      "args": [
+        "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3",
+        "app/Services/JobService.php",
+        "php",
+        6,
+        2,
+        true
+      ],
+      "context": {
+        "index": "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3"
+      },
+      "source": "scip-php 0.5.0",
+      "provenance": {
+        "depends_on": [
+          "scip:50d48462d04f:scip_index:77e3c298243f"
+        ]
+      }
+    },
+    {
+      "id": "scip:50d48462d04f:scip_document:3836bf987acc",
+      "kind": "fact",
+      "relation": "scip_document",
+      "arg_order": [
+        "index",
+        "path",
+        "language",
+        "occurrence_count",
+        "symbol_count",
+        "enclosing_synthesized"
+      ],
+      "args": [
+        "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3",
+        "app/Repos/JobRepo.php",
+        "php",
+        6,
+        2,
+        true
+      ],
+      "context": {
+        "index": "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3"
+      },
+      "source": "scip-php 0.5.0",
+      "provenance": {
+        "depends_on": [
+          "scip:50d48462d04f:scip_index:77e3c298243f"
+        ]
+      }
+    },
+    {
+      "id": "scip:50d48462d04f:scip_symbol:560a320406c1",
+      "kind": "fact",
+      "relation": "scip_symbol",
+      "arg_order": [
+        "index",
+        "symbol",
+        "kind",
+        "category",
+        "display_name"
+      ],
+      "args": [
+        "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3",
+        "scip-php composer example/app 1.0.0 App/Http/JobsController#show().",
+        "Method",
+        "callable",
+        "show"
+      ],
+      "context": {
+        "index": "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3"
+      },
+      "source": "scip-php 0.5.0",
+      "provenance": {
+        "depends_on": [
+          "scip:50d48462d04f:scip_index:77e3c298243f"
+        ]
+      }
+    },
+    {
+      "id": "scip:50d48462d04f:scip_symbol:7c24e049c3eb",
+      "kind": "fact",
+      "relation": "scip_symbol",
+      "arg_order": [
+        "index",
+        "symbol",
+        "kind",
+        "category",
+        "display_name"
+      ],
+      "args": [
+        "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3",
+        "scip-php composer example/app 1.0.0 App/Services/JobService#fetch().",
+        "Method",
+        "callable",
+        "fetch"
+      ],
+      "context": {
+        "index": "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3"
+      },
+      "source": "scip-php 0.5.0",
+      "provenance": {
+        "depends_on": [
+          "scip:50d48462d04f:scip_index:77e3c298243f"
+        ]
+      }
+    },
+    {
+      "id": "scip:50d48462d04f:scip_symbol:34b76003c673",
+      "kind": "fact",
+      "relation": "scip_symbol",
+      "arg_order": [
+        "index",
+        "symbol",
+        "kind",
+        "category",
+        "display_name"
+      ],
+      "args": [
+        "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3",
+        "scip-php composer example/app 1.0.0 App/Repos/JobRepo#get().",
+        "Method",
+        "callable",
+        "get"
+      ],
+      "context": {
+        "index": "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3"
+      },
+      "source": "scip-php 0.5.0",
+      "provenance": {
+        "depends_on": [
+          "scip:50d48462d04f:scip_index:77e3c298243f"
+        ]
+      }
+    },
+    {
+      "id": "scip:50d48462d04f:scip_enclosing:0f2b1aeac26f",
+      "kind": "fact",
+      "relation": "scip_enclosing",
+      "arg_order": [
+        "index",
+        "symbol",
+        "path",
+        "start_line",
+        "end_line",
+        "synthesized"
+      ],
+      "args": [
+        "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3",
+        "scip-php composer example/app 1.0.0 App/Http/JobsController#show().",
+        "app/Http/JobsController.php",
+        12,
+        20,
+        true
+      ],
+      "context": {
+        "index": "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3"
+      },
+      "source": "capcov.claims.static.scip_facts v1",
+      "provenance": {
+        "depends_on": [
+          "scip:50d48462d04f:scip_document:12509bf77065"
+        ]
+      }
+    },
+    {
+      "id": "scip:50d48462d04f:scip_enclosing:865bae559a72",
+      "kind": "fact",
+      "relation": "scip_enclosing",
+      "arg_order": [
+        "index",
+        "symbol",
+        "path",
+        "start_line",
+        "end_line",
+        "synthesized"
+      ],
+      "args": [
+        "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3",
+        "scip-php composer example/app 1.0.0 App/Services/JobService#fetch().",
+        "app/Services/JobService.php",
+        9,
+        15,
+        true
+      ],
+      "context": {
+        "index": "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3"
+      },
+      "source": "capcov.claims.static.scip_facts v1",
+      "provenance": {
+        "depends_on": [
+          "scip:50d48462d04f:scip_document:749de4702db9"
+        ]
+      }
+    },
+    {
+      "id": "static:50d48462d04f:route_site:599ffe81d36e",
+      "kind": "fact",
+      "relation": "route_site",
+      "arg_order": [
+        "index",
+        "surface",
+        "path",
+        "line",
+        "handler_name"
+      ],
+      "args": [
+        "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3",
+        "GET /jobs/{id}",
+        "routes/web.php",
+        4,
+        "JobsController@show"
+      ],
+      "context": {
+        "index": "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3"
+      },
+      "source": "treesitter-routes php",
+      "provenance": {
+        "depends_on": [
+          "scip:50d48462d04f:scip_index_tree:b1bcdc9fbd75"
+        ]
+      }
+    },
+    {
+      "id": "static:50d48462d04f:route_handler_location:278aa05dad21",
+      "kind": "fact",
+      "relation": "route_handler_location",
+      "arg_order": [
+        "index",
+        "surface",
+        "path",
+        "line"
+      ],
+      "args": [
+        "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3",
+        "GET /jobs/{id}",
+        "app/Http/JobsController.php",
+        12
+      ],
+      "context": {
+        "index": "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3"
+      },
+      "source": "treesitter-routes php",
+      "provenance": {
+        "depends_on": [
+          "scip:50d48462d04f:scip_index_tree:b1bcdc9fbd75"
+        ]
+      }
+    },
+    {
+      "id": "scip:50d48462d04f:scip_definition_site:b594659b7da9",
+      "kind": "fact",
+      "relation": "scip_definition_site",
+      "arg_order": [
+        "index",
+        "path",
+        "line",
+        "symbol"
+      ],
+      "args": [
+        "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3",
+        "app/Http/JobsController.php",
+        12,
+        "scip-php composer example/app 1.0.0 App/Http/JobsController#show()."
+      ],
+      "context": {
+        "index": "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3"
+      },
+      "source": "scip-php 0.5.0",
+      "provenance": {
+        "depends_on": [
+          "scip:50d48462d04f:scip_document:12509bf77065",
+          "external:scip-occurrence:50d48462d04f:c74dba8790ad"
+        ]
+      }
+    },
+    {
+      "id": "scip:50d48462d04f:scip_definition_site:510211342e29",
+      "kind": "fact",
+      "relation": "scip_definition_site",
+      "arg_order": [
+        "index",
+        "path",
+        "line",
+        "symbol"
+      ],
+      "args": [
+        "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3",
+        "app/Services/JobService.php",
+        9,
+        "scip-php composer example/app 1.0.0 App/Services/JobService#fetch()."
+      ],
+      "context": {
+        "index": "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3"
+      },
+      "source": "scip-php 0.5.0",
+      "provenance": {
+        "depends_on": [
+          "scip:50d48462d04f:scip_document:749de4702db9",
+          "external:scip-occurrence:50d48462d04f:d870f3439684"
+        ]
+      }
+    },
+    {
+      "id": "scip:50d48462d04f:scip_definition_site:a4015c1a15b5",
+      "kind": "fact",
+      "relation": "scip_definition_site",
+      "arg_order": [
+        "index",
+        "path",
+        "line",
+        "symbol"
+      ],
+      "args": [
+        "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3",
+        "app/Repos/JobRepo.php",
+        7,
+        "scip-php composer example/app 1.0.0 App/Repos/JobRepo#get()."
+      ],
+      "context": {
+        "index": "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3"
+      },
+      "source": "scip-php 0.5.0",
+      "provenance": {
+        "depends_on": [
+          "scip:50d48462d04f:scip_document:3836bf987acc",
+          "external:scip-occurrence:50d48462d04f:447a5a959e53"
+        ]
+      }
+    },
+    {
+      "id": "scip:50d48462d04f:scip_may_reference:718eefa9711b",
+      "kind": "fact",
+      "relation": "scip_may_reference",
+      "arg_order": [
+        "index",
+        "caller",
+        "callee",
+        "path",
+        "line",
+        "occurrence",
+        "caller_synthesized"
+      ],
+      "args": [
+        "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3",
+        "scip-php composer example/app 1.0.0 App/Http/JobsController#show().",
+        "scip-php composer example/app 1.0.0 App/Services/JobService#fetch().",
+        "app/Http/JobsController.php",
+        14,
+        "c3b2f22de7508197969986f63bb565c18ccbfec119c49afac378719eb37d4a9b",
+        true
+      ],
+      "context": {
+        "index": "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3"
+      },
+      "source": "scip-php 0.5.0",
+      "provenance": {
+        "depends_on": [
+          "scip:50d48462d04f:scip_document:12509bf77065",
+          "external:scip-occurrence:50d48462d04f:c3b2f22de750",
+          "scip:50d48462d04f:scip_definition_site:b594659b7da9",
+          "scip:50d48462d04f:scip_enclosing:0f2b1aeac26f"
+        ]
+      }
+    },
+    {
+      "id": "scip:50d48462d04f:scip_may_reference:c03dbd3ccc8b",
+      "kind": "fact",
+      "relation": "scip_may_reference",
+      "arg_order": [
+        "index",
+        "caller",
+        "callee",
+        "path",
+        "line",
+        "occurrence",
+        "caller_synthesized"
+      ],
+      "args": [
+        "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3",
+        "scip-php composer example/app 1.0.0 App/Services/JobService#fetch().",
+        "scip-php composer example/app 1.0.0 App/Repos/JobRepo#get().",
+        "app/Services/JobService.php",
+        11,
+        "4c4745736bf407300472d59b3fd61af31c361f10731d5c43c20884d5956e7dfd",
+        true
+      ],
+      "context": {
+        "index": "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3"
+      },
+      "source": "scip-php 0.5.0",
+      "provenance": {
+        "depends_on": [
+          "scip:50d48462d04f:scip_document:749de4702db9",
+          "external:scip-occurrence:50d48462d04f:4c4745736bf4",
+          "scip:50d48462d04f:scip_definition_site:510211342e29",
+          "scip:50d48462d04f:scip_enclosing:865bae559a72"
+        ]
+      }
+    },
+    {
+      "id": "static:50d48462d04f:static_op_site:36cdbb599ae1",
+      "kind": "fact",
+      "relation": "static_op_site",
+      "arg_order": [
+        "index",
+        "path",
+        "line",
+        "verb",
+        "entity"
+      ],
+      "args": [
+        "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3",
+        "app/Repos/JobRepo.php",
+        8,
+        "read",
+        "jobs"
+      ],
+      "context": {
+        "index": "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3"
+      },
+      "source": "treesitter-routes php",
+      "provenance": {
+        "depends_on": [
+          "scip:50d48462d04f:scip_index_tree:b1bcdc9fbd75"
+        ]
+      }
+    },
+    {
+      "id": "static:50d48462d04f:static_site_owner:4a3f08e8c755",
+      "kind": "fact",
+      "relation": "static_site_owner",
+      "arg_order": [
+        "index",
+        "path",
+        "line",
+        "symbol"
+      ],
+      "args": [
+        "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3",
+        "app/Repos/JobRepo.php",
+        8,
+        "scip-php composer example/app 1.0.0 App/Repos/JobRepo#get()."
+      ],
+      "context": {
+        "index": "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3"
+      },
+      "source": "treesitter-routes php",
+      "provenance": {
+        "depends_on": [
+          "scip:50d48462d04f:scip_index_tree:b1bcdc9fbd75",
+          "scip:50d48462d04f:scip_definition_site:a4015c1a15b5"
+        ]
+      }
+    },
+    {
+      "id": "runtime:run-6:runtime_route_observed:8944a614b6c1",
+      "kind": "fact",
+      "relation": "runtime_route_observed",
+      "arg_order": [
+        "tenant",
+        "surface",
+        "event",
+        "run"
+      ],
+      "args": [
+        "tenant-a",
+        "POST /jobs",
+        "evt-2",
+        "run-6"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "surface": "POST /jobs",
+        "event": "evt-2",
+        "run": "run-6"
+      },
+      "source": "capcov runtime probe",
+      "provenance": {
+        "depends_on": []
+      }
+    },
+    {
+      "id": "runtime:run-6:index_describes_run:86fcee946423",
+      "kind": "fact",
+      "relation": "index_describes_run",
+      "arg_order": [
+        "index",
+        "run"
+      ],
+      "args": [
+        "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3",
+        "run-6"
+      ],
+      "context": {
+        "index": "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3",
+        "run": "run-6"
+      },
+      "source": "capcov.claims.static.scip_facts v1",
+      "provenance": {
+        "depends_on": [
+          "scip:50d48462d04f:scip_index:77e3c298243f"
+        ]
+      }
+    }
+  ],
+  "assumptions": [],
+  "claims": [
+    {
+      "id": "claim-cap-jobs-read",
+      "relation": "static_capability",
+      "arg_order": [
+        "index",
+        "surface",
+        "entity",
+        "verb"
+      ],
+      "args": [
+        "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3",
+        "GET /jobs/{id}",
+        "jobs",
+        "read"
+      ],
+      "context": {
+        "index": "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3"
+      },
+      "quantifier": "exists",
+      "domain": null,
+      "mappings": [],
+      "diagnostics": [
+        {
+          "trigger_relation": "scip_may_reference",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "index"
+          ],
+          "predicate": {
+            "column": "caller_synthesized",
+            "operator": "=",
+            "value": true
+          }
+        }
+      ],
+      "reading": ""
+    },
+    {
+      "id": "claim-authz-gap",
+      "relation": "static_route_authorization_gap",
+      "arg_order": [
+        "index",
+        "surface"
+      ],
+      "args": [
+        "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3",
+        "GET /jobs/{id}"
+      ],
+      "context": {
+        "index": "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3"
+      },
+      "quantifier": "exists",
+      "domain": null,
+      "mappings": [],
+      "diagnostics": [],
+      "reading": ""
+    },
+    {
+      "id": "claim-runtime-route-gap",
+      "relation": "runtime_route_without_static",
+      "arg_order": [
+        "tenant",
+        "surface",
+        "run",
+        "index"
+      ],
+      "args": [
+        "tenant-a",
+        "POST /jobs",
+        "run-6",
+        "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "surface": "POST /jobs",
+        "run": "run-6",
+        "index": "50d48462d04ff4df4b7e7b02a8dd0c46dd337f27ba91568c3b07f1b45595f6a3"
+      },
+      "quantifier": "exists",
+      "domain": null,
+      "mappings": [],
+      "diagnostics": [],
+      "reading": ""
+    }
+  ],
+  "outputs": [
+    {
+      "kind": "discrepancy",
+      "claim_id": "claim-cap-jobs-read",
+      "when_claim": "supported",
+      "fields": {
+        "kind": {
+          "value": "caller-attribution-synthesized"
+        },
+        "caller": {
+          "value": "scip-php composer example/app 1.0.0 App/Http/JobsController#show()."
+        },
+        "callee": {
+          "value": "scip-php composer example/app 1.0.0 App/Services/JobService#fetch()."
+        }
+      },
+      "requires_all_evidence": [
+        "scip:50d48462d04f:scip_may_reference:718eefa9711b"
+      ]
+    },
+    {
+      "kind": "discrepancy",
+      "claim_id": "claim-cap-jobs-read",
+      "when_claim": "supported",
+      "fields": {
+        "kind": {
+          "value": "caller-attribution-synthesized"
+        },
+        "caller": {
+          "value": "scip-php composer example/app 1.0.0 App/Services/JobService#fetch()."
+        },
+        "callee": {
+          "value": "scip-php composer example/app 1.0.0 App/Repos/JobRepo#get()."
+        }
+      },
+      "requires_all_evidence": [
+        "scip:50d48462d04f:scip_may_reference:c03dbd3ccc8b"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-authz-gap",
+      "relation": "static_route_inventory_closed",
+      "fields": {
+        "reason": {
+          "value": "withheld: the route document has synthesized enclosing ranges"
+        }
+      }
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-authz-gap",
+      "relation": "static_reachability_closed",
+      "fields": {
+        "reason": {
+          "value": "withheld: every document has synthesized enclosing ranges"
+        }
+      }
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-runtime-route-gap",
+      "relation": "static_route_inventory_closed",
+      "fields": {
+        "reason": {
+          "value": "withheld: the route document has synthesized enclosing ranges"
+        }
+      }
+    }
+  ],
+  "expected": {
+    "claims": {
+      "claim-cap-jobs-read": {
+        "semantic_verdict": "supported",
+        "operational_status": "complete",
+        "support_leaves": [
+          "scip:50d48462d04f:scip_definition_site:b594659b7da9",
+          "scip:50d48462d04f:scip_index:77e3c298243f",
+          "scip:50d48462d04f:scip_index_tree:b1bcdc9fbd75",
+          "scip:50d48462d04f:scip_may_reference:718eefa9711b",
+          "scip:50d48462d04f:scip_may_reference:c03dbd3ccc8b",
+          "scip:50d48462d04f:scip_symbol:560a320406c1",
+          "static:50d48462d04f:route_handler_location:278aa05dad21",
+          "static:50d48462d04f:static_op_site:36cdbb599ae1",
+          "static:50d48462d04f:static_site_owner:4a3f08e8c755",
+          "static:claim-time:source_tree_observed:e5832404c78f"
+        ],
+        "refutation_leaves": [],
+        "observed_leaves": [
+          "scip:50d48462d04f:scip_definition_site:b594659b7da9",
+          "scip:50d48462d04f:scip_enclosing:0f2b1aeac26f",
+          "scip:50d48462d04f:scip_enclosing:865bae559a72",
+          "scip:50d48462d04f:scip_index:77e3c298243f",
+          "scip:50d48462d04f:scip_index_tree:b1bcdc9fbd75",
+          "scip:50d48462d04f:scip_may_reference:718eefa9711b",
+          "scip:50d48462d04f:scip_may_reference:c03dbd3ccc8b",
+          "scip:50d48462d04f:scip_symbol:560a320406c1",
+          "static:50d48462d04f:route_handler_location:278aa05dad21",
+          "static:50d48462d04f:static_op_site:36cdbb599ae1",
+          "static:50d48462d04f:static_site_owner:4a3f08e8c755",
+          "static:claim-time:source_tree_observed:e5832404c78f"
+        ],
+        "forbidden_leaves": [],
+        "discrepancies": [
+          {
+            "kind": "caller-attribution-synthesized",
+            "caller": "scip-php composer example/app 1.0.0 App/Services/JobService#fetch().",
+            "callee": "scip-php composer example/app 1.0.0 App/Repos/JobRepo#get()."
+          },
+          {
+            "kind": "caller-attribution-synthesized",
+            "caller": "scip-php composer example/app 1.0.0 App/Http/JobsController#show().",
+            "callee": "scip-php composer example/app 1.0.0 App/Services/JobService#fetch()."
+          }
+        ],
+        "missing_premises": []
+      },
+      "claim-authz-gap": {
+        "semantic_verdict": "unresolved",
+        "operational_status": "complete",
+        "support_leaves": [],
+        "refutation_leaves": [],
+        "observed_leaves": [
+          "static:50d48462d04f:route_site:599ffe81d36e"
+        ],
+        "forbidden_leaves": [],
+        "discrepancies": [],
+        "missing_premises": [
+          {
+            "relation": "static_reachability_closed",
+            "reason": "withheld: every document has synthesized enclosing ranges"
+          },
+          {
+            "relation": "static_route_inventory_closed",
+            "reason": "withheld: the route document has synthesized enclosing ranges"
+          }
+        ]
+      },
+      "claim-runtime-route-gap": {
+        "semantic_verdict": "unresolved",
+        "operational_status": "complete",
+        "support_leaves": [],
+        "refutation_leaves": [],
+        "observed_leaves": [
+          "runtime:run-6:index_describes_run:86fcee946423",
+          "runtime:run-6:runtime_route_observed:8944a614b6c1"
+        ],
+        "forbidden_leaves": [],
+        "discrepancies": [],
+        "missing_premises": [
+          {
+            "relation": "static_route_inventory_closed",
+            "reason": "withheld: the route document has synthesized enclosing ranges"
+          }
+        ]
+      }
+    }
+  }
+}
