@@ -1,0 +1,981 @@
+{
+  "schema_version": 1,
+  "description": "Per-claim reviewed expectations duplicated from each static case",
+  "rule_pack": "rules-static-v1",
+  "evaluation_basis_by_quantifier": {
+    "exists": "derivational",
+    "forall": "bounded-history-model"
+  },
+  "cases": {
+    "00-go-app-control": {
+      "claims": {
+        "claim-cap-jobs-read": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "scip:de8e15dc1e0a:scip_definition_site:211b93d866c3",
+            "scip:de8e15dc1e0a:scip_index:acc18ffac3f5",
+            "scip:de8e15dc1e0a:scip_index_tree:5288bc07bb32",
+            "scip:de8e15dc1e0a:scip_may_reference:a8e69b8609d0",
+            "scip:de8e15dc1e0a:scip_may_reference:f8b56e83319a",
+            "scip:de8e15dc1e0a:scip_symbol:3d38c3129ef5",
+            "static:claim-time:source_tree_observed:19fe4d1df157",
+            "static:de8e15dc1e0a:route_handler_location:ee47a721340c",
+            "static:de8e15dc1e0a:static_op_site:58774db907b0",
+            "static:de8e15dc1e0a:static_site_owner:d117b801df09"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:de8e15dc1e0a:scip_definition_site:211b93d866c3",
+            "scip:de8e15dc1e0a:scip_index:acc18ffac3f5",
+            "scip:de8e15dc1e0a:scip_index_tree:5288bc07bb32",
+            "scip:de8e15dc1e0a:scip_may_reference:a8e69b8609d0",
+            "scip:de8e15dc1e0a:scip_may_reference:f8b56e83319a",
+            "scip:de8e15dc1e0a:scip_symbol:3d38c3129ef5",
+            "static:claim-time:source_tree_observed:19fe4d1df157",
+            "static:de8e15dc1e0a:route_handler_location:ee47a721340c",
+            "static:de8e15dc1e0a:static_op_site:58774db907b0",
+            "static:de8e15dc1e0a:static_site_owner:d117b801df09"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        },
+        "claim-cap-audit-create": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "scip:de8e15dc1e0a:scip_definition_site:211b93d866c3",
+            "scip:de8e15dc1e0a:scip_index:acc18ffac3f5",
+            "scip:de8e15dc1e0a:scip_index_tree:5288bc07bb32",
+            "scip:de8e15dc1e0a:scip_may_reference:05e64d883bd6",
+            "scip:de8e15dc1e0a:scip_may_reference:a8e69b8609d0",
+            "scip:de8e15dc1e0a:scip_symbol:3d38c3129ef5",
+            "static:claim-time:source_tree_observed:19fe4d1df157",
+            "static:de8e15dc1e0a:route_handler_location:ee47a721340c",
+            "static:de8e15dc1e0a:static_op_site:8ad0699fa72b",
+            "static:de8e15dc1e0a:static_site_owner:a9eca2ebc25f"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:de8e15dc1e0a:scip_definition_site:211b93d866c3",
+            "scip:de8e15dc1e0a:scip_index:acc18ffac3f5",
+            "scip:de8e15dc1e0a:scip_index_tree:5288bc07bb32",
+            "scip:de8e15dc1e0a:scip_may_reference:05e64d883bd6",
+            "scip:de8e15dc1e0a:scip_may_reference:a8e69b8609d0",
+            "scip:de8e15dc1e0a:scip_symbol:3d38c3129ef5",
+            "static:claim-time:source_tree_observed:19fe4d1df157",
+            "static:de8e15dc1e0a:route_handler_location:ee47a721340c",
+            "static:de8e15dc1e0a:static_op_site:8ad0699fa72b",
+            "static:de8e15dc1e0a:static_site_owner:a9eca2ebc25f"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        },
+        "claim-route-authorized": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "scip:de8e15dc1e0a:scip_definition_site:211b93d866c3",
+            "scip:de8e15dc1e0a:scip_index_tree:5288bc07bb32",
+            "scip:de8e15dc1e0a:scip_may_reference:2fb13ff84c45",
+            "scip:de8e15dc1e0a:scip_symbol:3d38c3129ef5",
+            "static:claim-time:source_tree_observed:19fe4d1df157",
+            "static:de8e15dc1e0a:authz_symbol__accepted:26c45a55d72f",
+            "static:de8e15dc1e0a:route_handler_location:ee47a721340c"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:de8e15dc1e0a:scip_definition_site:211b93d866c3",
+            "scip:de8e15dc1e0a:scip_index_tree:5288bc07bb32",
+            "scip:de8e15dc1e0a:scip_may_reference:2fb13ff84c45",
+            "scip:de8e15dc1e0a:scip_symbol:3d38c3129ef5",
+            "static:claim-time:source_tree_observed:19fe4d1df157",
+            "static:de8e15dc1e0a:authz_symbol__accepted:26c45a55d72f",
+            "static:de8e15dc1e0a:route_handler_location:ee47a721340c"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        },
+        "claim-all-routes-authorized": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "scip:de8e15dc1e0a:scip_definition_site:211b93d866c3",
+            "scip:de8e15dc1e0a:scip_index_tree:5288bc07bb32",
+            "scip:de8e15dc1e0a:scip_may_reference:2fb13ff84c45",
+            "scip:de8e15dc1e0a:scip_symbol:3d38c3129ef5",
+            "static:claim-time:source_tree_observed:19fe4d1df157",
+            "static:de8e15dc1e0a:authz_symbol__accepted:26c45a55d72f",
+            "static:de8e15dc1e0a:route_handler_location:ee47a721340c",
+            "static:de8e15dc1e0a:route_site:64ed830b029a",
+            "static:de8e15dc1e0a:static_route_inventory_closed:df0644cb8d96"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:de8e15dc1e0a:scip_definition_site:211b93d866c3",
+            "scip:de8e15dc1e0a:scip_index_tree:5288bc07bb32",
+            "scip:de8e15dc1e0a:scip_may_reference:2fb13ff84c45",
+            "scip:de8e15dc1e0a:scip_symbol:3d38c3129ef5",
+            "static:claim-time:source_tree_observed:19fe4d1df157",
+            "static:de8e15dc1e0a:authz_symbol__accepted:26c45a55d72f",
+            "static:de8e15dc1e0a:route_handler_location:ee47a721340c",
+            "static:de8e15dc1e0a:route_site:64ed830b029a",
+            "static:de8e15dc1e0a:static_route_inventory_closed:df0644cb8d96"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        },
+        "claim-affected-by-repo-get": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "scip:de8e15dc1e0a:scip_definition_site:211b93d866c3",
+            "scip:de8e15dc1e0a:scip_index_tree:5288bc07bb32",
+            "scip:de8e15dc1e0a:scip_may_reference:a8e69b8609d0",
+            "scip:de8e15dc1e0a:scip_may_reference:f8b56e83319a",
+            "scip:de8e15dc1e0a:scip_symbol:3d38c3129ef5",
+            "static:claim-time:source_tree_observed:19fe4d1df157",
+            "static:de8e15dc1e0a:changed_symbol:3455dedba4bc",
+            "static:de8e15dc1e0a:route_handler_location:ee47a721340c"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:de8e15dc1e0a:scip_definition_site:211b93d866c3",
+            "scip:de8e15dc1e0a:scip_index_tree:5288bc07bb32",
+            "scip:de8e15dc1e0a:scip_may_reference:a8e69b8609d0",
+            "scip:de8e15dc1e0a:scip_may_reference:f8b56e83319a",
+            "scip:de8e15dc1e0a:scip_symbol:3d38c3129ef5",
+            "static:claim-time:source_tree_observed:19fe4d1df157",
+            "static:de8e15dc1e0a:changed_symbol:3455dedba4bc",
+            "static:de8e15dc1e0a:route_handler_location:ee47a721340c"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        },
+        "claim-runtime-route-gap": {
+          "semantic_verdict": "refuted",
+          "operational_status": "complete",
+          "support_leaves": [],
+          "refutation_leaves": [
+            "runtime:run-1:index_describes_run:7dbb6fcf6383",
+            "runtime:run-1:runtime_route_observed:5d99296a53c1",
+            "static:de8e15dc1e0a:static_route_inventory_closed:df0644cb8d96"
+          ],
+          "observed_leaves": [
+            "runtime:run-1:index_describes_run:7dbb6fcf6383",
+            "runtime:run-1:runtime_route_observed:5d99296a53c1",
+            "runtime:run-1:runtime_route_observed:f41fea5bc5d8",
+            "static:de8e15dc1e0a:static_route_inventory_closed:df0644cb8d96"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        }
+      }
+    },
+    "01-unresolved-symbol": {
+      "claims": {
+        "claim-cap-jobs-read": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "scip:1ec9372293b1:scip_definition_site:5e204b771d8d",
+            "scip:1ec9372293b1:scip_index:0a3bcd941204",
+            "scip:1ec9372293b1:scip_index_tree:505199714454",
+            "scip:1ec9372293b1:scip_may_reference:a9f19be2dd10",
+            "scip:1ec9372293b1:scip_may_reference:aed707963e88",
+            "scip:1ec9372293b1:scip_symbol:d253ff82edf9",
+            "static:1ec9372293b1:route_handler_location:be929e8fd84e",
+            "static:1ec9372293b1:static_op_site:d30893556d7b",
+            "static:1ec9372293b1:static_site_owner:87d6d6ed42e2",
+            "static:claim-time:source_tree_observed:0d8fa618268b"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:1ec9372293b1:scip_definition_site:5e204b771d8d",
+            "scip:1ec9372293b1:scip_index:0a3bcd941204",
+            "scip:1ec9372293b1:scip_index_tree:505199714454",
+            "scip:1ec9372293b1:scip_may_reference:a9f19be2dd10",
+            "scip:1ec9372293b1:scip_may_reference:aed707963e88",
+            "scip:1ec9372293b1:scip_symbol:d253ff82edf9",
+            "static:1ec9372293b1:route_handler_location:be929e8fd84e",
+            "static:1ec9372293b1:static_op_site:d30893556d7b",
+            "static:1ec9372293b1:static_site_owner:87d6d6ed42e2",
+            "static:claim-time:source_tree_observed:0d8fa618268b"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        },
+        "claim-callee-node": {
+          "semantic_verdict": "unresolved",
+          "operational_status": "complete",
+          "support_leaves": [],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:1ec9372293b1:scip_symbol:c5abd9bd3c51",
+            "scip:1ec9372293b1:scip_symbol_unrooted:6d52d64fb861"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [
+            {
+              "kind": "unrooted-symbol",
+              "symbol": "local 3",
+              "reason": "local"
+            }
+          ],
+          "missing_premises": [
+            {
+              "relation": "scip_symbol_node",
+              "reason": "local symbols have no rooted node identity"
+            }
+          ]
+        }
+      }
+    },
+    "02-incomplete-indexer": {
+      "claims": {
+        "claim-cap-jobs-read": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "scip:4707cc0737f1:scip_definition_site:fe83ab0fb640",
+            "scip:4707cc0737f1:scip_index:71052dc11960",
+            "scip:4707cc0737f1:scip_index_tree:e5c944895653",
+            "scip:4707cc0737f1:scip_may_reference:40cc97550f44",
+            "scip:4707cc0737f1:scip_may_reference:f47f50a7d814",
+            "scip:4707cc0737f1:scip_symbol:24ccbb1a3b4c",
+            "static:4707cc0737f1:route_handler_location:3caed2a12bf2",
+            "static:4707cc0737f1:static_op_site:165e0bd95027",
+            "static:4707cc0737f1:static_site_owner:7bf4c0fadafe",
+            "static:claim-time:source_tree_observed:d1f262c5a0bb"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:4707cc0737f1:scip_definition_site:fe83ab0fb640",
+            "scip:4707cc0737f1:scip_index:71052dc11960",
+            "scip:4707cc0737f1:scip_index_tree:e5c944895653",
+            "scip:4707cc0737f1:scip_may_reference:40cc97550f44",
+            "scip:4707cc0737f1:scip_may_reference:f47f50a7d814",
+            "scip:4707cc0737f1:scip_symbol:24ccbb1a3b4c",
+            "static:4707cc0737f1:route_handler_location:3caed2a12bf2",
+            "static:4707cc0737f1:static_op_site:165e0bd95027",
+            "static:4707cc0737f1:static_site_owner:7bf4c0fadafe",
+            "static:claim-time:source_tree_observed:d1f262c5a0bb"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        },
+        "claim-hooks-unindexed": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "scip:4707cc0737f1:scip_documents_closed:2a53d1dde35c",
+            "static:4707cc0737f1:static_source_file:2a987896f739"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:4707cc0737f1:scip_documents_closed:2a53d1dde35c",
+            "static:4707cc0737f1:static_source_file:2a987896f739"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        },
+        "claim-authz-gap": {
+          "semantic_verdict": "unresolved",
+          "operational_status": "complete",
+          "support_leaves": [],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "static:4707cc0737f1:route_site:dd0e5ac2dc31",
+            "static:4707cc0737f1:static_route_inventory_closed:35998c1d5002",
+            "static:4707cc0737f1:static_source_file:2a987896f739"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": [
+            {
+              "relation": "static_reachability_closed",
+              "reason": "static_route_authorized_closed needs static_reachability_closed, which the exporter withheld"
+            }
+          ]
+        }
+      }
+    },
+    "02-incomplete-indexer-lying-witness": {
+      "claims": {
+        "claim-cap-jobs-read": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "scip:694d1ff6509c:scip_definition_site:b65e0ea38083",
+            "scip:694d1ff6509c:scip_index:8f47562ce990",
+            "scip:694d1ff6509c:scip_index_tree:171c7ccff838",
+            "scip:694d1ff6509c:scip_may_reference:6f7fbfb9430f",
+            "scip:694d1ff6509c:scip_may_reference:f45259bcb1bd",
+            "scip:694d1ff6509c:scip_symbol:3df1effac57d",
+            "static:694d1ff6509c:route_handler_location:9d83888f5323",
+            "static:694d1ff6509c:static_op_site:05d2226cb62f",
+            "static:694d1ff6509c:static_site_owner:f38f7fd240df",
+            "static:claim-time:source_tree_observed:d7018c1dd0e0"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:694d1ff6509c:scip_definition_site:b65e0ea38083",
+            "scip:694d1ff6509c:scip_index:8f47562ce990",
+            "scip:694d1ff6509c:scip_index_tree:171c7ccff838",
+            "scip:694d1ff6509c:scip_may_reference:6f7fbfb9430f",
+            "scip:694d1ff6509c:scip_may_reference:f45259bcb1bd",
+            "scip:694d1ff6509c:scip_symbol:3df1effac57d",
+            "static:694d1ff6509c:route_handler_location:9d83888f5323",
+            "static:694d1ff6509c:static_op_site:05d2226cb62f",
+            "static:694d1ff6509c:static_site_owner:f38f7fd240df",
+            "static:claim-time:source_tree_observed:d7018c1dd0e0"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        },
+        "claim-hooks-unindexed": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "scip:694d1ff6509c:scip_documents_closed:6ae0458fa943",
+            "static:694d1ff6509c:static_source_file:425dfac83e23"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:694d1ff6509c:scip_documents_closed:6ae0458fa943",
+            "static:694d1ff6509c:static_source_file:425dfac83e23"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        },
+        "claim-authz-gap": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "scip:694d1ff6509c:scip_index_tree:171c7ccff838",
+            "static:694d1ff6509c:route_site:3c04acc77e37",
+            "static:694d1ff6509c:static_reachability_closed:e7a8366ba5bf",
+            "static:694d1ff6509c:static_route_inventory_closed:33e66f89d3f5",
+            "static:claim-time:source_tree_observed:d7018c1dd0e0"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:694d1ff6509c:scip_index_tree:171c7ccff838",
+            "static:694d1ff6509c:route_site:3c04acc77e37",
+            "static:694d1ff6509c:static_reachability_closed:e7a8366ba5bf",
+            "static:694d1ff6509c:static_route_inventory_closed:33e66f89d3f5",
+            "static:694d1ff6509c:static_source_file:425dfac83e23",
+            "static:claim-time:source_tree_observed:d7018c1dd0e0"
+          ],
+          "forbidden_leaves": [
+            "static:694d1ff6509c:static_reachability_closed:e7a8366ba5bf"
+          ],
+          "discrepancies": [
+            {
+              "kind": "unindexed-file-with-reachability-witness",
+              "path": "internal/audit/hooks.go"
+            }
+          ],
+          "missing_premises": []
+        }
+      }
+    },
+    "03-dynamic-dispatch": {
+      "claims": {
+        "claim-cap-jobs-read": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "scip:ba1a94b3850f:scip_definition_site:0d9682759212",
+            "scip:ba1a94b3850f:scip_index:0c3ceb2711d4",
+            "scip:ba1a94b3850f:scip_index_tree:1faa8b2db3c6",
+            "scip:ba1a94b3850f:scip_may_reference:47cfd7416b17",
+            "scip:ba1a94b3850f:scip_may_reference:be78609fc75c",
+            "scip:ba1a94b3850f:scip_symbol:19f88c4e4cd9",
+            "static:ba1a94b3850f:route_handler_location:f56aa023f684",
+            "static:ba1a94b3850f:static_op_site:93ea5e4c6681",
+            "static:ba1a94b3850f:static_site_owner:8ea07a5e6bea",
+            "static:claim-time:source_tree_observed:5eb550b24b7f"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:ba1a94b3850f:scip_definition_site:0d9682759212",
+            "scip:ba1a94b3850f:scip_index:0c3ceb2711d4",
+            "scip:ba1a94b3850f:scip_index_tree:1faa8b2db3c6",
+            "scip:ba1a94b3850f:scip_may_reference:47cfd7416b17",
+            "scip:ba1a94b3850f:scip_may_reference:be78609fc75c",
+            "scip:ba1a94b3850f:scip_symbol:19f88c4e4cd9",
+            "static:ba1a94b3850f:route_handler_location:f56aa023f684",
+            "static:ba1a94b3850f:static_blind_spot:ff75dbe2d4cd",
+            "static:ba1a94b3850f:static_op_site:93ea5e4c6681",
+            "static:ba1a94b3850f:static_site_owner:8ea07a5e6bea",
+            "static:claim-time:source_tree_observed:5eb550b24b7f"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [
+            {
+              "kind": "blind-spot-on-path",
+              "blind_spot_kind": "interface_dispatch",
+              "path": "api/jobs.go",
+              "line": 11
+            }
+          ],
+          "missing_premises": []
+        },
+        "claim-authz-gap": {
+          "semantic_verdict": "unresolved",
+          "operational_status": "complete",
+          "support_leaves": [],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "static:ba1a94b3850f:route_site:1de7cb79f63f",
+            "static:ba1a94b3850f:static_blind_spot:ff75dbe2d4cd",
+            "static:ba1a94b3850f:static_route_inventory_closed:c7a66dbc1e18"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": [
+            {
+              "relation": "scip_references_closed",
+              "reason": "api/jobs.go has an interface_dispatch blind spot, so its references are not closed"
+            },
+            {
+              "relation": "static_reachability_closed",
+              "reason": "static_route_authorized_closed needs static_reachability_closed, which the exporter withheld"
+            }
+          ]
+        }
+      }
+    },
+    "04-generated-code": {
+      "claims": {
+        "claim-all-routes-authorized": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "scip:462980747b49:scip_definition_site:c16eb0d387d0",
+            "scip:462980747b49:scip_index_tree:85b55cd85d2d",
+            "scip:462980747b49:scip_may_reference:548f38952c6a",
+            "scip:462980747b49:scip_symbol:38e217341ba9",
+            "static:462980747b49:authz_symbol__accepted:8306db58ff42",
+            "static:462980747b49:route_handler_location:257743c86088",
+            "static:462980747b49:route_site:d4f045cdf983",
+            "static:462980747b49:static_route_inventory_closed:404824db8316",
+            "static:claim-time:source_tree_observed:e35bb6de4b1c"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:462980747b49:scip_definition_site:c16eb0d387d0",
+            "scip:462980747b49:scip_generated_site:94e59ce8f236",
+            "scip:462980747b49:scip_index_tree:85b55cd85d2d",
+            "scip:462980747b49:scip_may_reference:548f38952c6a",
+            "scip:462980747b49:scip_symbol:38e217341ba9",
+            "static:462980747b49:authz_symbol__accepted:8306db58ff42",
+            "static:462980747b49:route_handler_location:257743c86088",
+            "static:462980747b49:route_site:d4f045cdf983",
+            "static:462980747b49:static_route_inventory_closed:404824db8316",
+            "static:claim-time:source_tree_observed:e35bb6de4b1c"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [
+            {
+              "kind": "handler-in-generated-code",
+              "path": "api/jobs_gen.go",
+              "symbol": "scip-go gomod github.com/example/jobsvc . api/Handler#GetJob()."
+            }
+          ],
+          "missing_premises": []
+        }
+      }
+    },
+    "04-generated-code-accepted": {
+      "claims": {
+        "claim-all-routes-authorized": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "scip:b1c077e07fbf:scip_definition_site:fe76559ca29a",
+            "scip:b1c077e07fbf:scip_index_tree:55393ff8b84c",
+            "scip:b1c077e07fbf:scip_may_reference:ad8d06ffbe49",
+            "scip:b1c077e07fbf:scip_symbol:b65dc318d68e",
+            "static:b1c077e07fbf:authz_symbol__accepted:a1dd2ebf134b",
+            "static:b1c077e07fbf:route_handler_location:53053053b1e3",
+            "static:b1c077e07fbf:route_site:44515257e332",
+            "static:b1c077e07fbf:static_route_inventory_closed:7b474de95c06",
+            "static:claim-time:source_tree_observed:10289e4e9bc5"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:b1c077e07fbf:scip_definition_site:fe76559ca29a",
+            "scip:b1c077e07fbf:scip_generated_site:e7ad5bf0301c",
+            "scip:b1c077e07fbf:scip_index_tree:55393ff8b84c",
+            "scip:b1c077e07fbf:scip_may_reference:ad8d06ffbe49",
+            "scip:b1c077e07fbf:scip_symbol:b65dc318d68e",
+            "static:b1c077e07fbf:authz_symbol__accepted:a1dd2ebf134b",
+            "static:b1c077e07fbf:generated_code_in_scope__accepted:16c2365a6226",
+            "static:b1c077e07fbf:route_handler_location:53053053b1e3",
+            "static:b1c077e07fbf:route_site:44515257e332",
+            "static:b1c077e07fbf:static_route_inventory_closed:7b474de95c06",
+            "static:claim-time:source_tree_observed:10289e4e9bc5"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        }
+      }
+    },
+    "04-generated-code-rejected": {
+      "claims": {
+        "claim-all-routes-authorized": {
+          "semantic_verdict": "unresolved",
+          "operational_status": "out-of-scope",
+          "support_leaves": [],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:e5bfdde259ce:scip_generated_site:d7907f90c0e7",
+            "static:e5bfdde259ce:route_site:ace12d4aadd4",
+            "static:e5bfdde259ce:static_route_inventory_closed:a9dad7d5ea9c"
+          ],
+          "forbidden_leaves": [
+            "scip:e5bfdde259ce:scip_definition_site:f766f518031a",
+            "scip:e5bfdde259ce:scip_generated_site:d7907f90c0e7",
+            "static:e5bfdde259ce:generated_code_in_scope__rejected:f61e2825fa84"
+          ],
+          "discrepancies": [],
+          "missing_premises": [
+            {
+              "relation": "static_route_handler",
+              "reason": "the handler definition lies in generated code that is rejected from scope"
+            }
+          ]
+        }
+      }
+    },
+    "05-stale-index": {
+      "claims": {
+        "claim-path-in-index": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "scip:bf7c3d393f11:scip_definition_site:fd4e3c154316",
+            "scip:bf7c3d393f11:scip_may_reference:9daf02e4174f",
+            "scip:bf7c3d393f11:scip_may_reference:a6e0265af731",
+            "scip:bf7c3d393f11:scip_symbol:1b83375d1cf2",
+            "static:bf7c3d393f11:route_handler_location:46cffa380072",
+            "static:bf7c3d393f11:static_op_site:a368560e94a6",
+            "static:bf7c3d393f11:static_site_owner:ce2797a9a32e"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:bf7c3d393f11:scip_definition_site:fd4e3c154316",
+            "scip:bf7c3d393f11:scip_may_reference:9daf02e4174f",
+            "scip:bf7c3d393f11:scip_may_reference:a6e0265af731",
+            "scip:bf7c3d393f11:scip_symbol:1b83375d1cf2",
+            "static:bf7c3d393f11:route_handler_location:46cffa380072",
+            "static:bf7c3d393f11:static_op_site:a368560e94a6",
+            "static:bf7c3d393f11:static_site_owner:ce2797a9a32e"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        },
+        "claim-cap-jobs-read": {
+          "semantic_verdict": "unresolved",
+          "operational_status": "stale",
+          "support_leaves": [],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:bf7c3d393f11:scip_definition_site:fd4e3c154316",
+            "scip:bf7c3d393f11:scip_index_tree:dcc715240585",
+            "scip:bf7c3d393f11:scip_may_reference:9daf02e4174f",
+            "scip:bf7c3d393f11:scip_may_reference:a6e0265af731",
+            "scip:bf7c3d393f11:scip_symbol:1b83375d1cf2",
+            "static:bf7c3d393f11:route_handler_location:46cffa380072",
+            "static:bf7c3d393f11:static_op_site:a368560e94a6",
+            "static:bf7c3d393f11:static_site_owner:ce2797a9a32e",
+            "static:claim-time:source_tree_observed:e3c6dc91ffb2"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": [
+            {
+              "relation": "static_index_current",
+              "reason": "the index tree digest does not equal the observed source tree digest"
+            }
+          ]
+        }
+      }
+    },
+    "06-synthesized-enclosing": {
+      "claims": {
+        "claim-cap-jobs-read": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "scip:50d48462d04f:scip_definition_site:b594659b7da9",
+            "scip:50d48462d04f:scip_index:77e3c298243f",
+            "scip:50d48462d04f:scip_index_tree:b1bcdc9fbd75",
+            "scip:50d48462d04f:scip_may_reference:718eefa9711b",
+            "scip:50d48462d04f:scip_may_reference:c03dbd3ccc8b",
+            "scip:50d48462d04f:scip_symbol:560a320406c1",
+            "static:50d48462d04f:route_handler_location:278aa05dad21",
+            "static:50d48462d04f:static_op_site:36cdbb599ae1",
+            "static:50d48462d04f:static_site_owner:4a3f08e8c755",
+            "static:claim-time:source_tree_observed:e5832404c78f"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:50d48462d04f:scip_definition_site:b594659b7da9",
+            "scip:50d48462d04f:scip_enclosing:0f2b1aeac26f",
+            "scip:50d48462d04f:scip_enclosing:865bae559a72",
+            "scip:50d48462d04f:scip_index:77e3c298243f",
+            "scip:50d48462d04f:scip_index_tree:b1bcdc9fbd75",
+            "scip:50d48462d04f:scip_may_reference:718eefa9711b",
+            "scip:50d48462d04f:scip_may_reference:c03dbd3ccc8b",
+            "scip:50d48462d04f:scip_symbol:560a320406c1",
+            "static:50d48462d04f:route_handler_location:278aa05dad21",
+            "static:50d48462d04f:static_op_site:36cdbb599ae1",
+            "static:50d48462d04f:static_site_owner:4a3f08e8c755",
+            "static:claim-time:source_tree_observed:e5832404c78f"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [
+            {
+              "kind": "caller-attribution-synthesized",
+              "caller": "scip-php composer example/app 1.0.0 App/Services/JobService#fetch().",
+              "callee": "scip-php composer example/app 1.0.0 App/Repos/JobRepo#get()."
+            },
+            {
+              "kind": "caller-attribution-synthesized",
+              "caller": "scip-php composer example/app 1.0.0 App/Http/JobsController#show().",
+              "callee": "scip-php composer example/app 1.0.0 App/Services/JobService#fetch()."
+            }
+          ],
+          "missing_premises": []
+        },
+        "claim-authz-gap": {
+          "semantic_verdict": "unresolved",
+          "operational_status": "complete",
+          "support_leaves": [],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "static:50d48462d04f:route_site:599ffe81d36e"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": [
+            {
+              "relation": "static_reachability_closed",
+              "reason": "withheld: every document has synthesized enclosing ranges"
+            },
+            {
+              "relation": "static_route_inventory_closed",
+              "reason": "withheld: the route document has synthesized enclosing ranges"
+            }
+          ]
+        },
+        "claim-runtime-route-gap": {
+          "semantic_verdict": "unresolved",
+          "operational_status": "complete",
+          "support_leaves": [],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "runtime:run-6:index_describes_run:86fcee946423",
+            "runtime:run-6:runtime_route_observed:8944a614b6c1"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": [
+            {
+              "relation": "static_route_inventory_closed",
+              "reason": "withheld: the route document has synthesized enclosing ranges"
+            }
+          ]
+        }
+      }
+    },
+    "07-constructor-as-type-reference": {
+      "claims": {
+        "claim-cap-jobs-read": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "scip:43cd33501653:scip_definition_site:95fef2847b6d",
+            "scip:43cd33501653:scip_index:e9f8d8593069",
+            "scip:43cd33501653:scip_index_tree:60708a57b9b2",
+            "scip:43cd33501653:scip_may_reference:1611e3f2208a",
+            "scip:43cd33501653:scip_may_reference:5af0f2b9d07f",
+            "scip:43cd33501653:scip_symbol:1f91bf5e71de",
+            "static:43cd33501653:route_handler_location:a2130f193e80",
+            "static:43cd33501653:static_op_site:eb62b551e700",
+            "static:43cd33501653:static_site_owner:c0c0be9fbbf6",
+            "static:claim-time:source_tree_observed:5eb6d0f422af"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:43cd33501653:scip_definition_site:95fef2847b6d",
+            "scip:43cd33501653:scip_index:e9f8d8593069",
+            "scip:43cd33501653:scip_index_tree:60708a57b9b2",
+            "scip:43cd33501653:scip_may_reference:1611e3f2208a",
+            "scip:43cd33501653:scip_may_reference:5af0f2b9d07f",
+            "scip:43cd33501653:scip_symbol:1f91bf5e71de",
+            "static:43cd33501653:route_handler_location:a2130f193e80",
+            "static:43cd33501653:static_op_site:eb62b551e700",
+            "static:43cd33501653:static_site_owner:c0c0be9fbbf6",
+            "static:claim-time:source_tree_observed:5eb6d0f422af"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        },
+        "claim-reaches-job-type": {
+          "semantic_verdict": "unresolved",
+          "operational_status": "complete",
+          "support_leaves": [],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:43cd33501653:scip_may_reference:1611e3f2208a",
+            "scip:43cd33501653:scip_may_reference:5af0f2b9d07f",
+            "scip:43cd33501653:scip_type_reference:a817c00da75e"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": [
+            {
+              "relation": "scip_may_reference",
+              "reason": "constructor calls are type references; static_edge is built from call edges only"
+            }
+          ]
+        }
+      }
+    },
+    "08-module-scope-reference": {
+      "claims": {
+        "claim-route-handler": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "scip:97eef94d35ed:scip_definition_site:514e08055baf",
+            "scip:97eef94d35ed:scip_symbol:84d54d485fce",
+            "static:97eef94d35ed:route_handler_location:e16d9f5b5259"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:97eef94d35ed:scip_definition_site:514e08055baf",
+            "scip:97eef94d35ed:scip_symbol:84d54d485fce",
+            "static:97eef94d35ed:route_handler_location:e16d9f5b5259"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        },
+        "claim-seed-owns-create": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "static:97eef94d35ed:static_op_site:c9ace6008f4d",
+            "static:97eef94d35ed:static_site_owner:00543e5ddd95"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "static:97eef94d35ed:static_op_site:c9ace6008f4d",
+            "static:97eef94d35ed:static_site_owner:00543e5ddd95"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        },
+        "claim-init-reaches-storage": {
+          "semantic_verdict": "unresolved",
+          "operational_status": "complete",
+          "support_leaves": [],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:97eef94d35ed:scip_module_scope_reference:0cd314c74517",
+            "scip:97eef94d35ed:scip_module_scope_reference:145652780f68"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": [
+            {
+              "relation": "static_root",
+              "reason": "a module-scope reference has no caller symbol, so no root reaches Repo#Seed"
+            }
+          ]
+        }
+      }
+    },
+    "09-duplicate-definitions": {
+      "claims": {
+        "claim-cap-jobs-read": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "scip:8c2d198c5948:scip_definition_site:a913d40a8b39",
+            "scip:8c2d198c5948:scip_index:42c61156a927",
+            "scip:8c2d198c5948:scip_index_tree:de197b52062a",
+            "scip:8c2d198c5948:scip_may_reference:09f38f0b5e30",
+            "scip:8c2d198c5948:scip_may_reference:54de11a2b540",
+            "scip:8c2d198c5948:scip_symbol:b87c0b7fbf06",
+            "static:8c2d198c5948:route_handler_location:37532169b171",
+            "static:8c2d198c5948:static_op_site:b5f12d73db8f",
+            "static:8c2d198c5948:static_site_owner:984f05adfe79",
+            "static:claim-time:source_tree_observed:46d1b09a1177"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:8c2d198c5948:scip_definition_site:45be2630c94d",
+            "scip:8c2d198c5948:scip_definition_site:a913d40a8b39",
+            "scip:8c2d198c5948:scip_index:42c61156a927",
+            "scip:8c2d198c5948:scip_index_tree:de197b52062a",
+            "scip:8c2d198c5948:scip_may_reference:09f38f0b5e30",
+            "scip:8c2d198c5948:scip_may_reference:54de11a2b540",
+            "scip:8c2d198c5948:scip_symbol:b87c0b7fbf06",
+            "static:8c2d198c5948:route_handler_location:37532169b171",
+            "static:8c2d198c5948:static_op_site:b5f12d73db8f",
+            "static:8c2d198c5948:static_site_owner:984f05adfe79",
+            "static:claim-time:source_tree_observed:46d1b09a1177"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [
+            {
+              "kind": "ambiguous-definition",
+              "symbol": "scip-go gomod github.com/example/jobsvc . api/Handler#GetJob().",
+              "paths": [
+                "api/jobs.go",
+                "api/jobs_legacy.go"
+              ]
+            }
+          ],
+          "missing_premises": []
+        },
+        "claim-duplicate": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "scip:8c2d198c5948:scip_definition_site:45be2630c94d",
+            "scip:8c2d198c5948:scip_definition_site:a913d40a8b39",
+            "scip:8c2d198c5948:scip_symbol:b87c0b7fbf06"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:8c2d198c5948:scip_definition_site:45be2630c94d",
+            "scip:8c2d198c5948:scip_definition_site:a913d40a8b39",
+            "scip:8c2d198c5948:scip_symbol:b87c0b7fbf06"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        },
+        "claim-authz-gap": {
+          "semantic_verdict": "unresolved",
+          "operational_status": "complete",
+          "support_leaves": [],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:8c2d198c5948:scip_definition_site:45be2630c94d",
+            "scip:8c2d198c5948:scip_definition_site:a913d40a8b39",
+            "static:8c2d198c5948:route_site:5eb564bfaade",
+            "static:8c2d198c5948:static_route_inventory_closed:195aec0df5a6"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": [
+            {
+              "relation": "static_reachability_closed",
+              "reason": "withheld: duplicate definitions of Handler#GetJob"
+            }
+          ]
+        }
+      }
+    },
+    "09-duplicate-definitions-package-symbol": {
+      "claims": {
+        "claim-cap-jobs-read": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "scip:c034889fbc50:scip_definition_site:bba5b0524d33",
+            "scip:c034889fbc50:scip_index:5fcd17b19df9",
+            "scip:c034889fbc50:scip_index_tree:42f51304332b",
+            "scip:c034889fbc50:scip_may_reference:53433c2f04e0",
+            "scip:c034889fbc50:scip_may_reference:80c3612898ab",
+            "scip:c034889fbc50:scip_symbol:bcf6d2961639",
+            "static:c034889fbc50:route_handler_location:deef42d6da33",
+            "static:c034889fbc50:static_op_site:b2fc49fdda23",
+            "static:c034889fbc50:static_site_owner:887a87fee7f9",
+            "static:claim-time:source_tree_observed:46d1b09a1177"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:c034889fbc50:scip_definition_site:bba5b0524d33",
+            "scip:c034889fbc50:scip_index:5fcd17b19df9",
+            "scip:c034889fbc50:scip_index_tree:42f51304332b",
+            "scip:c034889fbc50:scip_may_reference:53433c2f04e0",
+            "scip:c034889fbc50:scip_may_reference:80c3612898ab",
+            "scip:c034889fbc50:scip_symbol:bcf6d2961639",
+            "static:c034889fbc50:route_handler_location:deef42d6da33",
+            "static:c034889fbc50:static_op_site:b2fc49fdda23",
+            "static:c034889fbc50:static_site_owner:887a87fee7f9",
+            "static:claim-time:source_tree_observed:46d1b09a1177"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        },
+        "claim-duplicate": {
+          "semantic_verdict": "unresolved",
+          "operational_status": "complete",
+          "support_leaves": [],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:c034889fbc50:scip_definition_site:80c5d815a1d2",
+            "scip:c034889fbc50:scip_definition_site:af33a662a773",
+            "scip:c034889fbc50:scip_symbol:992014134886"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": [
+            {
+              "relation": "scip_symbol",
+              "reason": "package symbol api/ has category other: scip-go defines the package symbol in every file of the package; only callable, type and term symbols can be duplicate definitions"
+            }
+          ]
+        },
+        "claim-authz-gap": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "scip:c034889fbc50:scip_index_tree:42f51304332b",
+            "static:c034889fbc50:route_site:9713ef57f88a",
+            "static:c034889fbc50:static_reachability_closed:24260f368327",
+            "static:c034889fbc50:static_route_inventory_closed:b20ca0264775",
+            "static:claim-time:source_tree_observed:46d1b09a1177"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "scip:c034889fbc50:scip_index_tree:42f51304332b",
+            "static:c034889fbc50:route_site:9713ef57f88a",
+            "static:c034889fbc50:static_reachability_closed:24260f368327",
+            "static:c034889fbc50:static_route_inventory_closed:b20ca0264775",
+            "static:claim-time:source_tree_observed:46d1b09a1177"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        }
+      }
+    }
+  }
+}
