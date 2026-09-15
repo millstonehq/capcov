@@ -1,0 +1,465 @@
+{
+  "schema_version": 1,
+  "description": "Per-claim semantic expectations",
+  "evaluation_basis_by_quantifier": {
+    "exists": "derivational",
+    "forall": "bounded-history-model"
+  },
+  "cases": {
+    "01-correlated-positive": {
+      "claims": {
+        "claim-terminal-delivery": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "fact-http-save",
+            "fact-issue-changed",
+            "fact-mail-250",
+            "fact-sql-terminal"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "fact-http-save",
+            "fact-issue-changed",
+            "fact-mail-250",
+            "fact-sql-terminal"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        }
+      }
+    },
+    "02-surface-mismatch": {
+      "claims": {
+        "claim-effect": {
+          "semantic_verdict": "unresolved",
+          "operational_status": "complete",
+          "support_leaves": [],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "fact-route-a-static",
+            "fact-route-b-runtime"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [
+            {
+              "kind": "surface-mismatch",
+              "surfaces": [
+                "route-a",
+                "route-b"
+              ]
+            }
+          ],
+          "missing_premises": [
+            {
+              "reason": "static and runtime observations name different routes",
+              "relation": "same_surface"
+            }
+          ]
+        }
+      }
+    },
+    "03-post-without-creation": {
+      "claims": {
+        "claim-request": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "fact-post-200"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "fact-post-200"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        },
+        "claim-created": {
+          "semantic_verdict": "unresolved",
+          "operational_status": "complete",
+          "support_leaves": [],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "fact-post-200"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": [
+            {
+              "reason": "POST response does not prove durable creation",
+              "relation": "row_committed"
+            }
+          ]
+        }
+      }
+    },
+    "04-authorization-polarity": {
+      "claims": {
+        "claim-allow": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "fact-allow-200"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "fact-allow-200"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        },
+        "claim-deny": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "fact-deny-403"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "fact-deny-403"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        }
+      }
+    },
+    "05-wrong-event-email": {
+      "claims": {
+        "claim-target-mail": {
+          "semantic_verdict": "unresolved",
+          "operational_status": "complete",
+          "support_leaves": [],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "fact-mail-other-event",
+            "fact-mail-target"
+          ],
+          "forbidden_leaves": [
+            "fact-mail-target"
+          ],
+          "discrepancies": [
+            {
+              "kind": "wrong-event",
+              "observed": "evt-other",
+              "claimed": "evt-target"
+            }
+          ],
+          "missing_premises": [
+            {
+              "reason": "no accepted message for target event",
+              "relation": "mail_sent"
+            }
+          ]
+        }
+      }
+    },
+    "06-context-contamination": {
+      "claims": {
+        "claim-terminal": {
+          "semantic_verdict": "unresolved",
+          "operational_status": "complete",
+          "support_leaves": [],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "fact-tenant-a",
+            "fact-tenant-b"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [
+            {
+              "kind": "context-mismatch",
+              "dimensions": [
+                "tenant",
+                "run"
+              ]
+            }
+          ],
+          "missing_premises": [
+            {
+              "reason": "evidence rows cannot be joined",
+              "relation": "same_context"
+            }
+          ]
+        }
+      }
+    },
+    "07-shared-mistaken-assumption": {
+      "claims": {
+        "claim-delivered": {
+          "semantic_verdict": "unresolved",
+          "operational_status": "complete",
+          "support_leaves": [],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "fact-static",
+            "fact-runtime"
+          ],
+          "forbidden_leaves": [
+            "assumption-false-independent"
+          ],
+          "discrepancies": [
+            {
+              "kind": "shared-assumption",
+              "assumption": "assumption-false"
+            }
+          ],
+          "missing_premises": [
+            {
+              "reason": "both producers depend on one false assumption",
+              "relation": "independent_support"
+            }
+          ]
+        }
+      }
+    },
+    "08-rejection-versus-missing": {
+      "claims": {
+        "claim-explicit-denial": {
+          "semantic_verdict": "refuted",
+          "operational_status": "complete",
+          "support_leaves": [],
+          "refutation_leaves": [
+            "fact-explicit-rejection"
+          ],
+          "observed_leaves": [
+            "fact-explicit-rejection"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        },
+        "claim-missing-denial": {
+          "semantic_verdict": "unresolved",
+          "operational_status": "complete",
+          "support_leaves": [],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "fact-missing"
+          ],
+          "forbidden_leaves": [
+            "fact-missing"
+          ],
+          "discrepancies": [],
+          "missing_premises": [
+            {
+              "relation": "authorization_rejected",
+              "reason": "no explicit rejection for the claimed actor"
+            }
+          ]
+        }
+      }
+    },
+    "09-support-and-refutation": {
+      "claims": {
+        "claim-terminal": {
+          "semantic_verdict": "conflicting",
+          "operational_status": "complete",
+          "support_leaves": [
+            "fact-allow"
+          ],
+          "refutation_leaves": [
+            "fact-deny"
+          ],
+          "observed_leaves": [
+            "fact-allow",
+            "fact-deny"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [
+            {
+              "kind": "same-scope-polarity-conflict"
+            }
+          ],
+          "missing_premises": []
+        }
+      }
+    },
+    "10-revoked-assumption-alternative": {
+      "claims": {
+        "claim-saved": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "assumption-independent-source",
+            "fact-independent-proof"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "fact-independent-proof"
+          ],
+          "forbidden_leaves": [
+            "assumption-revoked"
+          ],
+          "discrepancies": [
+            {
+              "kind": "revoked-assumption",
+              "assumption": "assumption-revoked"
+            }
+          ],
+          "missing_premises": []
+        }
+      }
+    },
+    "11-compatible-history-sets": {
+      "claims": {
+        "claim-universal": {
+          "semantic_verdict": "unresolved",
+          "operational_status": "inconsistent-premises",
+          "support_leaves": [],
+          "refutation_leaves": [],
+          "observed_leaves": [],
+          "forbidden_leaves": [
+            "fact-empty-history-success"
+          ],
+          "discrepancies": [
+            {
+              "kind": "empty-compatible-history-domain"
+            }
+          ],
+          "missing_premises": [
+            {
+              "reason": "empty domain cannot establish universal claim",
+              "relation": "compatible_history"
+            }
+          ]
+        },
+        "claim-mixed": {
+          "semantic_verdict": "unresolved",
+          "operational_status": "complete",
+          "support_leaves": [],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "fact-mixed-history-support",
+            "fact-mixed-history-refute"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [
+            {
+              "kind": "mixed-compatible-history-outcomes"
+            }
+          ],
+          "missing_premises": [
+            {
+              "reason": "compatible histories contain both support and refutation",
+              "relation": "all_compatible_histories_agree"
+            }
+          ]
+        }
+      }
+    },
+    "12-unexpected-runtime-surface": {
+      "claims": {
+        "claim-model-complete": {
+          "semantic_verdict": "unresolved",
+          "operational_status": "out-of-scope",
+          "support_leaves": [],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "fact-known-surface",
+            "fact-unknown-surface"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [
+            {
+              "kind": "unknown-runtime-surface",
+              "surface": "surface-unmodeled"
+            }
+          ],
+          "missing_premises": [
+            {
+              "reason": "runtime surface is outside the closed model",
+              "relation": "model_complete"
+            }
+          ]
+        }
+      }
+    },
+    "13-acceptance-sql-ack-failure": {
+      "claims": {
+        "claim-provider": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "fact-mail-250"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "fact-mail-250"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        },
+        "claim-terminal": {
+          "semantic_verdict": "unresolved",
+          "operational_status": "complete",
+          "support_leaves": [],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "fact-mail-250",
+            "fact-sql-ack"
+          ],
+          "forbidden_leaves": [
+            "fact-sql-ack"
+          ],
+          "discrepancies": [
+            {
+              "kind": "sql-ack-failure"
+            }
+          ],
+          "missing_premises": [
+            {
+              "reason": "provider acceptance does not imply application acknowledgement",
+              "relation": "sql_terminal_ack"
+            }
+          ]
+        }
+      }
+    },
+    "14-bounded-no-resend": {
+      "claims": {
+        "claim-bounded": {
+          "semantic_verdict": "supported",
+          "operational_status": "complete",
+          "support_leaves": [
+            "fact-one-delivery",
+            "fact-no-resend-window",
+            "assumption-window-closed"
+          ],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "fact-one-delivery",
+            "fact-no-resend-window",
+            "assumption-window-closed"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": []
+        },
+        "claim-forever": {
+          "semantic_verdict": "unresolved",
+          "operational_status": "complete",
+          "support_leaves": [],
+          "refutation_leaves": [],
+          "observed_leaves": [
+            "fact-one-delivery",
+            "fact-no-resend-window",
+            "assumption-window-closed"
+          ],
+          "forbidden_leaves": [],
+          "discrepancies": [],
+          "missing_premises": [
+            {
+              "reason": "bounded observation cannot establish indefinite safety",
+              "relation": "no_resend_forever"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
