@@ -1,0 +1,68 @@
+{
+  "producer": "shen shen-model-runner v1",
+  "rows": [
+    {
+      "kind": "insert",
+      "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+      "pk": "286bbc3165c77702a9a2c88c60a87d0cdb9f625f8d8b6863a90f25a9b6c07ceb",
+      "req": "req-1",
+      "run": "run-fixture-1",
+      "seq": 1,
+      "table": "issue"
+    },
+    {
+      "kind": "update",
+      "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+      "pk": "3b65dbc7d7f67c28250ab49afa4db2edc47b47b85d158d1e66c9490b030ce41b",
+      "req": "req-1",
+      "run": "run-fixture-1",
+      "seq": 2,
+      "table": "entity_statistics"
+    },
+    {
+      "kind": "update",
+      "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+      "pk": "286bbc3165c77702a9a2c88c60a87d0cdb9f625f8d8b6863a90f25a9b6c07ceb",
+      "req": "req-2",
+      "run": "run-fixture-1",
+      "seq": 1,
+      "table": "issue"
+    },
+    {
+      "kind": "update",
+      "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+      "pk": "3b65dbc7d7f67c28250ab49afa4db2edc47b47b85d158d1e66c9490b030ce41b",
+      "req": "req-2",
+      "run": "run-fixture-1",
+      "seq": 2,
+      "table": "entity_statistics"
+    },
+    {
+      "kind": "insert",
+      "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+      "pk": "8a4c92af3b73b36336ef48adaca25fe10d26d4828bbf005821bcae3fec69746e",
+      "req": "req-3",
+      "run": "run-fixture-1",
+      "seq": 1,
+      "table": "issue"
+    },
+    {
+      "kind": "update",
+      "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+      "pk": "286bbc3165c77702a9a2c88c60a87d0cdb9f625f8d8b6863a90f25a9b6c07ceb",
+      "req": "req-4",
+      "run": "run-fixture-1",
+      "seq": 1,
+      "table": "issue"
+    },
+    {
+      "kind": "update",
+      "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+      "pk": "3b65dbc7d7f67c28250ab49afa4db2edc47b47b85d158d1e66c9490b030ce41b",
+      "req": "req-4",
+      "run": "run-fixture-1",
+      "seq": 2,
+      "table": "entity_statistics"
+    }
+  ]
+}

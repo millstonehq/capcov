@@ -1,0 +1,20 @@
+{
+  "producer": "mut shen-mutator v1",
+  "rows": [
+    {
+      "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+      "mutant": "m-1",
+      "op": "issues.create"
+    },
+    {
+      "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+      "mutant": "m-2",
+      "op": "issues.close"
+    },
+    {
+      "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+      "mutant": "m-3",
+      "op": "delete-issue"
+    }
+  ]
+}
