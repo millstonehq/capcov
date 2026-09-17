@@ -1,0 +1,9 @@
+{
+  "producer": "reviewer fixture-reviewer admitted model checkers 2026-09-16",
+  "rows": [
+    {
+      "checker": "stage-d-typecheck",
+      "checker_version": "0.1-pending"
+    }
+  ]
+}
