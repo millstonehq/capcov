@@ -323,32 +323,43 @@ class ReplayRulePackTests(unittest.TestCase):
         self.assertEqual(frozen["model_scope_exclusion"]["modality"], "assumption")
         self.assertEqual(frozen["model_scope_exclusions_closed"]["completes"], "model_scope_exclusion")
 
-    def test_model_well_formedness_is_a_positive_premise_of_qualification(self) -> None:
+    def test_model_authority_is_operation_scoped_and_exactly_joined(self) -> None:
         rules = {rule["name"]: rule for rule in self.pack["rules"]}
         atoms = _atoms(rules["op_qualified_rt"])
         well_formed = next(atom for atom in atoms if atom["relation"] == "model_well_formed")
+        checked = next(atom for atom in atoms if atom["relation"] == "model_operation_checked")
         admitted = next(atom for atom in atoms if atom["relation"] == "model_checker_admitted")
         binding = next(atom for atom in atoms if atom["relation"] == "model_describes_run")
-        for atom in (well_formed, admitted, binding):
+        for atom in (well_formed, checked, admitted, binding):
             self.assertIsNone(atom.get("negated"), atom["relation"])
         # the certificate is joined on the model the compatibility witness binds to this run
         self.assertEqual(well_formed["terms"][0], binding["terms"][0])
         self.assertEqual(binding["terms"][1], rules["op_qualified_rt"]["head"]["terms"][1])
-        # and on the (checker, version) pair the reviewer admits
-        self.assertEqual(admitted["terms"], well_formed["terms"][1:3])
+        # The model is structural, but each operation joins its own successful check
+        # to the exact reviewer-approved model/op/checker/version/binary/certificate tuple.
+        self.assertEqual(checked["terms"], [well_formed["terms"][0],
+                                              rules["op_qualified_rt"]["head"]["terms"][2],
+                                              *well_formed["terms"][1:4], {"variable": "OperationCert"}])
+        self.assertEqual(admitted["terms"], checked["terms"])
         frozen = {item["name"]: item for item in self.pack["primitives"]}
         self.assertEqual(frozen["model_well_formed"]["producer_classes"], ["modelcheck"])
         self.assertNotIn("shen", frozen["model_well_formed"]["producer_classes"])
         self.assertEqual(frozen["model_well_formed"]["context_indices"], ["model"])
         self.assertEqual([column["name"] for column in frozen["model_well_formed"]["columns"]],
-                         ["model", "checker", "checker_version", "certificate"])
+                         ["model", "checker", "checker_version", "checker_binary", "certificate"])
+        self.assertEqual(frozen["model_operation_checked"]["producer_classes"], ["modelcheck"])
+        self.assertEqual(frozen["model_operation_checked"]["context_indices"], ["model", "operation"])
+        self.assertEqual([column["name"] for column in frozen["model_operation_checked"]["columns"]],
+                         ["model", "operation", "checker", "checker_version", "checker_binary", "certificate"])
         self.assertEqual(frozen["model_checker_admitted"]["producer_classes"], ["reviewer"])
-        self.assertEqual(frozen["model_checker_admitted"]["context_indices"], [])
+        self.assertEqual(frozen["model_checker_admitted"]["context_indices"], ["model", "operation"])
         # nothing negates well-formedness, so neither relation has (or needs) a closure
         self.assertEqual([name for name, item in self.declarations.items()
-                          if item["completes"] in ("model_well_formed", "model_checker_admitted")], [])
-        self.assertNotIn("model_well_formed", {atom["relation"] for rule in self.pack["rules"]
-                                               for atom in _atoms(rule) if atom.get("negated")})
+                          if item["completes"] in ("model_well_formed", "model_operation_checked",
+                                                    "model_checker_admitted")], [])
+        self.assertFalse({"model_well_formed", "model_operation_checked", "model_checker_admitted"} &
+                         {atom["relation"] for rule in self.pack["rules"]
+                          for atom in _atoms(rule) if atom.get("negated")})
 
     def test_the_static_join_is_isolated_in_the_claim_rule(self) -> None:
         for rule in self.pack["rules"]:
@@ -373,7 +384,7 @@ class ReplayCaseTests(unittest.TestCase):
         self.assertEqual([path.stem for path in self.paths], list(case_builder.BUILDERS))
         self.assertEqual(sorted({path.name[:2] for path in self.paths}),
                          ["00", "01", "02", "03", "04", "05", "06", "08", "09", "10", "11", "13", "14", "15",
-                          "17", "18", "19", "20", "21", "23", "24", "25", "26", "27", "28", "29", "31"])
+                          "17", "18", "19", "20", "21", "23", "24", "25", "26", "27", "28", "29", "31", "32"])
         self.assertEqual([path.stem for path in case_paths(REJECTED_DIR)],
                          ["07-producer-class-violation", "12-closure-producer-violation",
                           "16-exclusion-producer-violation", "22-effect-seq-producer-violation",

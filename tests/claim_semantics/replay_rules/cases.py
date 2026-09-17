@@ -56,9 +56,10 @@ OTHER_NONCE = hashlib.sha256(b"rules-replay-v1 another nonce").hexdigest()
 # the model of a *different* Shen domain model: what a checker certificate for the
 # previous model names (case 28), which must not join this run's model
 OTHER_MODEL = hashlib.sha256(b"rules-replay-v1 another model").hexdigest()
-# the Stage D placeholder the fixture's model_well_formed.json / model_checkers.json carry
+# synthetic runtime identity used by the checker authority controls
 CHECKER, CHECKER_VERSION = "stage-d-typecheck", "0.1-pending"
 CHECKER_CERTIFICATE = hashlib.sha256(b"pending: checker not yet built").hexdigest()
+CHECKER_BINARY = "b" * 64
 DISAGREEING_STATE = hashlib.sha256(b"rules-replay-v1 php post-state outside the model").hexdigest()
 
 REVIEWER_SOURCE = "reviewer claim-time observation"
@@ -155,8 +156,20 @@ def census_facts(ops: tuple[str, ...] = OPS) -> list[dict[str, Any]]:
 # exporter rows -> case facts
 
 
-def exported_facts(receipt_dir: Path, *, drop_relations: tuple[str, ...] = ()) -> tuple[list[dict[str, Any]], str]:
-    result = replay_facts.export_bundle(receipt_dir, run=RUN, describes_indexes=(INDEX,))
+def reviewer_admissions(receipt_dir: Path) -> list[dict[str, str]]:
+    """Synthetic corpus policy for each checked operation, outside its receipt."""
+    path = receipt_dir / "model_operation_checked.json"
+    if not path.is_file():
+        return []
+    rows = json.loads(path.read_text(encoding="utf-8"))["rows"]
+    return [{"producer": "reviewer synthetic-corpus-policy", **row} for row in rows]
+
+
+def exported_facts(receipt_dir: Path, *, drop_relations: tuple[str, ...] = (),
+                   reviewer_authority: bool = True) -> tuple[list[dict[str, Any]], str]:
+    result = replay_facts.export_bundle(
+        receipt_dir, run=RUN, describes_indexes=(INDEX,),
+        reviewer_admissions=reviewer_admissions(receipt_dir) if reviewer_authority else ())
     if result.status != replay_facts.STATUS_COMPLETE:
         raise AssertionError(f"export failed: {result.status} {result.messages}")
     bundle = result.bundle
@@ -213,6 +226,13 @@ def qualified_claim(op: str, reading: str, diagnostics: list[dict[str, Any]]) ->
                   [INDEX, RUN, op], {"index": INDEX, "run": RUN}, reading, diagnostics)
 
 
+def witness_diagnostics(op: str) -> list[dict[str, Any]]:
+    """Operation authority rows are relevant only when their operation matches the claim."""
+    return [*WITNESS_DIAGNOSTICS,
+            observation("model_operation_checked", [], {"column": "operation", "operator": "=", "value": op}),
+            observation("model_checker_admitted", [], {"column": "operation", "operator": "=", "value": op})]
+
+
 def observation(trigger: str, context: list[str], predicate: dict[str, Any] | None = None,
                 status: str = "complete") -> dict[str, Any]:
     out = {"trigger_relation": trigger, "effect": "observation", "operational_status": status,
@@ -235,7 +255,7 @@ WITNESS_DIAGNOSTICS = [observation("model_describes_run", ["run"]), observation(
                        observation("model_effect_seqs_closed", ["run"]), observation("replay_request_seqs_closed", ["run"]),
                        observation("php_responses_closed", ["run"]), observation("go_responses_closed", ["run"]),
                        observation("replay_stability_closed", ["run"]),
-                       observation("model_well_formed", []), observation("model_checker_admitted", [])]
+                       observation("model_well_formed", [])]
 WITNESS_REASONS = {
     "model_describes_run": "no model_describes_run witness binds the receipt's model to the run",
     "run_nonce_observed": "the reviewer did not observe the run's nonce",
@@ -254,8 +274,9 @@ WITNESS_REASONS = {
     "php_responses_closed": "the harness did not close the PHP response table for the run",
     "go_responses_closed": "the harness did not close the Go response table for the run",
     "replay_stability_closed": "the harness did not close the cross-run stability table for the run (no bound selftest)",
-    "model_well_formed": "no typed checker certified that the model the judge binds to this run is well formed",
-    "model_checker_admitted": "the reviewer admits no checker at the version that certified the model",
+    "model_well_formed": "no typed checker certified the model's global structure",
+    "model_operation_checked": "no successful operation-scoped checker certificate matches this model operation",
+    "model_checker_admitted": "the reviewer admits no exact checker, binary, and certificate tuple for this operation",
 }
 
 
@@ -277,12 +298,35 @@ def witness_templates(claim_id: str, facts: list[dict[str, Any]], *, absent: tup
     (nothing exists to name), so exactly the absent ones fire."""
     out = []
     override = override or {}
+    op = next((candidate for candidate, suffix in SUFFIX.items()
+               if claim_id == f"claim-qualified-{suffix}"), None)
     for relation, reason in WITNESS_REASONS.items():
         if relation in override:
             out.append(override[relation])
             continue
         if relation in absent:
             out.append(missing(claim_id, relation, reason))
+        elif relation in ("model_operation_checked", "model_checker_admitted"):
+            checked = [entry for entry in facts if entry["relation"] == "model_operation_checked"
+                       and dict(zip(entry["arg_order"], entry["args"])).get("operation") == op]
+            matching = [entry for entry in facts if entry["relation"] == relation
+                        and dict(zip(entry["arg_order"], entry["args"])).get("operation") == op]
+            if relation == "model_checker_admitted" and not checked:
+                # No operation certificate means admission is not yet meaningful.
+                continue
+            if matching:
+                out.append(missing(claim_id, relation, reason,
+                                   excludes=[entry["id"] for entry in matching]))
+            else:
+                out.append(missing(claim_id, relation, reason))
+        elif relation == "model_well_formed":
+            matching = [entry for entry in facts if entry["relation"] == relation
+                        and dict(zip(entry["arg_order"], entry["args"])).get("model") == MODEL]
+            if matching:
+                out.append(missing(claim_id, relation, reason,
+                                   excludes=[entry["id"] for entry in matching]))
+            else:
+                out.append(missing(claim_id, relation, reason))
         else:
             out.append(missing(claim_id, relation, reason, excludes=[find_id(facts, relation)]))
     return out
@@ -331,7 +375,7 @@ def _both_qualified(facts, readings, *, absent=(), extra_diagnostics=None, overr
     extra_diagnostics = extra_diagnostics or {}
     claims, outputs = [], []
     for op in OPS:
-        claim = qualified_claim(op, readings[op], WITNESS_DIAGNOSTICS + extra_diagnostics.get(op, []))
+        claim = qualified_claim(op, readings[op], witness_diagnostics(op) + extra_diagnostics.get(op, []))
         claims.append(claim)
         outputs.extend(witness_templates(claim["id"], facts, absent=absent,
                                          override=(override or {}).get(op)))
@@ -373,10 +417,11 @@ def build_00() -> dict[str, Any]:
         "so req-1 is chosen over req-3 for replayed/op_exercised and for effect_order_exercised); leaves span the "
         "replay, php, go, shen, mut, reviewer, php-census and modelcheck producer classes and include the php/go/model "
         "effect sequences and the stability row.",
-        "This is also the positive control of the Stage D premise: the typed checker's model_well_formed certificate "
-        "(stage-d-typecheck 0.1-pending) is a support leaf of every op_qualified proof, joined on the same model as "
-        "model_describes_run, under the reviewer's model_checker_admitted row.  Cases 27-29 withhold each half in "
-        "turn and 30 (rejected) lets the model host sign its own certificate.",
+        "This is also the positive control of checker authority: structural validity is a model-level support leaf; "
+        "each operation has its own checked certificate, and the reviewer admits that exact model/operation/checker/"
+        "version/binary/certificate tuple.  Case 32 keeps only delete-issue checked to prove the other operations "
+        "remain pending; cases 27-29 withhold separate authority premises and 30 (rejected) lets the model host "
+        "sign its own structural certificate.",
         "The per-target claim repeat_delete_not_found(run, " + DELETE_TARGET + ") is supported from the tape order, "
         "both 200/404 response pairs, req-4's issue update on both sides and both effect closures; oracle_stable "
         "is supported from the stability row and its closure.",
@@ -1147,17 +1192,17 @@ def build_27() -> dict[str, Any]:
         exported, _ = exported_facts(root)
     facts = exported + reviewer_facts() + census_facts()
     claims, outputs = _both_qualified(facts, {
-        CREATE: "model_well_formed.json is absent, so no typed checker certified the model the judge binds to this "
-                "run: op_qualified_rt's positive well-formedness premise has nothing to match and no op qualifies, "
-                "however well PHP, Go and the model agree.",
+        CREATE: "model_well_formed.json is absent, so no typed checker certified the global structure of the model "
+                "bound to this run: op_qualified_rt's positive structural premise has nothing to match and no op "
+                "qualifies, however well PHP, Go and the operation-local checks agree.",
         CLOSE: "As for issues.create.", DELETE: "As for issues.create."},
         absent=("model_well_formed",))
     notes = [
-        "The control receipt without model_well_formed.json; the reviewer's model_checkers.json still admits "
-        "stage-d-typecheck 0.1-pending and every other observation, witness and closure is the control's.",
-        "All three op_qualified claims are unresolved with model_well_formed as the only missing premise.  The "
-        "premise is positive, not a negation under a closure: an un-typechecked model is not qualified by silence, "
-        "and there is no completeness witness that could make its absence mean 'no certificate exists'.",
+        "The control receipt without model_well_formed.json; checker facts for the operation-local checks and every "
+        "other observation, witness and closure remain present.",
+        "All three op_qualified claims are unresolved with model_well_formed as the only missing premise. The "
+        "global structure premise is positive, not a negation under a closure: an uncertified model structure is not "
+        "qualified by silence.",
     ]
     return _case("27-model-not-well-formed", "No typed well-formedness certificate for the model", None, notes,
                  facts, claims, outputs)
@@ -1169,8 +1214,9 @@ def _foreign_certificate() -> dict[str, Any]:
     The exporter refuses such a row inside a receipt (``stale``: the certificate is
     for a different artifact), so the only way it reaches a judge is directly from
     the checker -- which is exactly the shape a stale Stage D run produces."""
-    return _claim_time_fact("model_well_formed", ["model", "checker", "checker_version", "certificate"],
-                            [OTHER_MODEL, CHECKER, CHECKER_VERSION, CHECKER_CERTIFICATE],
+    return _claim_time_fact("model_well_formed", ["model", "checker", "checker_version",
+                                                    "checker_binary", "certificate"],
+                            [OTHER_MODEL, CHECKER, CHECKER_VERSION, CHECKER_BINARY, CHECKER_CERTIFICATE],
                             {"model": OTHER_MODEL}, "modelcheck",
                             f"modelcheck {CHECKER} {CHECKER_VERSION} model:{OTHER_MODEL[:12]}",
                             [f"external:model:{OTHER_MODEL}"])
@@ -1192,14 +1238,14 @@ def build_28() -> dict[str, Any]:
         CLOSE: "As for issues.create.", DELETE: "As for issues.create."},
         override=override)
     notes = [
-        "The control receipt without model_well_formed.json, plus a claim-time checker certificate for a different "
-        "model digest.  The exporter refuses such a row inside a receipt (stale: the certificate is for another "
-        "artifact), so a certificate naming a foreign model can only arrive at claim time, which is what this case "
-        "plants -- the shape a Stage D run against the previous model produces.",
+        "The control receipt without model_well_formed.json, plus a claim-time structural certificate for a different "
+        "model digest. The exporter refuses such a row inside a receipt (stale: the certificate is for another "
+        "artifact), so a certificate naming a foreign model can only arrive at claim time. Operation-local checked "
+        "rows and reviewer admissions remain bound to the receipt model.",
         "All three op_qualified claims are unresolved with model_well_formed as the missing premise, triggered by the "
-        "foreign certificate: the join is on the model, so a certificate for another model is not weaker evidence, "
-        "it is no evidence at all.  Contrast case 27, where no certificate exists.",
-        "This is the only case whose rows do not all name the case's model; the foreign row is the fault.",
+        "foreign structural certificate: the join is on the model, so a certificate for another model is no evidence. "
+        "Contrast case 27, where no structural certificate exists.",
+        "The foreign structural row is the only fact whose model differs from the case's model.",
     ]
     return _case("28-well-formed-other-model", "The checker certified a different model", "well-formed-other-model",
                  notes, facts, claims, outputs)
@@ -1207,23 +1253,46 @@ def build_28() -> dict[str, Any]:
 
 def build_29() -> dict[str, Any]:
     with variant({"model_checkers": lambda _: None}) as root:
-        exported, _ = exported_facts(root)
+        exported, _ = exported_facts(root, reviewer_authority=False)
     facts = exported + reviewer_facts() + census_facts()
     claims, outputs = _both_qualified(facts, {
-        CREATE: "The checker certified the model, but the reviewer's admitted-checker list is absent: "
-                "model_checker_admitted(stage-d-typecheck, 0.1-pending) does not hold, so the certificate is from a "
-                "checker version nobody vouched for and op_qualified_rt cannot derive.",
+        CREATE: "The model and this operation have successful checker facts, but the reviewer's exact operation "
+                "admission is absent, so model_checker_admitted has no tuple to join and op_qualified_rt cannot "
+                "derive.",
         CLOSE: "As for issues.create.", DELETE: "As for issues.create."},
         absent=("model_checker_admitted",))
     notes = [
-        "The control receipt without model_checkers.json; model_well_formed.json is the control's, so the "
-        "certificate itself is present and valid.",
-        "All three op_qualified claims are unresolved with model_checker_admitted as the only missing premise: which "
-        "checker versions may be believed is the reviewer's word, not the checker's, so an unknown checker version "
-        "certifies nothing.  The rule joins the certificate's (checker, checker_version) to the admitted pair.",
+        "The model_checkers.json row in the receipt is ignored, and the caller supplies no reviewer admission. "
+        "The structural and operation checker facts remain present.",
+        "All three op_qualified claims are unresolved with model_checker_admitted as the only missing premise: "
+        "reviewer authority must join the exact model, operation, checker, version, binary and semantic-certificate "
+        "tuple, not merely a checker name and version.",
     ]
     return _case("29-checker-not-admitted", "The certifying checker version is not admitted by the reviewer", None,
                  notes, facts, claims, outputs)
+
+
+def build_32() -> dict[str, Any]:
+    def only_delete(document: Any) -> Any:
+        return {**document, "rows": [row for row in document["rows"] if row["operation"] == DELETE]}
+
+    with variant({"model_operation_checked": only_delete}) as root:
+        exported, _ = exported_facts(root)
+    facts = exported + reviewer_facts() + census_facts()
+    claims, outputs = _both_qualified(facts, {
+        CREATE: "The model is structurally well formed and delete-issue has exact checker and reviewer authority, "
+                "but issues.create has no operation-local checked certificate, so it stays pending.",
+        CLOSE: "As for issues.create.",
+        DELETE: "delete-issue has a successful operation-local certificate admitted for the exact model, operation, "
+                "checker version, native checker binary and semantic certificate digest, so it qualifies as in case 00."})
+    notes = [
+        "The receipt contains only the model_operation_checked row for delete-issue; caller-supplied reviewer "
+        "authority also admits only that exact tuple. The structural model_well_formed fact remains present.",
+        "delete-issue remains supported while issues.create and issues.close are unresolved with "
+        "model_operation_checked as their only missing premise. No operation can inherit another operation's fact.",
+    ]
+    return _case("32-partial-operation-check", "One checked operation does not grant authority to its siblings",
+                 None, notes, facts, claims, outputs)
 
 
 def build_rejected_30() -> dict[str, Any]:
@@ -1358,6 +1427,7 @@ BUILDERS: dict[str, Callable[[], dict[str, Any]]] = {
     "28-well-formed-other-model": build_28,
     "29-checker-not-admitted": build_29,
     "31-missing-response-closure": build_31,
+    "32-partial-operation-check": build_32,
 }
 REJECTED_BUILDERS: dict[str, Callable[[], dict[str, Any]]] = {
     "07-producer-class-violation": build_rejected_07,
@@ -1433,6 +1503,11 @@ REVIEW: dict[str, dict[str, tuple[str, str, list[str], list[str]]]] = {
     "27-model-not-well-formed": _all_ops("model_well_formed"),
     "28-well-formed-other-model": _all_ops("model_well_formed"),
     "29-checker-not-admitted": _all_ops("model_checker_admitted"),
+    "32-partial-operation-check": {
+        "claim-qualified-create": ("unresolved", "complete", ["model_operation_checked"], []),
+        "claim-qualified-close": ("unresolved", "complete", ["model_operation_checked"], []),
+        "claim-qualified-delete": SUPPORTED,
+    },
     "31-missing-response-closure": {**_all_ops("php_responses_closed"),
                                     "claim-repeat-delete-not-found": SUPPORTED},
     "23-repeat-delete-excluded-write": {"claim-qualified-create": SUPPORTED, "claim-qualified-close": SUPPORTED,
