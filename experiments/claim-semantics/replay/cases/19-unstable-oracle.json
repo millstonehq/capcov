@@ -1,0 +1,4866 @@
+{
+  "schema_version": 1,
+  "id": "19-unstable-oracle",
+  "title": "The bound selftest says the PHP oracle is unstable",
+  "rule_pack": "rules-replay-v1",
+  "provenance": {
+    "kind": "synthetic",
+    "source": "replay_facts.export_bundle over an edit of tests/claim_semantics/fixtures/replay_receipt_min",
+    "seeded_fault": "oracle-unstable"
+  },
+  "context": {
+    "run": "run-fixture-1",
+    "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+    "index": "1a741e9712491dba5cf03bb8d27001081b9d17280014e4805c4dcbe9f7d0124b"
+  },
+  "review_notes": [
+    "replay_stability.json row 0 says stable = false (the two selftest runs disagreed); closed.replay_stability stays true, every observation of the run itself is the control's.",
+    "All three op_qualified claims are unresolved with oracle_stable as the missing premise, triggered by the unstable row: an oracle that does not reproduce itself qualifies nothing, however well PHP, Go and the model agree in this one run.",
+    "The companion oracle_unstable claim is supported from the stability row alone (discrepancy oracle-unstable)."
+  ],
+  "facts": [
+    {
+      "id": "reviewer:e4b47ae5f7df:model_checker_admitted:cd6761b8d728",
+      "kind": "fact",
+      "relation": "model_checker_admitted",
+      "arg_order": [
+        "checker",
+        "checker_version"
+      ],
+      "args": [
+        "stage-d-typecheck",
+        "0.1-pending"
+      ],
+      "context": {},
+      "source": "reviewer fixture-reviewer admitted model checkers 2026-09-16",
+      "provenance": {
+        "depends_on": []
+      }
+    },
+    {
+      "id": "reviewer:e4b47ae5f7df:index_describes_replay:6da538f7902a",
+      "kind": "fact",
+      "relation": "index_describes_replay",
+      "arg_order": [
+        "index",
+        "run"
+      ],
+      "args": [
+        "1a741e9712491dba5cf03bb8d27001081b9d17280014e4805c4dcbe9f7d0124b",
+        "run-fixture-1"
+      ],
+      "context": {
+        "index": "1a741e9712491dba5cf03bb8d27001081b9d17280014e4805c4dcbe9f7d0124b",
+        "run": "run-fixture-1"
+      },
+      "source": "reviewer capcov.claims.replay.replay_facts v1",
+      "provenance": {
+        "depends_on": [
+          "external:index:1a741e9712491dba5cf03bb8d27001081b9d17280014e4805c4dcbe9f7d0124b",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "modelcheck:e4b47ae5f7df:model_well_formed:45152bff266a",
+      "kind": "fact",
+      "relation": "model_well_formed",
+      "arg_order": [
+        "model",
+        "checker",
+        "checker_version",
+        "certificate"
+      ],
+      "args": [
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "stage-d-typecheck",
+        "0.1-pending",
+        "9f874decfcef80d9c4cab3db4c257fd98147b20023f936f46c77c3289d2c5ea7"
+      ],
+      "context": {
+        "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+      },
+      "source": "modelcheck stage-d-typecheck 0.1-pending model:5f0d985d02df",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+        ]
+      }
+    },
+    {
+      "id": "mut:e4b47ae5f7df:mutant:dcabe2e5666c",
+      "kind": "fact",
+      "relation": "mutant",
+      "arg_order": [
+        "model",
+        "mutant",
+        "op"
+      ],
+      "args": [
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "m-1",
+        "issues.create"
+      ],
+      "context": {
+        "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+      },
+      "source": "mut shen-mutator v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+        ]
+      }
+    },
+    {
+      "id": "mut:e4b47ae5f7df:mutant:48053510584a",
+      "kind": "fact",
+      "relation": "mutant",
+      "arg_order": [
+        "model",
+        "mutant",
+        "op"
+      ],
+      "args": [
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "m-2",
+        "issues.close"
+      ],
+      "context": {
+        "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+      },
+      "source": "mut shen-mutator v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+        ]
+      }
+    },
+    {
+      "id": "mut:e4b47ae5f7df:mutant:922bc90b7793",
+      "kind": "fact",
+      "relation": "mutant",
+      "arg_order": [
+        "model",
+        "mutant",
+        "op"
+      ],
+      "args": [
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "m-3",
+        "delete-issue"
+      ],
+      "context": {
+        "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+      },
+      "source": "mut shen-mutator v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_writes:9064c317a6f7",
+      "kind": "fact",
+      "relation": "model_writes",
+      "arg_order": [
+        "model",
+        "op",
+        "table"
+      ],
+      "args": [
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "delete-issue",
+        "entity_statistics"
+      ],
+      "context": {
+        "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+      },
+      "source": "shen shen-model-runner v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_writes:c7463dd3139d",
+      "kind": "fact",
+      "relation": "model_writes",
+      "arg_order": [
+        "model",
+        "op",
+        "table"
+      ],
+      "args": [
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "delete-issue",
+        "issue"
+      ],
+      "context": {
+        "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+      },
+      "source": "shen shen-model-runner v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_writes:2f4039259a0f",
+      "kind": "fact",
+      "relation": "model_writes",
+      "arg_order": [
+        "model",
+        "op",
+        "table"
+      ],
+      "args": [
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "issues.close",
+        "entity_statistics"
+      ],
+      "context": {
+        "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+      },
+      "source": "shen shen-model-runner v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_writes:71c9201a4ba8",
+      "kind": "fact",
+      "relation": "model_writes",
+      "arg_order": [
+        "model",
+        "op",
+        "table"
+      ],
+      "args": [
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "issues.close",
+        "issue"
+      ],
+      "context": {
+        "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+      },
+      "source": "shen shen-model-runner v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_writes:346b0cfd6d01",
+      "kind": "fact",
+      "relation": "model_writes",
+      "arg_order": [
+        "model",
+        "op",
+        "table"
+      ],
+      "args": [
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "issues.create",
+        "entity_statistics"
+      ],
+      "context": {
+        "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+      },
+      "source": "shen shen-model-runner v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_writes:dcad27ec7c29",
+      "kind": "fact",
+      "relation": "model_writes",
+      "arg_order": [
+        "model",
+        "op",
+        "table"
+      ],
+      "args": [
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "issues.create",
+        "issue"
+      ],
+      "context": {
+        "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+      },
+      "source": "shen shen-model-runner v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_writes_closed:c0617349e17e",
+      "kind": "fact",
+      "relation": "model_writes_closed",
+      "arg_order": [
+        "model",
+        "op"
+      ],
+      "args": [
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "delete-issue"
+      ],
+      "context": {
+        "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+      },
+      "source": "shen capcov.claims.replay.replay_facts model-writes-closed-v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_writes_closed:6425563e0740",
+      "kind": "fact",
+      "relation": "model_writes_closed",
+      "arg_order": [
+        "model",
+        "op"
+      ],
+      "args": [
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "issues.close"
+      ],
+      "context": {
+        "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+      },
+      "source": "shen capcov.claims.replay.replay_facts model-writes-closed-v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_writes_closed:0b12b0ac957d",
+      "kind": "fact",
+      "relation": "model_writes_closed",
+      "arg_order": [
+        "model",
+        "op"
+      ],
+      "args": [
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "issues.create"
+      ],
+      "context": {
+        "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+      },
+      "source": "shen capcov.claims.replay.replay_facts model-writes-closed-v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+        ]
+      }
+    },
+    {
+      "id": "mut:e4b47ae5f7df:mutants_closed:adb434f574a9",
+      "kind": "fact",
+      "relation": "mutants_closed",
+      "arg_order": [
+        "model",
+        "op"
+      ],
+      "args": [
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "delete-issue"
+      ],
+      "context": {
+        "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+      },
+      "source": "mut capcov.claims.replay.replay_facts mutants-closed-v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+        ]
+      }
+    },
+    {
+      "id": "mut:e4b47ae5f7df:mutants_closed:d76a11a716ff",
+      "kind": "fact",
+      "relation": "mutants_closed",
+      "arg_order": [
+        "model",
+        "op"
+      ],
+      "args": [
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "issues.close"
+      ],
+      "context": {
+        "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+      },
+      "source": "mut capcov.claims.replay.replay_facts mutants-closed-v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+        ]
+      }
+    },
+    {
+      "id": "mut:e4b47ae5f7df:mutants_closed:e0260c65efbe",
+      "kind": "fact",
+      "relation": "mutants_closed",
+      "arg_order": [
+        "model",
+        "op"
+      ],
+      "args": [
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "issues.create"
+      ],
+      "context": {
+        "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+      },
+      "source": "mut capcov.claims.replay.replay_facts mutants-closed-v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_describes_run:30e5416af7e4",
+      "kind": "fact",
+      "relation": "model_describes_run",
+      "arg_order": [
+        "model",
+        "run"
+      ],
+      "args": [
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "run-fixture-1"
+      ],
+      "context": {
+        "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "run": "run-fixture-1"
+      },
+      "source": "shen capcov.claims.replay.replay_facts v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "reviewer:e4b47ae5f7df:model_scope_exclusions_closed:62143215abdd",
+      "kind": "fact",
+      "relation": "model_scope_exclusions_closed",
+      "arg_order": [
+        "model"
+      ],
+      "args": [
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+      ],
+      "context": {
+        "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+      },
+      "source": "reviewer capcov.claims.replay.replay_facts model-scope-exclusions-closed-v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_effect_seq:5dcfe47f18ac",
+      "kind": "fact",
+      "relation": "model_effect_seq",
+      "arg_order": [
+        "run",
+        "model",
+        "req",
+        "seq",
+        "table",
+        "kind",
+        "pk"
+      ],
+      "args": [
+        "run-fixture-1",
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "req-1",
+        1,
+        "issue",
+        "insert",
+        "286bbc3165c77702a9a2c88c60a87d0cdb9f625f8d8b6863a90f25a9b6c07ceb"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "shen shen-model-runner v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+          "replay:e4b47ae5f7df:replay_request:b67ffd90fbf2",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_effect_seq:a426fb99a18f",
+      "kind": "fact",
+      "relation": "model_effect_seq",
+      "arg_order": [
+        "run",
+        "model",
+        "req",
+        "seq",
+        "table",
+        "kind",
+        "pk"
+      ],
+      "args": [
+        "run-fixture-1",
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "req-1",
+        2,
+        "entity_statistics",
+        "update",
+        "3b65dbc7d7f67c28250ab49afa4db2edc47b47b85d158d1e66c9490b030ce41b"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "shen shen-model-runner v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+          "replay:e4b47ae5f7df:replay_request:b67ffd90fbf2",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_effect_seq:34cd40906492",
+      "kind": "fact",
+      "relation": "model_effect_seq",
+      "arg_order": [
+        "run",
+        "model",
+        "req",
+        "seq",
+        "table",
+        "kind",
+        "pk"
+      ],
+      "args": [
+        "run-fixture-1",
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "req-2",
+        1,
+        "issue",
+        "update",
+        "286bbc3165c77702a9a2c88c60a87d0cdb9f625f8d8b6863a90f25a9b6c07ceb"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "shen shen-model-runner v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+          "replay:e4b47ae5f7df:replay_request:e1b3e116da62",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_effect_seq:12afcd5b3a5d",
+      "kind": "fact",
+      "relation": "model_effect_seq",
+      "arg_order": [
+        "run",
+        "model",
+        "req",
+        "seq",
+        "table",
+        "kind",
+        "pk"
+      ],
+      "args": [
+        "run-fixture-1",
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "req-2",
+        2,
+        "entity_statistics",
+        "update",
+        "3b65dbc7d7f67c28250ab49afa4db2edc47b47b85d158d1e66c9490b030ce41b"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "shen shen-model-runner v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+          "replay:e4b47ae5f7df:replay_request:e1b3e116da62",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_effect_seq:9802de59cd82",
+      "kind": "fact",
+      "relation": "model_effect_seq",
+      "arg_order": [
+        "run",
+        "model",
+        "req",
+        "seq",
+        "table",
+        "kind",
+        "pk"
+      ],
+      "args": [
+        "run-fixture-1",
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "req-3",
+        1,
+        "issue",
+        "insert",
+        "8a4c92af3b73b36336ef48adaca25fe10d26d4828bbf005821bcae3fec69746e"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "shen shen-model-runner v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+          "replay:e4b47ae5f7df:replay_request:0978f89fd323",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_effect_seq:8cc36ec3d9a2",
+      "kind": "fact",
+      "relation": "model_effect_seq",
+      "arg_order": [
+        "run",
+        "model",
+        "req",
+        "seq",
+        "table",
+        "kind",
+        "pk"
+      ],
+      "args": [
+        "run-fixture-1",
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "req-4",
+        1,
+        "issue",
+        "update",
+        "286bbc3165c77702a9a2c88c60a87d0cdb9f625f8d8b6863a90f25a9b6c07ceb"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "shen shen-model-runner v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+          "replay:e4b47ae5f7df:replay_request:843caaa74c2d",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_effect_seq:9d0f6b87c294",
+      "kind": "fact",
+      "relation": "model_effect_seq",
+      "arg_order": [
+        "run",
+        "model",
+        "req",
+        "seq",
+        "table",
+        "kind",
+        "pk"
+      ],
+      "args": [
+        "run-fixture-1",
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "req-4",
+        2,
+        "entity_statistics",
+        "update",
+        "3b65dbc7d7f67c28250ab49afa4db2edc47b47b85d158d1e66c9490b030ce41b"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "shen shen-model-runner v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+          "replay:e4b47ae5f7df:replay_request:843caaa74c2d",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_admissible:bbd809734048",
+      "kind": "fact",
+      "relation": "model_admissible",
+      "arg_order": [
+        "run",
+        "model",
+        "req",
+        "state_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "req-1",
+        "97f7bee595ea2f9b87aaf02a677347d557f2a6bf7b2928c2e7cf4ba5740ad1c4"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "shen shen-model-runner v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+          "replay:e4b47ae5f7df:replay_request:b67ffd90fbf2",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_admissible:390a5bcaf435",
+      "kind": "fact",
+      "relation": "model_admissible",
+      "arg_order": [
+        "run",
+        "model",
+        "req",
+        "state_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "req-2",
+        "15443b740dbf15e513c6c1e7eacc60a85a026d824cd1b31e388bc697ae38edcb"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "shen shen-model-runner v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+          "replay:e4b47ae5f7df:replay_request:e1b3e116da62",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_admissible:d9d0f794addd",
+      "kind": "fact",
+      "relation": "model_admissible",
+      "arg_order": [
+        "run",
+        "model",
+        "req",
+        "state_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "req-3",
+        "9adba6ea8163d8305de6471b138f046d19cfb019c96b4df9c3ee63b03fcfb90e"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "shen shen-model-runner v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+          "replay:e4b47ae5f7df:replay_request:0978f89fd323",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_admissible:c88ec3adb7d6",
+      "kind": "fact",
+      "relation": "model_admissible",
+      "arg_order": [
+        "run",
+        "model",
+        "req",
+        "state_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "req-4",
+        "e1406e7d2cb297c23fe0c502af738881d547b56b736e52217fe4415550bcc495"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "shen shen-model-runner v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+          "replay:e4b47ae5f7df:replay_request:843caaa74c2d",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_admissible:bc19283e42d2",
+      "kind": "fact",
+      "relation": "model_admissible",
+      "arg_order": [
+        "run",
+        "model",
+        "req",
+        "state_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "req-5",
+        "e1406e7d2cb297c23fe0c502af738881d547b56b736e52217fe4415550bcc495"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "shen shen-model-runner v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+          "replay:e4b47ae5f7df:replay_request:079cade6b535",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_effect:698668c2b115",
+      "kind": "fact",
+      "relation": "model_effect",
+      "arg_order": [
+        "run",
+        "model",
+        "req",
+        "table",
+        "kind",
+        "pk",
+        "cols_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "req-1",
+        "entity_statistics",
+        "update",
+        "3b65dbc7d7f67c28250ab49afa4db2edc47b47b85d158d1e66c9490b030ce41b",
+        "121890fc68623e4bef0bf61ff89c850c97b63cd544c8a21cc90f348531edf1f5"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "shen shen-model-runner v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+          "replay:e4b47ae5f7df:replay_request:b67ffd90fbf2",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_effect:0dc4e6e6632f",
+      "kind": "fact",
+      "relation": "model_effect",
+      "arg_order": [
+        "run",
+        "model",
+        "req",
+        "table",
+        "kind",
+        "pk",
+        "cols_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "req-1",
+        "issue",
+        "insert",
+        "286bbc3165c77702a9a2c88c60a87d0cdb9f625f8d8b6863a90f25a9b6c07ceb",
+        "18d494dabf129a2007d65fad8f4744b7d4e51368e58c142ff512514828b80c91"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "shen shen-model-runner v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+          "replay:e4b47ae5f7df:replay_request:b67ffd90fbf2",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_effect:8060d968bd42",
+      "kind": "fact",
+      "relation": "model_effect",
+      "arg_order": [
+        "run",
+        "model",
+        "req",
+        "table",
+        "kind",
+        "pk",
+        "cols_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "req-2",
+        "entity_statistics",
+        "update",
+        "3b65dbc7d7f67c28250ab49afa4db2edc47b47b85d158d1e66c9490b030ce41b",
+        "8082a007486cc9272de1ff8240e3f24fc10967ba0628eac33c50b926769db3b5"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "shen shen-model-runner v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+          "replay:e4b47ae5f7df:replay_request:e1b3e116da62",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_effect:304bd0a5bff1",
+      "kind": "fact",
+      "relation": "model_effect",
+      "arg_order": [
+        "run",
+        "model",
+        "req",
+        "table",
+        "kind",
+        "pk",
+        "cols_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "req-2",
+        "issue",
+        "update",
+        "286bbc3165c77702a9a2c88c60a87d0cdb9f625f8d8b6863a90f25a9b6c07ceb",
+        "34cca5168fd44d787e707172ecc1ebfccd7c73c1f11144c206f326f0d996a420"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "shen shen-model-runner v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+          "replay:e4b47ae5f7df:replay_request:e1b3e116da62",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_effect:be709c880a07",
+      "kind": "fact",
+      "relation": "model_effect",
+      "arg_order": [
+        "run",
+        "model",
+        "req",
+        "table",
+        "kind",
+        "pk",
+        "cols_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "req-3",
+        "issue",
+        "insert",
+        "8a4c92af3b73b36336ef48adaca25fe10d26d4828bbf005821bcae3fec69746e",
+        "e0962d93f20719f1cfc01d722aaeb6ca4bb040bdef2fea31d7255de7752865fd"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "shen shen-model-runner v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+          "replay:e4b47ae5f7df:replay_request:0978f89fd323",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_effect:8912865064fd",
+      "kind": "fact",
+      "relation": "model_effect",
+      "arg_order": [
+        "run",
+        "model",
+        "req",
+        "table",
+        "kind",
+        "pk",
+        "cols_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "req-4",
+        "entity_statistics",
+        "update",
+        "3b65dbc7d7f67c28250ab49afa4db2edc47b47b85d158d1e66c9490b030ce41b",
+        "80482024f69bda1d5a39ddf39b8f2b59461e1d0fed79a4ec7703e69d6b9a7908"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "shen shen-model-runner v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+          "replay:e4b47ae5f7df:replay_request:843caaa74c2d",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_effect:d314f491b7cc",
+      "kind": "fact",
+      "relation": "model_effect",
+      "arg_order": [
+        "run",
+        "model",
+        "req",
+        "table",
+        "kind",
+        "pk",
+        "cols_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "req-4",
+        "issue",
+        "update",
+        "286bbc3165c77702a9a2c88c60a87d0cdb9f625f8d8b6863a90f25a9b6c07ceb",
+        "5716922565d9d93a2d1d55f5084ae2870c5c0dc3e9decdfa756aeb6aa72a3c08"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "shen shen-model-runner v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+          "replay:e4b47ae5f7df:replay_request:843caaa74c2d",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_admissible_closed:e42e24b4af61",
+      "kind": "fact",
+      "relation": "model_admissible_closed",
+      "arg_order": [
+        "run",
+        "model"
+      ],
+      "args": [
+        "run-fixture-1",
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "shen capcov.claims.replay.replay_facts model-admissible-closed-v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "shen:e4b47ae5f7df:model_effect_seqs_closed:53d4ce94a7bc",
+      "kind": "fact",
+      "relation": "model_effect_seqs_closed",
+      "arg_order": [
+        "run",
+        "model"
+      ],
+      "args": [
+        "run-fixture-1",
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "shen capcov.claims.replay.replay_facts model-effect-seqs-closed-v1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "mut:e4b47ae5f7df:mutant_killed:ae7c53ffc992",
+      "kind": "fact",
+      "relation": "mutant_killed",
+      "arg_order": [
+        "run",
+        "mutant",
+        "req"
+      ],
+      "args": [
+        "run-fixture-1",
+        "m-1",
+        "req-1"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "mut shen-mutator v1",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:b67ffd90fbf2",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "mut:e4b47ae5f7df:mutant_killed:7f186340484e",
+      "kind": "fact",
+      "relation": "mutant_killed",
+      "arg_order": [
+        "run",
+        "mutant",
+        "req"
+      ],
+      "args": [
+        "run-fixture-1",
+        "m-2",
+        "req-2"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "mut shen-mutator v1",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:e1b3e116da62",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "mut:e4b47ae5f7df:mutant_killed:b3a01a97e3d8",
+      "kind": "fact",
+      "relation": "mutant_killed",
+      "arg_order": [
+        "run",
+        "mutant",
+        "req"
+      ],
+      "args": [
+        "run-fixture-1",
+        "m-3",
+        "req-4"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "mut shen-mutator v1",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:843caaa74c2d",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "replay:e4b47ae5f7df:replay_run:ad8057bded65",
+      "kind": "fact",
+      "relation": "replay_run",
+      "arg_order": [
+        "run",
+        "nonce",
+        "php_commit",
+        "go_commit",
+        "snapshot",
+        "model"
+      ],
+      "args": [
+        "run-fixture-1",
+        "d773402cd68020ae5fd98ab12d30cc9a52d8e1ababd8cb925e2062d9dac57c6a",
+        "php0000000000000000000000000000000000001",
+        "go00000000000000000000000000000000000001",
+        "db8013d3f0cc34353f82ca8fb8b587aaaea9bbff9194cbd21e62e203fafd0f6e",
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "replay capcov.claims.replay.replay_facts v1",
+      "provenance": {
+        "depends_on": [
+          "external:git-commit:go00000000000000000000000000000000000001",
+          "external:git-commit:php0000000000000000000000000000000000001",
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+          "external:snapshot:db8013d3f0cc34353f82ca8fb8b587aaaea9bbff9194cbd21e62e203fafd0f6e"
+        ]
+      }
+    },
+    {
+      "id": "go:e4b47ae5f7df:go_effect_seq:78e9c3fa9c25",
+      "kind": "fact",
+      "relation": "go_effect_seq",
+      "arg_order": [
+        "run",
+        "req",
+        "seq",
+        "table",
+        "kind",
+        "pk"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-1",
+        1,
+        "issue",
+        "insert",
+        "286bbc3165c77702a9a2c88c60a87d0cdb9f625f8d8b6863a90f25a9b6c07ceb"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "go target-go go00000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:b67ffd90fbf2",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "go:e4b47ae5f7df:go_effect_seq:d46699911e42",
+      "kind": "fact",
+      "relation": "go_effect_seq",
+      "arg_order": [
+        "run",
+        "req",
+        "seq",
+        "table",
+        "kind",
+        "pk"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-1",
+        2,
+        "entity_statistics",
+        "update",
+        "3b65dbc7d7f67c28250ab49afa4db2edc47b47b85d158d1e66c9490b030ce41b"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "go target-go go00000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:b67ffd90fbf2",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "go:e4b47ae5f7df:go_effect_seq:f5b8bce5d42d",
+      "kind": "fact",
+      "relation": "go_effect_seq",
+      "arg_order": [
+        "run",
+        "req",
+        "seq",
+        "table",
+        "kind",
+        "pk"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-2",
+        1,
+        "issue",
+        "update",
+        "286bbc3165c77702a9a2c88c60a87d0cdb9f625f8d8b6863a90f25a9b6c07ceb"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "go target-go go00000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:e1b3e116da62",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "go:e4b47ae5f7df:go_effect_seq:7d3882824e7e",
+      "kind": "fact",
+      "relation": "go_effect_seq",
+      "arg_order": [
+        "run",
+        "req",
+        "seq",
+        "table",
+        "kind",
+        "pk"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-2",
+        2,
+        "entity_statistics",
+        "update",
+        "3b65dbc7d7f67c28250ab49afa4db2edc47b47b85d158d1e66c9490b030ce41b"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "go target-go go00000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:e1b3e116da62",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "go:e4b47ae5f7df:go_effect_seq:7a3e52d3ede9",
+      "kind": "fact",
+      "relation": "go_effect_seq",
+      "arg_order": [
+        "run",
+        "req",
+        "seq",
+        "table",
+        "kind",
+        "pk"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-3",
+        1,
+        "issue",
+        "insert",
+        "8a4c92af3b73b36336ef48adaca25fe10d26d4828bbf005821bcae3fec69746e"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "go target-go go00000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:0978f89fd323",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "go:e4b47ae5f7df:go_effect_seq:e7b8dd7ed7db",
+      "kind": "fact",
+      "relation": "go_effect_seq",
+      "arg_order": [
+        "run",
+        "req",
+        "seq",
+        "table",
+        "kind",
+        "pk"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-4",
+        1,
+        "issue",
+        "update",
+        "286bbc3165c77702a9a2c88c60a87d0cdb9f625f8d8b6863a90f25a9b6c07ceb"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "go target-go go00000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:843caaa74c2d",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "go:e4b47ae5f7df:go_effect_seq:4d9d7170f1dc",
+      "kind": "fact",
+      "relation": "go_effect_seq",
+      "arg_order": [
+        "run",
+        "req",
+        "seq",
+        "table",
+        "kind",
+        "pk"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-4",
+        2,
+        "entity_statistics",
+        "update",
+        "3b65dbc7d7f67c28250ab49afa4db2edc47b47b85d158d1e66c9490b030ce41b"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "go target-go go00000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:843caaa74c2d",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "php:e4b47ae5f7df:php_effect_seq:4aed4b23d132",
+      "kind": "fact",
+      "relation": "php_effect_seq",
+      "arg_order": [
+        "run",
+        "req",
+        "seq",
+        "table",
+        "kind",
+        "pk"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-1",
+        1,
+        "issue",
+        "insert",
+        "286bbc3165c77702a9a2c88c60a87d0cdb9f625f8d8b6863a90f25a9b6c07ceb"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "php target-cloud php0000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:b67ffd90fbf2",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "php:e4b47ae5f7df:php_effect_seq:84132940ab52",
+      "kind": "fact",
+      "relation": "php_effect_seq",
+      "arg_order": [
+        "run",
+        "req",
+        "seq",
+        "table",
+        "kind",
+        "pk"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-1",
+        2,
+        "entity_statistics",
+        "update",
+        "3b65dbc7d7f67c28250ab49afa4db2edc47b47b85d158d1e66c9490b030ce41b"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "php target-cloud php0000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:b67ffd90fbf2",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "php:e4b47ae5f7df:php_effect_seq:5200a1c4b152",
+      "kind": "fact",
+      "relation": "php_effect_seq",
+      "arg_order": [
+        "run",
+        "req",
+        "seq",
+        "table",
+        "kind",
+        "pk"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-2",
+        1,
+        "issue",
+        "update",
+        "286bbc3165c77702a9a2c88c60a87d0cdb9f625f8d8b6863a90f25a9b6c07ceb"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "php target-cloud php0000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:e1b3e116da62",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "php:e4b47ae5f7df:php_effect_seq:41690c918d13",
+      "kind": "fact",
+      "relation": "php_effect_seq",
+      "arg_order": [
+        "run",
+        "req",
+        "seq",
+        "table",
+        "kind",
+        "pk"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-2",
+        2,
+        "entity_statistics",
+        "update",
+        "3b65dbc7d7f67c28250ab49afa4db2edc47b47b85d158d1e66c9490b030ce41b"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "php target-cloud php0000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:e1b3e116da62",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "php:e4b47ae5f7df:php_effect_seq:56658058036a",
+      "kind": "fact",
+      "relation": "php_effect_seq",
+      "arg_order": [
+        "run",
+        "req",
+        "seq",
+        "table",
+        "kind",
+        "pk"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-3",
+        1,
+        "issue",
+        "insert",
+        "8a4c92af3b73b36336ef48adaca25fe10d26d4828bbf005821bcae3fec69746e"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "php target-cloud php0000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:0978f89fd323",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "php:e4b47ae5f7df:php_effect_seq:941ca360b4fc",
+      "kind": "fact",
+      "relation": "php_effect_seq",
+      "arg_order": [
+        "run",
+        "req",
+        "seq",
+        "table",
+        "kind",
+        "pk"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-4",
+        1,
+        "issue",
+        "update",
+        "286bbc3165c77702a9a2c88c60a87d0cdb9f625f8d8b6863a90f25a9b6c07ceb"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "php target-cloud php0000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:843caaa74c2d",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "php:e4b47ae5f7df:php_effect_seq:56d289a677b4",
+      "kind": "fact",
+      "relation": "php_effect_seq",
+      "arg_order": [
+        "run",
+        "req",
+        "seq",
+        "table",
+        "kind",
+        "pk"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-4",
+        2,
+        "entity_statistics",
+        "update",
+        "3b65dbc7d7f67c28250ab49afa4db2edc47b47b85d158d1e66c9490b030ce41b"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "php target-cloud php0000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:843caaa74c2d",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "replay:e4b47ae5f7df:replay_request_seq:30cc30c48760",
+      "kind": "fact",
+      "relation": "replay_request_seq",
+      "arg_order": [
+        "run",
+        "req",
+        "seq",
+        "target"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-1",
+        1,
+        "POST /api/issues"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "replay capcov.claims.replay.replay_facts v1",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:b67ffd90fbf2",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "replay:e4b47ae5f7df:replay_request_seq:7cf849107bfa",
+      "kind": "fact",
+      "relation": "replay_request_seq",
+      "arg_order": [
+        "run",
+        "req",
+        "seq",
+        "target"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-2",
+        2,
+        "POST /api/issues/1/close"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "replay capcov.claims.replay.replay_facts v1",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:e1b3e116da62",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "replay:e4b47ae5f7df:replay_request_seq:08ba6a506e6e",
+      "kind": "fact",
+      "relation": "replay_request_seq",
+      "arg_order": [
+        "run",
+        "req",
+        "seq",
+        "target"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-3",
+        3,
+        "POST /api/issues"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "replay capcov.claims.replay.replay_facts v1",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:0978f89fd323",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "replay:e4b47ae5f7df:replay_request_seq:3b26a7492237",
+      "kind": "fact",
+      "relation": "replay_request_seq",
+      "arg_order": [
+        "run",
+        "req",
+        "seq",
+        "target"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-4",
+        4,
+        "DELETE /api/issues/1"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "replay capcov.claims.replay.replay_facts v1",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:843caaa74c2d",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "replay:e4b47ae5f7df:replay_request_seq:e8f6a28e8b2a",
+      "kind": "fact",
+      "relation": "replay_request_seq",
+      "arg_order": [
+        "run",
+        "req",
+        "seq",
+        "target"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-5",
+        5,
+        "DELETE /api/issues/1"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "replay capcov.claims.replay.replay_facts v1",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:079cade6b535",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "go:e4b47ae5f7df:go_post_state:b10fe6120345",
+      "kind": "fact",
+      "relation": "go_post_state",
+      "arg_order": [
+        "run",
+        "req",
+        "state_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-1",
+        "97f7bee595ea2f9b87aaf02a677347d557f2a6bf7b2928c2e7cf4ba5740ad1c4"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "go target-go go00000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:b67ffd90fbf2",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "go:e4b47ae5f7df:go_post_state:8cd0fcfad011",
+      "kind": "fact",
+      "relation": "go_post_state",
+      "arg_order": [
+        "run",
+        "req",
+        "state_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-2",
+        "15443b740dbf15e513c6c1e7eacc60a85a026d824cd1b31e388bc697ae38edcb"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "go target-go go00000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:e1b3e116da62",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "go:e4b47ae5f7df:go_post_state:36a8b17f9da0",
+      "kind": "fact",
+      "relation": "go_post_state",
+      "arg_order": [
+        "run",
+        "req",
+        "state_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-3",
+        "9adba6ea8163d8305de6471b138f046d19cfb019c96b4df9c3ee63b03fcfb90e"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "go target-go go00000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:0978f89fd323",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "go:e4b47ae5f7df:go_post_state:4d82078e2c4a",
+      "kind": "fact",
+      "relation": "go_post_state",
+      "arg_order": [
+        "run",
+        "req",
+        "state_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-4",
+        "e1406e7d2cb297c23fe0c502af738881d547b56b736e52217fe4415550bcc495"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "go target-go go00000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:843caaa74c2d",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "go:e4b47ae5f7df:go_post_state:d1c9da9ab58c",
+      "kind": "fact",
+      "relation": "go_post_state",
+      "arg_order": [
+        "run",
+        "req",
+        "state_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-5",
+        "e1406e7d2cb297c23fe0c502af738881d547b56b736e52217fe4415550bcc495"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "go target-go go00000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:079cade6b535",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "php:e4b47ae5f7df:php_post_state:cb69b5673861",
+      "kind": "fact",
+      "relation": "php_post_state",
+      "arg_order": [
+        "run",
+        "req",
+        "state_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-1",
+        "97f7bee595ea2f9b87aaf02a677347d557f2a6bf7b2928c2e7cf4ba5740ad1c4"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "php target-cloud php0000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:b67ffd90fbf2",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "php:e4b47ae5f7df:php_post_state:61c03708afcd",
+      "kind": "fact",
+      "relation": "php_post_state",
+      "arg_order": [
+        "run",
+        "req",
+        "state_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-2",
+        "15443b740dbf15e513c6c1e7eacc60a85a026d824cd1b31e388bc697ae38edcb"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "php target-cloud php0000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:e1b3e116da62",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "php:e4b47ae5f7df:php_post_state:811ecd651a8b",
+      "kind": "fact",
+      "relation": "php_post_state",
+      "arg_order": [
+        "run",
+        "req",
+        "state_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-3",
+        "9adba6ea8163d8305de6471b138f046d19cfb019c96b4df9c3ee63b03fcfb90e"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "php target-cloud php0000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:0978f89fd323",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "php:e4b47ae5f7df:php_post_state:62d53ef57d7c",
+      "kind": "fact",
+      "relation": "php_post_state",
+      "arg_order": [
+        "run",
+        "req",
+        "state_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-4",
+        "e1406e7d2cb297c23fe0c502af738881d547b56b736e52217fe4415550bcc495"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "php target-cloud php0000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:843caaa74c2d",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "php:e4b47ae5f7df:php_post_state:515b393b40fc",
+      "kind": "fact",
+      "relation": "php_post_state",
+      "arg_order": [
+        "run",
+        "req",
+        "state_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-5",
+        "e1406e7d2cb297c23fe0c502af738881d547b56b736e52217fe4415550bcc495"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "php target-cloud php0000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:079cade6b535",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "go:e4b47ae5f7df:go_response:ba5741069208",
+      "kind": "fact",
+      "relation": "go_response",
+      "arg_order": [
+        "run",
+        "req",
+        "status"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-1",
+        201
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "go target-go go00000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:b67ffd90fbf2",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "go:e4b47ae5f7df:go_response:2df74c6fee8a",
+      "kind": "fact",
+      "relation": "go_response",
+      "arg_order": [
+        "run",
+        "req",
+        "status"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-2",
+        200
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "go target-go go00000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:e1b3e116da62",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "go:e4b47ae5f7df:go_response:e9e109fd66f0",
+      "kind": "fact",
+      "relation": "go_response",
+      "arg_order": [
+        "run",
+        "req",
+        "status"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-3",
+        201
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "go target-go go00000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:0978f89fd323",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "go:e4b47ae5f7df:go_response:a6405fc1c9ae",
+      "kind": "fact",
+      "relation": "go_response",
+      "arg_order": [
+        "run",
+        "req",
+        "status"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-4",
+        200
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "go target-go go00000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:843caaa74c2d",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "go:e4b47ae5f7df:go_response:e19df8b2066b",
+      "kind": "fact",
+      "relation": "go_response",
+      "arg_order": [
+        "run",
+        "req",
+        "status"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-5",
+        404
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "go target-go go00000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:079cade6b535",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "php:e4b47ae5f7df:php_response:e2f71d85105f",
+      "kind": "fact",
+      "relation": "php_response",
+      "arg_order": [
+        "run",
+        "req",
+        "status"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-1",
+        201
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "php target-cloud php0000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:b67ffd90fbf2",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "php:e4b47ae5f7df:php_response:cde9400635f9",
+      "kind": "fact",
+      "relation": "php_response",
+      "arg_order": [
+        "run",
+        "req",
+        "status"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-2",
+        200
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "php target-cloud php0000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:e1b3e116da62",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "php:e4b47ae5f7df:php_response:c6459ea4366e",
+      "kind": "fact",
+      "relation": "php_response",
+      "arg_order": [
+        "run",
+        "req",
+        "status"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-3",
+        201
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "php target-cloud php0000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:0978f89fd323",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "php:e4b47ae5f7df:php_response:0000c0a41b1d",
+      "kind": "fact",
+      "relation": "php_response",
+      "arg_order": [
+        "run",
+        "req",
+        "status"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-4",
+        200
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "php target-cloud php0000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:843caaa74c2d",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "php:e4b47ae5f7df:php_response:44bff4b7f3da",
+      "kind": "fact",
+      "relation": "php_response",
+      "arg_order": [
+        "run",
+        "req",
+        "status"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-5",
+        404
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "php target-cloud php0000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:079cade6b535",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "go:e4b47ae5f7df:go_effect:c1b3d5476357",
+      "kind": "fact",
+      "relation": "go_effect",
+      "arg_order": [
+        "run",
+        "req",
+        "table",
+        "kind",
+        "pk",
+        "cols_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-1",
+        "entity_statistics",
+        "update",
+        "3b65dbc7d7f67c28250ab49afa4db2edc47b47b85d158d1e66c9490b030ce41b",
+        "121890fc68623e4bef0bf61ff89c850c97b63cd544c8a21cc90f348531edf1f5"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "go target-go go00000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:b67ffd90fbf2",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "go:e4b47ae5f7df:go_effect:049f7433cb18",
+      "kind": "fact",
+      "relation": "go_effect",
+      "arg_order": [
+        "run",
+        "req",
+        "table",
+        "kind",
+        "pk",
+        "cols_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-1",
+        "issue",
+        "insert",
+        "286bbc3165c77702a9a2c88c60a87d0cdb9f625f8d8b6863a90f25a9b6c07ceb",
+        "18d494dabf129a2007d65fad8f4744b7d4e51368e58c142ff512514828b80c91"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "go target-go go00000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:b67ffd90fbf2",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "go:e4b47ae5f7df:go_effect:16acd1136644",
+      "kind": "fact",
+      "relation": "go_effect",
+      "arg_order": [
+        "run",
+        "req",
+        "table",
+        "kind",
+        "pk",
+        "cols_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-2",
+        "entity_statistics",
+        "update",
+        "3b65dbc7d7f67c28250ab49afa4db2edc47b47b85d158d1e66c9490b030ce41b",
+        "8082a007486cc9272de1ff8240e3f24fc10967ba0628eac33c50b926769db3b5"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "go target-go go00000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:e1b3e116da62",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "go:e4b47ae5f7df:go_effect:57f42ab0272a",
+      "kind": "fact",
+      "relation": "go_effect",
+      "arg_order": [
+        "run",
+        "req",
+        "table",
+        "kind",
+        "pk",
+        "cols_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-2",
+        "issue",
+        "update",
+        "286bbc3165c77702a9a2c88c60a87d0cdb9f625f8d8b6863a90f25a9b6c07ceb",
+        "34cca5168fd44d787e707172ecc1ebfccd7c73c1f11144c206f326f0d996a420"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "go target-go go00000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:e1b3e116da62",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "go:e4b47ae5f7df:go_effect:c90310912c7a",
+      "kind": "fact",
+      "relation": "go_effect",
+      "arg_order": [
+        "run",
+        "req",
+        "table",
+        "kind",
+        "pk",
+        "cols_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-3",
+        "issue",
+        "insert",
+        "8a4c92af3b73b36336ef48adaca25fe10d26d4828bbf005821bcae3fec69746e",
+        "e0962d93f20719f1cfc01d722aaeb6ca4bb040bdef2fea31d7255de7752865fd"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "go target-go go00000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:0978f89fd323",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "go:e4b47ae5f7df:go_effect:3cae52ac6bb3",
+      "kind": "fact",
+      "relation": "go_effect",
+      "arg_order": [
+        "run",
+        "req",
+        "table",
+        "kind",
+        "pk",
+        "cols_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-4",
+        "entity_statistics",
+        "update",
+        "3b65dbc7d7f67c28250ab49afa4db2edc47b47b85d158d1e66c9490b030ce41b",
+        "80482024f69bda1d5a39ddf39b8f2b59461e1d0fed79a4ec7703e69d6b9a7908"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "go target-go go00000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:843caaa74c2d",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "go:e4b47ae5f7df:go_effect:a27c442c2ee5",
+      "kind": "fact",
+      "relation": "go_effect",
+      "arg_order": [
+        "run",
+        "req",
+        "table",
+        "kind",
+        "pk",
+        "cols_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-4",
+        "issue",
+        "update",
+        "286bbc3165c77702a9a2c88c60a87d0cdb9f625f8d8b6863a90f25a9b6c07ceb",
+        "5716922565d9d93a2d1d55f5084ae2870c5c0dc3e9decdfa756aeb6aa72a3c08"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "go target-go go00000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:843caaa74c2d",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "php:e4b47ae5f7df:php_effect:c59d6054c03b",
+      "kind": "fact",
+      "relation": "php_effect",
+      "arg_order": [
+        "run",
+        "req",
+        "table",
+        "kind",
+        "pk",
+        "cols_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-1",
+        "entity_statistics",
+        "update",
+        "3b65dbc7d7f67c28250ab49afa4db2edc47b47b85d158d1e66c9490b030ce41b",
+        "121890fc68623e4bef0bf61ff89c850c97b63cd544c8a21cc90f348531edf1f5"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "php target-cloud php0000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:b67ffd90fbf2",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "php:e4b47ae5f7df:php_effect:0055d4599094",
+      "kind": "fact",
+      "relation": "php_effect",
+      "arg_order": [
+        "run",
+        "req",
+        "table",
+        "kind",
+        "pk",
+        "cols_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-1",
+        "issue",
+        "insert",
+        "286bbc3165c77702a9a2c88c60a87d0cdb9f625f8d8b6863a90f25a9b6c07ceb",
+        "18d494dabf129a2007d65fad8f4744b7d4e51368e58c142ff512514828b80c91"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "php target-cloud php0000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:b67ffd90fbf2",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "php:e4b47ae5f7df:php_effect:7eb41e9adf29",
+      "kind": "fact",
+      "relation": "php_effect",
+      "arg_order": [
+        "run",
+        "req",
+        "table",
+        "kind",
+        "pk",
+        "cols_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-2",
+        "entity_statistics",
+        "update",
+        "3b65dbc7d7f67c28250ab49afa4db2edc47b47b85d158d1e66c9490b030ce41b",
+        "8082a007486cc9272de1ff8240e3f24fc10967ba0628eac33c50b926769db3b5"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "php target-cloud php0000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:e1b3e116da62",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "php:e4b47ae5f7df:php_effect:1a70baa10e37",
+      "kind": "fact",
+      "relation": "php_effect",
+      "arg_order": [
+        "run",
+        "req",
+        "table",
+        "kind",
+        "pk",
+        "cols_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-2",
+        "issue",
+        "update",
+        "286bbc3165c77702a9a2c88c60a87d0cdb9f625f8d8b6863a90f25a9b6c07ceb",
+        "34cca5168fd44d787e707172ecc1ebfccd7c73c1f11144c206f326f0d996a420"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "php target-cloud php0000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:e1b3e116da62",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "php:e4b47ae5f7df:php_effect:1ef830cad884",
+      "kind": "fact",
+      "relation": "php_effect",
+      "arg_order": [
+        "run",
+        "req",
+        "table",
+        "kind",
+        "pk",
+        "cols_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-3",
+        "issue",
+        "insert",
+        "8a4c92af3b73b36336ef48adaca25fe10d26d4828bbf005821bcae3fec69746e",
+        "e0962d93f20719f1cfc01d722aaeb6ca4bb040bdef2fea31d7255de7752865fd"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "php target-cloud php0000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:0978f89fd323",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "php:e4b47ae5f7df:php_effect:1c1d57baaed7",
+      "kind": "fact",
+      "relation": "php_effect",
+      "arg_order": [
+        "run",
+        "req",
+        "table",
+        "kind",
+        "pk",
+        "cols_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-4",
+        "entity_statistics",
+        "update",
+        "3b65dbc7d7f67c28250ab49afa4db2edc47b47b85d158d1e66c9490b030ce41b",
+        "80482024f69bda1d5a39ddf39b8f2b59461e1d0fed79a4ec7703e69d6b9a7908"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "php target-cloud php0000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:843caaa74c2d",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "php:e4b47ae5f7df:php_effect:f587af8c82cc",
+      "kind": "fact",
+      "relation": "php_effect",
+      "arg_order": [
+        "run",
+        "req",
+        "table",
+        "kind",
+        "pk",
+        "cols_digest"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-4",
+        "issue",
+        "update",
+        "286bbc3165c77702a9a2c88c60a87d0cdb9f625f8d8b6863a90f25a9b6c07ceb",
+        "5716922565d9d93a2d1d55f5084ae2870c5c0dc3e9decdfa756aeb6aa72a3c08"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "php target-cloud php0000000000000000000000000000000000001",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_request:843caaa74c2d",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "replay:e4b47ae5f7df:replay_request:b67ffd90fbf2",
+      "kind": "fact",
+      "relation": "replay_request",
+      "arg_order": [
+        "run",
+        "req",
+        "tenant",
+        "route",
+        "op"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-1",
+        "tenant-a",
+        "POST /api/issues",
+        "issues.create"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "replay capcov.claims.replay.replay_facts v1",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "replay:e4b47ae5f7df:replay_request:e1b3e116da62",
+      "kind": "fact",
+      "relation": "replay_request",
+      "arg_order": [
+        "run",
+        "req",
+        "tenant",
+        "route",
+        "op"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-2",
+        "tenant-a",
+        "POST /api/issues/{id}/close",
+        "issues.close"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "replay capcov.claims.replay.replay_facts v1",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "replay:e4b47ae5f7df:replay_request:0978f89fd323",
+      "kind": "fact",
+      "relation": "replay_request",
+      "arg_order": [
+        "run",
+        "req",
+        "tenant",
+        "route",
+        "op"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-3",
+        "tenant-b",
+        "POST /api/issues",
+        "issues.create"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "replay capcov.claims.replay.replay_facts v1",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "replay:e4b47ae5f7df:replay_request:843caaa74c2d",
+      "kind": "fact",
+      "relation": "replay_request",
+      "arg_order": [
+        "run",
+        "req",
+        "tenant",
+        "route",
+        "op"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-4",
+        "tenant-a",
+        "DELETE /api/issues/{id}",
+        "delete-issue"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "replay capcov.claims.replay.replay_facts v1",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "replay:e4b47ae5f7df:replay_request:079cade6b535",
+      "kind": "fact",
+      "relation": "replay_request",
+      "arg_order": [
+        "run",
+        "req",
+        "tenant",
+        "route",
+        "op"
+      ],
+      "args": [
+        "run-fixture-1",
+        "req-5",
+        "tenant-a",
+        "DELETE /api/issues/{id}",
+        "delete-issue"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "replay capcov.claims.replay.replay_facts v1",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "replay:e4b47ae5f7df:replay_stability:089aa9f36e9d",
+      "kind": "fact",
+      "relation": "replay_stability",
+      "arg_order": [
+        "run",
+        "run_a",
+        "run_b",
+        "side",
+        "stable"
+      ],
+      "args": [
+        "run-fixture-1",
+        "run-fixture-1a",
+        "run-fixture-1b",
+        "php",
+        "false"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "replay capcov.claims.replay.replay_facts v1",
+      "provenance": {
+        "depends_on": [
+          "external:run:run-fixture-1a",
+          "external:run:run-fixture-1b",
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "replay:e4b47ae5f7df:go_effects_closed:741c700022f7",
+      "kind": "fact",
+      "relation": "go_effects_closed",
+      "arg_order": [
+        "run"
+      ],
+      "args": [
+        "run-fixture-1"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "replay capcov.claims.replay.replay_facts go-effects-closed-v1",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "replay:e4b47ae5f7df:go_effect_seqs_closed:abdb419a2db3",
+      "kind": "fact",
+      "relation": "go_effect_seqs_closed",
+      "arg_order": [
+        "run"
+      ],
+      "args": [
+        "run-fixture-1"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "replay capcov.claims.replay.replay_facts go-effect-seqs-closed-v1",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "replay:e4b47ae5f7df:go_post_states_closed:d399545a4a0d",
+      "kind": "fact",
+      "relation": "go_post_states_closed",
+      "arg_order": [
+        "run"
+      ],
+      "args": [
+        "run-fixture-1"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "replay capcov.claims.replay.replay_facts go-post-states-closed-v1",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "replay:e4b47ae5f7df:go_responses_closed:f59875098423",
+      "kind": "fact",
+      "relation": "go_responses_closed",
+      "arg_order": [
+        "run"
+      ],
+      "args": [
+        "run-fixture-1"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "replay capcov.claims.replay.replay_facts go-responses-closed-v1",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "replay:e4b47ae5f7df:mutant_kills_closed:5ec55c452bcf",
+      "kind": "fact",
+      "relation": "mutant_kills_closed",
+      "arg_order": [
+        "run"
+      ],
+      "args": [
+        "run-fixture-1"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "replay capcov.claims.replay.replay_facts mutant-kills-closed-v1",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "replay:e4b47ae5f7df:php_effects_closed:c69d8dda2898",
+      "kind": "fact",
+      "relation": "php_effects_closed",
+      "arg_order": [
+        "run"
+      ],
+      "args": [
+        "run-fixture-1"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "replay capcov.claims.replay.replay_facts php-effects-closed-v1",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "replay:e4b47ae5f7df:php_effect_seqs_closed:d8e1764ed4bf",
+      "kind": "fact",
+      "relation": "php_effect_seqs_closed",
+      "arg_order": [
+        "run"
+      ],
+      "args": [
+        "run-fixture-1"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "replay capcov.claims.replay.replay_facts php-effect-seqs-closed-v1",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "replay:e4b47ae5f7df:php_post_states_closed:563c8b6a1be0",
+      "kind": "fact",
+      "relation": "php_post_states_closed",
+      "arg_order": [
+        "run"
+      ],
+      "args": [
+        "run-fixture-1"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "replay capcov.claims.replay.replay_facts php-post-states-closed-v1",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "replay:e4b47ae5f7df:php_responses_closed:a139721eba4a",
+      "kind": "fact",
+      "relation": "php_responses_closed",
+      "arg_order": [
+        "run"
+      ],
+      "args": [
+        "run-fixture-1"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "replay capcov.claims.replay.replay_facts php-responses-closed-v1",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "replay:e4b47ae5f7df:replay_requests_closed:acc922ba3952",
+      "kind": "fact",
+      "relation": "replay_requests_closed",
+      "arg_order": [
+        "run"
+      ],
+      "args": [
+        "run-fixture-1"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "replay capcov.claims.replay.replay_facts requests-closed-v1",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "replay:e4b47ae5f7df:replay_request_seqs_closed:2bfa66364c8c",
+      "kind": "fact",
+      "relation": "replay_request_seqs_closed",
+      "arg_order": [
+        "run"
+      ],
+      "args": [
+        "run-fixture-1"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "replay capcov.claims.replay.replay_facts replay-request-seqs-closed-v1",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "replay:e4b47ae5f7df:replay_stability_closed:cafd259173e9",
+      "kind": "fact",
+      "relation": "replay_stability_closed",
+      "arg_order": [
+        "run"
+      ],
+      "args": [
+        "run-fixture-1"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "source": "replay capcov.claims.replay.replay_facts replay-stability-closed-v1",
+      "provenance": {
+        "depends_on": [
+          "replay:e4b47ae5f7df:replay_run:ad8057bded65"
+        ]
+      }
+    },
+    {
+      "id": "reviewer:claim-time:run_nonce_observed:47b34bd1b4f8",
+      "kind": "fact",
+      "relation": "run_nonce_observed",
+      "arg_order": [
+        "run",
+        "nonce"
+      ],
+      "args": [
+        "run-fixture-1",
+        "d773402cd68020ae5fd98ab12d30cc9a52d8e1ababd8cb925e2062d9dac57c6a"
+      ],
+      "context": {},
+      "source": "reviewer claim-time observation",
+      "provenance": {
+        "depends_on": []
+      }
+    },
+    {
+      "id": "reviewer:claim-time:snapshot_observed:320fa56f8495",
+      "kind": "fact",
+      "relation": "snapshot_observed",
+      "arg_order": [
+        "snapshot"
+      ],
+      "args": [
+        "db8013d3f0cc34353f82ca8fb8b587aaaea9bbff9194cbd21e62e203fafd0f6e"
+      ],
+      "context": {},
+      "source": "reviewer claim-time observation",
+      "provenance": {
+        "depends_on": []
+      }
+    },
+    {
+      "id": "reviewer:claim-time:model_observed:5071ad5dc2c5",
+      "kind": "fact",
+      "relation": "model_observed",
+      "arg_order": [
+        "model"
+      ],
+      "args": [
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+      ],
+      "context": {},
+      "source": "reviewer claim-time observation",
+      "provenance": {
+        "depends_on": []
+      }
+    },
+    {
+      "id": "php:claim-time:op_declared:f80177ad9367",
+      "kind": "fact",
+      "relation": "op_declared",
+      "arg_order": [
+        "index",
+        "op"
+      ],
+      "args": [
+        "1a741e9712491dba5cf03bb8d27001081b9d17280014e4805c4dcbe9f7d0124b",
+        "issues.create"
+      ],
+      "context": {
+        "index": "1a741e9712491dba5cf03bb8d27001081b9d17280014e4805c4dcbe9f7d0124b"
+      },
+      "source": "php-census target-cloud route census v1",
+      "provenance": {
+        "depends_on": [
+          "external:index:1a741e9712491dba5cf03bb8d27001081b9d17280014e4805c4dcbe9f7d0124b"
+        ]
+      }
+    },
+    {
+      "id": "php:claim-time:op_declared:a23b0d956caa",
+      "kind": "fact",
+      "relation": "op_declared",
+      "arg_order": [
+        "index",
+        "op"
+      ],
+      "args": [
+        "1a741e9712491dba5cf03bb8d27001081b9d17280014e4805c4dcbe9f7d0124b",
+        "issues.close"
+      ],
+      "context": {
+        "index": "1a741e9712491dba5cf03bb8d27001081b9d17280014e4805c4dcbe9f7d0124b"
+      },
+      "source": "php-census target-cloud route census v1",
+      "provenance": {
+        "depends_on": [
+          "external:index:1a741e9712491dba5cf03bb8d27001081b9d17280014e4805c4dcbe9f7d0124b"
+        ]
+      }
+    },
+    {
+      "id": "php:claim-time:op_declared:435ff47d3ea2",
+      "kind": "fact",
+      "relation": "op_declared",
+      "arg_order": [
+        "index",
+        "op"
+      ],
+      "args": [
+        "1a741e9712491dba5cf03bb8d27001081b9d17280014e4805c4dcbe9f7d0124b",
+        "delete-issue"
+      ],
+      "context": {
+        "index": "1a741e9712491dba5cf03bb8d27001081b9d17280014e4805c4dcbe9f7d0124b"
+      },
+      "source": "php-census target-cloud route census v1",
+      "provenance": {
+        "depends_on": [
+          "external:index:1a741e9712491dba5cf03bb8d27001081b9d17280014e4805c4dcbe9f7d0124b"
+        ]
+      }
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "reviewer:e4b47ae5f7df:model_scope_exclusion:200966c832d5",
+      "kind": "assumption",
+      "relation": "model_scope_exclusion",
+      "arg_order": [
+        "model",
+        "table",
+        "reason"
+      ],
+      "args": [
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "authentication",
+        "session touch on every authenticated request"
+      ],
+      "context": {
+        "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+      },
+      "source": "reviewer fixture-reviewer 2026-09-16 model:5f0d985d02df run:run-fixture-1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+        ]
+      }
+    },
+    {
+      "id": "reviewer:e4b47ae5f7df:model_scope_exclusion:b8aab0a0e075",
+      "kind": "assumption",
+      "relation": "model_scope_exclusion",
+      "arg_order": [
+        "model",
+        "table",
+        "reason"
+      ],
+      "args": [
+        "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156",
+        "redis",
+        "cache invalidation bookkeeping"
+      ],
+      "context": {
+        "model": "5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+      },
+      "source": "reviewer fixture-reviewer 2026-09-16 model:5f0d985d02df run:run-fixture-1",
+      "provenance": {
+        "depends_on": [
+          "external:model:5f0d985d02df45b3790e120f9809e5d4af85edef8079b84b08f5bfdf8439e156"
+        ]
+      }
+    }
+  ],
+  "claims": [
+    {
+      "id": "claim-qualified-create",
+      "relation": "op_qualified",
+      "arg_order": [
+        "index",
+        "run",
+        "op"
+      ],
+      "args": [
+        "1a741e9712491dba5cf03bb8d27001081b9d17280014e4805c4dcbe9f7d0124b",
+        "run-fixture-1",
+        "issues.create"
+      ],
+      "context": {
+        "index": "1a741e9712491dba5cf03bb8d27001081b9d17280014e4805c4dcbe9f7d0124b",
+        "run": "run-fixture-1"
+      },
+      "quantifier": "exists",
+      "domain": null,
+      "mappings": [],
+      "diagnostics": [
+        {
+          "trigger_relation": "model_describes_run",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "run_nonce_observed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": []
+        },
+        {
+          "trigger_relation": "snapshot_observed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": []
+        },
+        {
+          "trigger_relation": "model_observed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": []
+        },
+        {
+          "trigger_relation": "php_post_states_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "go_post_states_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "php_effects_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "go_effects_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "model_admissible_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "model_scope_exclusions_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": []
+        },
+        {
+          "trigger_relation": "php_effect_seqs_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "go_effect_seqs_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "model_effect_seqs_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "replay_request_seqs_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "php_responses_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "go_responses_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "replay_stability_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "model_well_formed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": []
+        },
+        {
+          "trigger_relation": "model_checker_admitted",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": []
+        },
+        {
+          "trigger_relation": "replay_stability",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        }
+      ],
+      "reading": "The bound selftest reports stable = false: oracle_unstable derives, so oracle_stable (which negates it under replay_stability_closed) does not, and op_qualified_rt cannot derive for any op of the run."
+    },
+    {
+      "id": "claim-qualified-close",
+      "relation": "op_qualified",
+      "arg_order": [
+        "index",
+        "run",
+        "op"
+      ],
+      "args": [
+        "1a741e9712491dba5cf03bb8d27001081b9d17280014e4805c4dcbe9f7d0124b",
+        "run-fixture-1",
+        "issues.close"
+      ],
+      "context": {
+        "index": "1a741e9712491dba5cf03bb8d27001081b9d17280014e4805c4dcbe9f7d0124b",
+        "run": "run-fixture-1"
+      },
+      "quantifier": "exists",
+      "domain": null,
+      "mappings": [],
+      "diagnostics": [
+        {
+          "trigger_relation": "model_describes_run",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "run_nonce_observed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": []
+        },
+        {
+          "trigger_relation": "snapshot_observed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": []
+        },
+        {
+          "trigger_relation": "model_observed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": []
+        },
+        {
+          "trigger_relation": "php_post_states_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "go_post_states_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "php_effects_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "go_effects_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "model_admissible_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "model_scope_exclusions_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": []
+        },
+        {
+          "trigger_relation": "php_effect_seqs_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "go_effect_seqs_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "model_effect_seqs_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "replay_request_seqs_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "php_responses_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "go_responses_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "replay_stability_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "model_well_formed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": []
+        },
+        {
+          "trigger_relation": "model_checker_admitted",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": []
+        },
+        {
+          "trigger_relation": "replay_stability",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        }
+      ],
+      "reading": "As for issues.create."
+    },
+    {
+      "id": "claim-qualified-delete",
+      "relation": "op_qualified",
+      "arg_order": [
+        "index",
+        "run",
+        "op"
+      ],
+      "args": [
+        "1a741e9712491dba5cf03bb8d27001081b9d17280014e4805c4dcbe9f7d0124b",
+        "run-fixture-1",
+        "delete-issue"
+      ],
+      "context": {
+        "index": "1a741e9712491dba5cf03bb8d27001081b9d17280014e4805c4dcbe9f7d0124b",
+        "run": "run-fixture-1"
+      },
+      "quantifier": "exists",
+      "domain": null,
+      "mappings": [],
+      "diagnostics": [
+        {
+          "trigger_relation": "model_describes_run",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "run_nonce_observed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": []
+        },
+        {
+          "trigger_relation": "snapshot_observed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": []
+        },
+        {
+          "trigger_relation": "model_observed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": []
+        },
+        {
+          "trigger_relation": "php_post_states_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "go_post_states_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "php_effects_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "go_effects_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "model_admissible_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "model_scope_exclusions_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": []
+        },
+        {
+          "trigger_relation": "php_effect_seqs_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "go_effect_seqs_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "model_effect_seqs_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "replay_request_seqs_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "php_responses_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "go_responses_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "replay_stability_closed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        },
+        {
+          "trigger_relation": "model_well_formed",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": []
+        },
+        {
+          "trigger_relation": "model_checker_admitted",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": []
+        },
+        {
+          "trigger_relation": "replay_stability",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        }
+      ],
+      "reading": "As for issues.create."
+    },
+    {
+      "id": "claim-oracle-unstable",
+      "relation": "oracle_unstable",
+      "arg_order": [
+        "run"
+      ],
+      "args": [
+        "run-fixture-1"
+      ],
+      "context": {
+        "run": "run-fixture-1"
+      },
+      "quantifier": "exists",
+      "domain": null,
+      "mappings": [],
+      "diagnostics": [
+        {
+          "trigger_relation": "replay_stability",
+          "effect": "observation",
+          "operational_status": "complete",
+          "context_indices": [
+            "run"
+          ]
+        }
+      ],
+      "reading": "replay_stability carries a row with stable = false for the run."
+    }
+  ],
+  "outputs": [
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-create",
+      "relation": "model_describes_run",
+      "fields": {
+        "reason": {
+          "value": "no model_describes_run witness binds the receipt's model to the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "shen:e4b47ae5f7df:model_describes_run:30e5416af7e4"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-create",
+      "relation": "run_nonce_observed",
+      "fields": {
+        "reason": {
+          "value": "the reviewer did not observe the run's nonce"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "reviewer:claim-time:run_nonce_observed:47b34bd1b4f8"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-create",
+      "relation": "snapshot_observed",
+      "fields": {
+        "reason": {
+          "value": "the reviewer did not observe the run's snapshot digest"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "reviewer:claim-time:snapshot_observed:320fa56f8495"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-create",
+      "relation": "model_observed",
+      "fields": {
+        "reason": {
+          "value": "the reviewer did not observe the model digest"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "reviewer:claim-time:model_observed:5071ad5dc2c5"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-create",
+      "relation": "php_post_states_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the PHP post-state table for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:php_post_states_closed:563c8b6a1be0"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-create",
+      "relation": "go_post_states_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the Go post-state table for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:go_post_states_closed:d399545a4a0d"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-create",
+      "relation": "php_effects_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the PHP effect table for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:php_effects_closed:c69d8dda2898"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-create",
+      "relation": "go_effects_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the Go effect table for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:go_effects_closed:741c700022f7"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-create",
+      "relation": "model_admissible_closed",
+      "fields": {
+        "reason": {
+          "value": "the model runner did not close the admissible-state set for the run and model"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "shen:e4b47ae5f7df:model_admissible_closed:e42e24b4af61"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-create",
+      "relation": "model_scope_exclusions_closed",
+      "fields": {
+        "reason": {
+          "value": "the reviewer did not close the model-scope exclusion set for the model"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "reviewer:e4b47ae5f7df:model_scope_exclusions_closed:62143215abdd"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-create",
+      "relation": "php_effect_seqs_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the PHP per-statement effect sequence for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:php_effect_seqs_closed:d8e1764ed4bf"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-create",
+      "relation": "go_effect_seqs_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the Go per-statement effect sequence for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:go_effect_seqs_closed:abdb419a2db3"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-create",
+      "relation": "model_effect_seqs_closed",
+      "fields": {
+        "reason": {
+          "value": "the model runner did not close the model's effect order for the run and model"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "shen:e4b47ae5f7df:model_effect_seqs_closed:53d4ce94a7bc"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-create",
+      "relation": "replay_request_seqs_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the tape order for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:replay_request_seqs_closed:2bfa66364c8c"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-create",
+      "relation": "php_responses_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the PHP response table for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:php_responses_closed:a139721eba4a"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-create",
+      "relation": "go_responses_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the Go response table for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:go_responses_closed:f59875098423"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-create",
+      "relation": "replay_stability_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the cross-run stability table for the run (no bound selftest)"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:replay_stability_closed:cafd259173e9"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-create",
+      "relation": "model_well_formed",
+      "fields": {
+        "reason": {
+          "value": "no typed checker certified that the model the judge binds to this run is well formed"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "modelcheck:e4b47ae5f7df:model_well_formed:45152bff266a"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-create",
+      "relation": "model_checker_admitted",
+      "fields": {
+        "reason": {
+          "value": "the reviewer admits no checker at the version that certified the model"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "reviewer:e4b47ae5f7df:model_checker_admitted:cd6761b8d728"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-close",
+      "relation": "model_describes_run",
+      "fields": {
+        "reason": {
+          "value": "no model_describes_run witness binds the receipt's model to the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "shen:e4b47ae5f7df:model_describes_run:30e5416af7e4"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-close",
+      "relation": "run_nonce_observed",
+      "fields": {
+        "reason": {
+          "value": "the reviewer did not observe the run's nonce"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "reviewer:claim-time:run_nonce_observed:47b34bd1b4f8"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-close",
+      "relation": "snapshot_observed",
+      "fields": {
+        "reason": {
+          "value": "the reviewer did not observe the run's snapshot digest"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "reviewer:claim-time:snapshot_observed:320fa56f8495"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-close",
+      "relation": "model_observed",
+      "fields": {
+        "reason": {
+          "value": "the reviewer did not observe the model digest"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "reviewer:claim-time:model_observed:5071ad5dc2c5"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-close",
+      "relation": "php_post_states_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the PHP post-state table for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:php_post_states_closed:563c8b6a1be0"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-close",
+      "relation": "go_post_states_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the Go post-state table for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:go_post_states_closed:d399545a4a0d"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-close",
+      "relation": "php_effects_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the PHP effect table for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:php_effects_closed:c69d8dda2898"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-close",
+      "relation": "go_effects_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the Go effect table for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:go_effects_closed:741c700022f7"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-close",
+      "relation": "model_admissible_closed",
+      "fields": {
+        "reason": {
+          "value": "the model runner did not close the admissible-state set for the run and model"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "shen:e4b47ae5f7df:model_admissible_closed:e42e24b4af61"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-close",
+      "relation": "model_scope_exclusions_closed",
+      "fields": {
+        "reason": {
+          "value": "the reviewer did not close the model-scope exclusion set for the model"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "reviewer:e4b47ae5f7df:model_scope_exclusions_closed:62143215abdd"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-close",
+      "relation": "php_effect_seqs_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the PHP per-statement effect sequence for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:php_effect_seqs_closed:d8e1764ed4bf"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-close",
+      "relation": "go_effect_seqs_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the Go per-statement effect sequence for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:go_effect_seqs_closed:abdb419a2db3"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-close",
+      "relation": "model_effect_seqs_closed",
+      "fields": {
+        "reason": {
+          "value": "the model runner did not close the model's effect order for the run and model"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "shen:e4b47ae5f7df:model_effect_seqs_closed:53d4ce94a7bc"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-close",
+      "relation": "replay_request_seqs_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the tape order for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:replay_request_seqs_closed:2bfa66364c8c"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-close",
+      "relation": "php_responses_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the PHP response table for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:php_responses_closed:a139721eba4a"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-close",
+      "relation": "go_responses_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the Go response table for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:go_responses_closed:f59875098423"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-close",
+      "relation": "replay_stability_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the cross-run stability table for the run (no bound selftest)"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:replay_stability_closed:cafd259173e9"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-close",
+      "relation": "model_well_formed",
+      "fields": {
+        "reason": {
+          "value": "no typed checker certified that the model the judge binds to this run is well formed"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "modelcheck:e4b47ae5f7df:model_well_formed:45152bff266a"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-close",
+      "relation": "model_checker_admitted",
+      "fields": {
+        "reason": {
+          "value": "the reviewer admits no checker at the version that certified the model"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "reviewer:e4b47ae5f7df:model_checker_admitted:cd6761b8d728"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-delete",
+      "relation": "model_describes_run",
+      "fields": {
+        "reason": {
+          "value": "no model_describes_run witness binds the receipt's model to the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "shen:e4b47ae5f7df:model_describes_run:30e5416af7e4"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-delete",
+      "relation": "run_nonce_observed",
+      "fields": {
+        "reason": {
+          "value": "the reviewer did not observe the run's nonce"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "reviewer:claim-time:run_nonce_observed:47b34bd1b4f8"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-delete",
+      "relation": "snapshot_observed",
+      "fields": {
+        "reason": {
+          "value": "the reviewer did not observe the run's snapshot digest"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "reviewer:claim-time:snapshot_observed:320fa56f8495"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-delete",
+      "relation": "model_observed",
+      "fields": {
+        "reason": {
+          "value": "the reviewer did not observe the model digest"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "reviewer:claim-time:model_observed:5071ad5dc2c5"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-delete",
+      "relation": "php_post_states_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the PHP post-state table for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:php_post_states_closed:563c8b6a1be0"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-delete",
+      "relation": "go_post_states_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the Go post-state table for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:go_post_states_closed:d399545a4a0d"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-delete",
+      "relation": "php_effects_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the PHP effect table for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:php_effects_closed:c69d8dda2898"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-delete",
+      "relation": "go_effects_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the Go effect table for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:go_effects_closed:741c700022f7"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-delete",
+      "relation": "model_admissible_closed",
+      "fields": {
+        "reason": {
+          "value": "the model runner did not close the admissible-state set for the run and model"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "shen:e4b47ae5f7df:model_admissible_closed:e42e24b4af61"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-delete",
+      "relation": "model_scope_exclusions_closed",
+      "fields": {
+        "reason": {
+          "value": "the reviewer did not close the model-scope exclusion set for the model"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "reviewer:e4b47ae5f7df:model_scope_exclusions_closed:62143215abdd"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-delete",
+      "relation": "php_effect_seqs_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the PHP per-statement effect sequence for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:php_effect_seqs_closed:d8e1764ed4bf"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-delete",
+      "relation": "go_effect_seqs_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the Go per-statement effect sequence for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:go_effect_seqs_closed:abdb419a2db3"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-delete",
+      "relation": "model_effect_seqs_closed",
+      "fields": {
+        "reason": {
+          "value": "the model runner did not close the model's effect order for the run and model"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "shen:e4b47ae5f7df:model_effect_seqs_closed:53d4ce94a7bc"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-delete",
+      "relation": "replay_request_seqs_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the tape order for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:replay_request_seqs_closed:2bfa66364c8c"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-delete",
+      "relation": "php_responses_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the PHP response table for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:php_responses_closed:a139721eba4a"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-delete",
+      "relation": "go_responses_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the Go response table for the run"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:go_responses_closed:f59875098423"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-delete",
+      "relation": "replay_stability_closed",
+      "fields": {
+        "reason": {
+          "value": "the harness did not close the cross-run stability table for the run (no bound selftest)"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "replay:e4b47ae5f7df:replay_stability_closed:cafd259173e9"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-delete",
+      "relation": "model_well_formed",
+      "fields": {
+        "reason": {
+          "value": "no typed checker certified that the model the judge binds to this run is well formed"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "modelcheck:e4b47ae5f7df:model_well_formed:45152bff266a"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-delete",
+      "relation": "model_checker_admitted",
+      "fields": {
+        "reason": {
+          "value": "the reviewer admits no checker at the version that certified the model"
+        }
+      },
+      "when_claim": "unresolved",
+      "excludes_evidence": [
+        "reviewer:e4b47ae5f7df:model_checker_admitted:cd6761b8d728"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-create",
+      "relation": "oracle_stable",
+      "fields": {
+        "reason": {
+          "value": "the bound PHP selftest is unstable (a request differed in status or net SQL effects between two fresh runs)"
+        }
+      },
+      "when_claim": "unresolved",
+      "requires_all_evidence": [
+        "replay:e4b47ae5f7df:replay_stability:089aa9f36e9d"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-close",
+      "relation": "oracle_stable",
+      "fields": {
+        "reason": {
+          "value": "the bound PHP selftest is unstable (a request differed in status or net SQL effects between two fresh runs)"
+        }
+      },
+      "when_claim": "unresolved",
+      "requires_all_evidence": [
+        "replay:e4b47ae5f7df:replay_stability:089aa9f36e9d"
+      ]
+    },
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-qualified-delete",
+      "relation": "oracle_stable",
+      "fields": {
+        "reason": {
+          "value": "the bound PHP selftest is unstable (a request differed in status or net SQL effects between two fresh runs)"
+        }
+      },
+      "when_claim": "unresolved",
+      "requires_all_evidence": [
+        "replay:e4b47ae5f7df:replay_stability:089aa9f36e9d"
+      ]
+    },
+    {
+      "kind": "discrepancy",
+      "claim_id": "claim-oracle-unstable",
+      "when_claim": "supported",
+      "fields": {
+        "kind": {
+          "value": "oracle-unstable"
+        },
+        "side": {
+          "value": "php"
+        }
+      },
+      "requires_all_evidence": [
+        "replay:e4b47ae5f7df:replay_stability:089aa9f36e9d"
+      ]
+    }
+  ],
+  "expected": {
+    "claims": {
+      "claim-qualified-close": {
+        "semantic_verdict": "unresolved",
+        "operational_status": "complete",
+        "support_leaves": [],
+        "refutation_leaves": [],
+        "observed_leaves": [
+          "modelcheck:e4b47ae5f7df:model_well_formed:45152bff266a",
+          "replay:e4b47ae5f7df:go_effect_seqs_closed:abdb419a2db3",
+          "replay:e4b47ae5f7df:go_effects_closed:741c700022f7",
+          "replay:e4b47ae5f7df:go_post_states_closed:d399545a4a0d",
+          "replay:e4b47ae5f7df:go_responses_closed:f59875098423",
+          "replay:e4b47ae5f7df:php_effect_seqs_closed:d8e1764ed4bf",
+          "replay:e4b47ae5f7df:php_effects_closed:c69d8dda2898",
+          "replay:e4b47ae5f7df:php_post_states_closed:563c8b6a1be0",
+          "replay:e4b47ae5f7df:php_responses_closed:a139721eba4a",
+          "replay:e4b47ae5f7df:replay_request_seqs_closed:2bfa66364c8c",
+          "replay:e4b47ae5f7df:replay_stability:089aa9f36e9d",
+          "replay:e4b47ae5f7df:replay_stability_closed:cafd259173e9",
+          "reviewer:claim-time:model_observed:5071ad5dc2c5",
+          "reviewer:claim-time:run_nonce_observed:47b34bd1b4f8",
+          "reviewer:claim-time:snapshot_observed:320fa56f8495",
+          "reviewer:e4b47ae5f7df:model_checker_admitted:cd6761b8d728",
+          "reviewer:e4b47ae5f7df:model_scope_exclusions_closed:62143215abdd",
+          "shen:e4b47ae5f7df:model_admissible_closed:e42e24b4af61",
+          "shen:e4b47ae5f7df:model_describes_run:30e5416af7e4",
+          "shen:e4b47ae5f7df:model_effect_seqs_closed:53d4ce94a7bc"
+        ],
+        "forbidden_leaves": [],
+        "discrepancies": [],
+        "missing_premises": [
+          {
+            "relation": "oracle_stable",
+            "reason": "the bound PHP selftest is unstable (a request differed in status or net SQL effects between two fresh runs)"
+          }
+        ]
+      },
+      "claim-qualified-create": {
+        "semantic_verdict": "unresolved",
+        "operational_status": "complete",
+        "support_leaves": [],
+        "refutation_leaves": [],
+        "observed_leaves": [
+          "modelcheck:e4b47ae5f7df:model_well_formed:45152bff266a",
+          "replay:e4b47ae5f7df:go_effect_seqs_closed:abdb419a2db3",
+          "replay:e4b47ae5f7df:go_effects_closed:741c700022f7",
+          "replay:e4b47ae5f7df:go_post_states_closed:d399545a4a0d",
+          "replay:e4b47ae5f7df:go_responses_closed:f59875098423",
+          "replay:e4b47ae5f7df:php_effect_seqs_closed:d8e1764ed4bf",
+          "replay:e4b47ae5f7df:php_effects_closed:c69d8dda2898",
+          "replay:e4b47ae5f7df:php_post_states_closed:563c8b6a1be0",
+          "replay:e4b47ae5f7df:php_responses_closed:a139721eba4a",
+          "replay:e4b47ae5f7df:replay_request_seqs_closed:2bfa66364c8c",
+          "replay:e4b47ae5f7df:replay_stability:089aa9f36e9d",
+          "replay:e4b47ae5f7df:replay_stability_closed:cafd259173e9",
+          "reviewer:claim-time:model_observed:5071ad5dc2c5",
+          "reviewer:claim-time:run_nonce_observed:47b34bd1b4f8",
+          "reviewer:claim-time:snapshot_observed:320fa56f8495",
+          "reviewer:e4b47ae5f7df:model_checker_admitted:cd6761b8d728",
+          "reviewer:e4b47ae5f7df:model_scope_exclusions_closed:62143215abdd",
+          "shen:e4b47ae5f7df:model_admissible_closed:e42e24b4af61",
+          "shen:e4b47ae5f7df:model_describes_run:30e5416af7e4",
+          "shen:e4b47ae5f7df:model_effect_seqs_closed:53d4ce94a7bc"
+        ],
+        "forbidden_leaves": [],
+        "discrepancies": [],
+        "missing_premises": [
+          {
+            "relation": "oracle_stable",
+            "reason": "the bound PHP selftest is unstable (a request differed in status or net SQL effects between two fresh runs)"
+          }
+        ]
+      },
+      "claim-qualified-delete": {
+        "semantic_verdict": "unresolved",
+        "operational_status": "complete",
+        "support_leaves": [],
+        "refutation_leaves": [],
+        "observed_leaves": [
+          "modelcheck:e4b47ae5f7df:model_well_formed:45152bff266a",
+          "replay:e4b47ae5f7df:go_effect_seqs_closed:abdb419a2db3",
+          "replay:e4b47ae5f7df:go_effects_closed:741c700022f7",
+          "replay:e4b47ae5f7df:go_post_states_closed:d399545a4a0d",
+          "replay:e4b47ae5f7df:go_responses_closed:f59875098423",
+          "replay:e4b47ae5f7df:php_effect_seqs_closed:d8e1764ed4bf",
+          "replay:e4b47ae5f7df:php_effects_closed:c69d8dda2898",
+          "replay:e4b47ae5f7df:php_post_states_closed:563c8b6a1be0",
+          "replay:e4b47ae5f7df:php_responses_closed:a139721eba4a",
+          "replay:e4b47ae5f7df:replay_request_seqs_closed:2bfa66364c8c",
+          "replay:e4b47ae5f7df:replay_stability:089aa9f36e9d",
+          "replay:e4b47ae5f7df:replay_stability_closed:cafd259173e9",
+          "reviewer:claim-time:model_observed:5071ad5dc2c5",
+          "reviewer:claim-time:run_nonce_observed:47b34bd1b4f8",
+          "reviewer:claim-time:snapshot_observed:320fa56f8495",
+          "reviewer:e4b47ae5f7df:model_checker_admitted:cd6761b8d728",
+          "reviewer:e4b47ae5f7df:model_scope_exclusions_closed:62143215abdd",
+          "shen:e4b47ae5f7df:model_admissible_closed:e42e24b4af61",
+          "shen:e4b47ae5f7df:model_describes_run:30e5416af7e4",
+          "shen:e4b47ae5f7df:model_effect_seqs_closed:53d4ce94a7bc"
+        ],
+        "forbidden_leaves": [],
+        "discrepancies": [],
+        "missing_premises": [
+          {
+            "relation": "oracle_stable",
+            "reason": "the bound PHP selftest is unstable (a request differed in status or net SQL effects between two fresh runs)"
+          }
+        ]
+      },
+      "claim-oracle-unstable": {
+        "semantic_verdict": "supported",
+        "operational_status": "complete",
+        "support_leaves": [
+          "replay:e4b47ae5f7df:replay_stability:089aa9f36e9d"
+        ],
+        "refutation_leaves": [],
+        "observed_leaves": [
+          "replay:e4b47ae5f7df:replay_stability:089aa9f36e9d"
+        ],
+        "forbidden_leaves": [],
+        "discrepancies": [
+          {
+            "kind": "oracle-unstable",
+            "side": "php"
+          }
+        ],
+        "missing_premises": []
+      }
+    }
+  }
+}
