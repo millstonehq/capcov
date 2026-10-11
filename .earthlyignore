@@ -1,0 +1,8 @@
+.venv
+.direnv
+.capcov
+dist
+build
+result
+**/__pycache__
+**/*.egg-info

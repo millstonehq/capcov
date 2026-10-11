@@ -1,0 +1,1369 @@
+{
+  "documents": [
+    {
+      "language": "go",
+      "occurrences": [
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            0,
+            8,
+            11
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/api`/",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            2,
+            8,
+            50
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/service`/",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            4,
+            4,
+            7
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/api`/svc.",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            4,
+            11,
+            18
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/service`/",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            4,
+            19,
+            26
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/service`/Service#",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "enclosing_range": [
+            9,
+            0,
+            11,
+            1
+          ],
+          "range": [
+            9,
+            5,
+            11
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/api`/GetJob().",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            9,
+            12,
+            13
+          ],
+          "symbol": "local 0",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            9,
+            19,
+            20
+          ],
+          "symbol": "local 1",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            10,
+            1,
+            4
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/api`/svc.",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            10,
+            5,
+            10
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/service`/Service#Fetch().",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "enclosing_range": [
+            15,
+            0,
+            17,
+            1
+          ],
+          "range": [
+            15,
+            5,
+            13
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/api`/Register().",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            16,
+            1,
+            7
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/api`/handle().",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            16,
+            26,
+            32
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/api`/GetJob().",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "enclosing_range": [
+            19,
+            0,
+            49
+          ],
+          "range": [
+            19,
+            5,
+            11
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/api`/handle().",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            19,
+            12,
+            19
+          ],
+          "symbol": "local 2",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            19,
+            28,
+            30
+          ],
+          "symbol": "local 3",
+          "symbol_roles": 1
+        }
+      ],
+      "relative_path": "api/jobs.go",
+      "symbols": [
+        {
+          "display_name": "w",
+          "kind": 61,
+          "signature_documentation": {
+            "language": "go",
+            "text": "var w int"
+          },
+          "symbol": "local 0"
+        },
+        {
+          "display_name": "r",
+          "kind": 61,
+          "signature_documentation": {
+            "language": "go",
+            "text": "var r int"
+          },
+          "symbol": "local 1"
+        },
+        {
+          "display_name": "pattern",
+          "kind": 61,
+          "signature_documentation": {
+            "language": "go",
+            "text": "var pattern string"
+          },
+          "symbol": "local 2"
+        },
+        {
+          "display_name": "fn",
+          "kind": 61,
+          "signature_documentation": {
+            "language": "go",
+            "text": "var fn func(int, int)"
+          },
+          "symbol": "local 3"
+        },
+        {
+          "display_name": "api",
+          "kind": 35,
+          "signature_documentation": {
+            "language": "go",
+            "text": "package api"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/api`/"
+        },
+        {
+          "display_name": "GetJob",
+          "documentation": [
+            "GetJob is the route handler. It touches no data directly; the fixpoint must\ntrace it across packages and files down to the entities Repo.Get/Repo.Write\ntouch."
+          ],
+          "kind": 17,
+          "signature_documentation": {
+            "language": "go",
+            "text": "func GetJob(w int, r int)"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/api`/GetJob()."
+        },
+        {
+          "display_name": "Register",
+          "documentation": [
+            "Register mounts the route. `handle` is the config-supplied route shape the\ntree-sitter query recognizes."
+          ],
+          "kind": 17,
+          "signature_documentation": {
+            "language": "go",
+            "text": "func Register()"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/api`/Register()."
+        },
+        {
+          "display_name": "handle",
+          "kind": 17,
+          "signature_documentation": {
+            "language": "go",
+            "text": "func handle(pattern string, fn func(int, int))"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/api`/handle()."
+        },
+        {
+          "display_name": "svc",
+          "kind": 61,
+          "signature_documentation": {
+            "language": "go",
+            "text": "var svc *service.Service"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/api`/svc."
+        }
+      ]
+    },
+    {
+      "language": "go",
+      "occurrences": [
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            5,
+            8,
+            12
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            7,
+            5,
+            10
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/Model#",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            8,
+            1,
+            3
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/Model#ID.",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            11,
+            5,
+            7
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/DB#",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            13,
+            6,
+            8
+          ],
+          "symbol": "local 0",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            13,
+            10,
+            12
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/DB#",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "enclosing_range": [
+            13,
+            0,
+            56
+          ],
+          "range": [
+            13,
+            14,
+            19
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/DB#First().",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            13,
+            20,
+            24
+          ],
+          "symbol": "local 1",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            13,
+            39,
+            41
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/DB#",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            13,
+            52,
+            54
+          ],
+          "symbol": "local 0",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            14,
+            6,
+            8
+          ],
+          "symbol": "local 2",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            14,
+            10,
+            12
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/DB#",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "enclosing_range": [
+            14,
+            0,
+            57
+          ],
+          "range": [
+            14,
+            14,
+            20
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/DB#Create().",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            14,
+            21,
+            26
+          ],
+          "symbol": "local 3",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            14,
+            41,
+            43
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/DB#",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            14,
+            53,
+            55
+          ],
+          "symbol": "local 2",
+          "symbol_roles": 8
+        }
+      ],
+      "relative_path": "gorm/gorm.go",
+      "symbols": [
+        {
+          "display_name": "db",
+          "kind": 61,
+          "signature_documentation": {
+            "language": "go",
+            "text": "var db *DB"
+          },
+          "symbol": "local 0"
+        },
+        {
+          "display_name": "dest",
+          "kind": 61,
+          "signature_documentation": {
+            "language": "go",
+            "text": "var dest interface{}"
+          },
+          "symbol": "local 1"
+        },
+        {
+          "display_name": "db",
+          "kind": 61,
+          "signature_documentation": {
+            "language": "go",
+            "text": "var db *DB"
+          },
+          "symbol": "local 2"
+        },
+        {
+          "display_name": "value",
+          "kind": 61,
+          "signature_documentation": {
+            "language": "go",
+            "text": "var value interface{}"
+          },
+          "symbol": "local 3"
+        },
+        {
+          "display_name": "gorm",
+          "documentation": [
+            "Package gorm is a tiny local stand-in for jinzhu/gorm, so the fixture is a\nself-contained, offline-buildable module: `gorm.Model` embedding and the\n`First`/`Create` data-access methods exist without a network dependency, and\nthe tree-sitter entity/op queries see the exact source tokens a real gorm app\nshows (`gorm.Model`, `db.First(&Job{})`).\n"
+          ],
+          "kind": 35,
+          "signature_documentation": {
+            "language": "go",
+            "text": "package gorm"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/"
+        },
+        {
+          "display_name": "DB",
+          "kind": 49,
+          "signature_documentation": {
+            "language": "go",
+            "text": "type DB struct{}"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/DB#"
+        },
+        {
+          "display_name": "Create",
+          "kind": 26,
+          "signature_documentation": {
+            "language": "go",
+            "text": "func (*DB).Create(value interface{}) *DB"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/DB#Create()."
+        },
+        {
+          "display_name": "First",
+          "kind": 26,
+          "signature_documentation": {
+            "language": "go",
+            "text": "func (*DB).First(dest interface{}) *DB"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/DB#First()."
+        },
+        {
+          "display_name": "Model",
+          "kind": 49,
+          "signature_documentation": {
+            "language": "go",
+            "text": "type Model struct{ ID uint }"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/Model#"
+        },
+        {
+          "display_name": "ID",
+          "kind": 15,
+          "signature_documentation": {
+            "language": "go",
+            "text": "struct field ID uint"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/Model#ID."
+        }
+      ]
+    },
+    {
+      "language": "go",
+      "occurrences": [
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            0,
+            8,
+            12
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/jobs`/",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            3,
+            2,
+            32
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            4,
+            2,
+            34
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/models`/",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            7,
+            5,
+            9
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/jobs`/Repo#",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            8,
+            1,
+            3
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/jobs`/Repo#db.",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            8,
+            5,
+            9
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            8,
+            10,
+            12
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/DB#",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            13,
+            6,
+            7
+          ],
+          "symbol": "local 0",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            13,
+            9,
+            13
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/jobs`/Repo#",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "enclosing_range": [
+            13,
+            0,
+            15,
+            1
+          ],
+          "range": [
+            13,
+            15,
+            18
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/jobs`/Repo#Get().",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            14,
+            1,
+            2
+          ],
+          "symbol": "local 0",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            14,
+            3,
+            5
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/jobs`/Repo#db.",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            14,
+            6,
+            11
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/DB#First().",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            14,
+            13,
+            19
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/models`/",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            14,
+            20,
+            23
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/models`/Job#",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            18,
+            6,
+            7
+          ],
+          "symbol": "local 1",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            18,
+            9,
+            13
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/jobs`/Repo#",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "enclosing_range": [
+            18,
+            0,
+            20,
+            1
+          ],
+          "range": [
+            18,
+            15,
+            20
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/jobs`/Repo#Write().",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            19,
+            1,
+            2
+          ],
+          "symbol": "local 1",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            19,
+            3,
+            5
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/jobs`/Repo#db.",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            19,
+            6,
+            12
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/DB#Create().",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            19,
+            14,
+            20
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/models`/",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            19,
+            21,
+            29
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/models`/AuditLog#",
+          "symbol_roles": 8
+        }
+      ],
+      "relative_path": "internal/jobs/repo.go",
+      "symbols": [
+        {
+          "display_name": "r",
+          "kind": 61,
+          "signature_documentation": {
+            "language": "go",
+            "text": "var r *Repo"
+          },
+          "symbol": "local 0"
+        },
+        {
+          "display_name": "r",
+          "kind": 61,
+          "signature_documentation": {
+            "language": "go",
+            "text": "var r *Repo"
+          },
+          "symbol": "local 1"
+        },
+        {
+          "display_name": "jobs",
+          "kind": 35,
+          "signature_documentation": {
+            "language": "go",
+            "text": "package jobs"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/jobs`/"
+        },
+        {
+          "display_name": "Repo",
+          "kind": 49,
+          "signature_documentation": {
+            "language": "go",
+            "text": "type Repo struct{ db *gorm.DB }"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/jobs`/Repo#"
+        },
+        {
+          "display_name": "Get",
+          "documentation": [
+            "Get reads a Job (gorm First). The op_query captures the &models.Job{}\nconstruction; SCIP resolves that this method is reached from GetJob."
+          ],
+          "kind": 26,
+          "signature_documentation": {
+            "language": "go",
+            "text": "func (*Repo).Get()"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/jobs`/Repo#Get()."
+        },
+        {
+          "display_name": "Write",
+          "documentation": [
+            "Write creates an AuditLog (gorm Create)."
+          ],
+          "kind": 26,
+          "signature_documentation": {
+            "language": "go",
+            "text": "func (*Repo).Write()"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/jobs`/Repo#Write()."
+        },
+        {
+          "display_name": "db",
+          "kind": 15,
+          "signature_documentation": {
+            "language": "go",
+            "text": "struct field db *gorm.DB"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/jobs`/Repo#db."
+        }
+      ]
+    },
+    {
+      "language": "go",
+      "occurrences": [
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            0,
+            8,
+            15
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/service`/",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            2,
+            8,
+            47
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/jobs`/",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            4,
+            5,
+            12
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/service`/Service#",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            5,
+            1,
+            5
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/service`/Service#repo.",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            5,
+            7,
+            11
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/jobs`/",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            5,
+            12,
+            16
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/jobs`/Repo#",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            11,
+            6,
+            7
+          ],
+          "symbol": "local 0",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            11,
+            9,
+            16
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/service`/Service#",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "enclosing_range": [
+            11,
+            0,
+            14,
+            1
+          ],
+          "range": [
+            11,
+            18,
+            23
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/service`/Service#Fetch().",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            12,
+            1,
+            2
+          ],
+          "symbol": "local 0",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            12,
+            3,
+            7
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/service`/Service#repo.",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            12,
+            8,
+            11
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/jobs`/Repo#Get().",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            13,
+            1,
+            2
+          ],
+          "symbol": "local 0",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            13,
+            3,
+            7
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/service`/Service#repo.",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            13,
+            8,
+            13
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/jobs`/Repo#Write().",
+          "symbol_roles": 8
+        }
+      ],
+      "relative_path": "internal/service/service.go",
+      "symbols": [
+        {
+          "display_name": "s",
+          "kind": 61,
+          "signature_documentation": {
+            "language": "go",
+            "text": "var s *Service"
+          },
+          "symbol": "local 0"
+        },
+        {
+          "display_name": "service",
+          "kind": 35,
+          "signature_documentation": {
+            "language": "go",
+            "text": "package service"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/service`/"
+        },
+        {
+          "display_name": "Service",
+          "kind": 49,
+          "signature_documentation": {
+            "language": "go",
+            "text": "type Service struct{ repo *jobs.Repo }"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/service`/Service#"
+        },
+        {
+          "display_name": "Fetch",
+          "documentation": [
+            "Fetch is the intermediate hop: it touches no data itself, it calls the repo.\nThis is what makes the resolved chain GetJob -> Service.Fetch -> Repo.Get a\ntwo-hop (call-chain:2) capability rather than a direct touch."
+          ],
+          "kind": 26,
+          "signature_documentation": {
+            "language": "go",
+            "text": "func (*Service).Fetch()"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/service`/Service#Fetch()."
+        },
+        {
+          "display_name": "repo",
+          "kind": 15,
+          "signature_documentation": {
+            "language": "go",
+            "text": "struct field repo *jobs.Repo"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/internal/service`/Service#repo."
+        }
+      ]
+    },
+    {
+      "language": "go",
+      "occurrences": [
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            0,
+            8,
+            14
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/models`/",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            2,
+            8,
+            38
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            6,
+            5,
+            8
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/models`/Job#",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            7,
+            1,
+            5
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            7,
+            6,
+            11
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/Model#",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            7,
+            6,
+            11
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/models`/Job#Model.",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            8,
+            1,
+            6
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/models`/Job#Title.",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            12,
+            5,
+            13
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/models`/AuditLog#",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            13,
+            1,
+            5
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            13,
+            6,
+            11
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/gorm`/Model#",
+          "symbol_roles": 8
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            13,
+            6,
+            11
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/models`/AuditLog#Model.",
+          "symbol_roles": 1
+        },
+        {
+          "TypedEnclosingRange": null,
+          "TypedRange": null,
+          "range": [
+            14,
+            1,
+            7
+          ],
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/models`/AuditLog#Action.",
+          "symbol_roles": 1
+        }
+      ],
+      "relative_path": "models/models.go",
+      "symbols": [
+        {
+          "display_name": "models",
+          "kind": 35,
+          "signature_documentation": {
+            "language": "go",
+            "text": "package models"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/models`/"
+        },
+        {
+          "display_name": "AuditLog",
+          "documentation": [
+            "AuditLog derives the table `audit_logs`."
+          ],
+          "kind": 49,
+          "signature_documentation": {
+            "language": "go",
+            "text": "type AuditLog struct {\n    gorm.Model\n    Action string\n}"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/models`/AuditLog#"
+        },
+        {
+          "display_name": "Action",
+          "kind": 15,
+          "signature_documentation": {
+            "language": "go",
+            "text": "struct field Action string"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/models`/AuditLog#Action."
+        },
+        {
+          "display_name": "Model",
+          "kind": 15,
+          "signature_documentation": {
+            "language": "go",
+            "text": "struct field Model gorm.Model"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/models`/AuditLog#Model."
+        },
+        {
+          "display_name": "Job",
+          "documentation": [
+            "Job is a gorm model: the entity_query recognizes the embedded gorm.Model and\nthe recognizer derives the table `jobs` (snake_case plural, no TableName)."
+          ],
+          "kind": 49,
+          "signature_documentation": {
+            "language": "go",
+            "text": "type Job struct {\n    gorm.Model\n    Title string\n}"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/models`/Job#"
+        },
+        {
+          "display_name": "Model",
+          "kind": 15,
+          "signature_documentation": {
+            "language": "go",
+            "text": "struct field Model gorm.Model"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/models`/Job#Model."
+        },
+        {
+          "display_name": "Title",
+          "kind": 15,
+          "signature_documentation": {
+            "language": "go",
+            "text": "struct field Title string"
+          },
+          "symbol": "scip-go gomod github.com/example/jobsvc . `github.com/example/jobsvc/models`/Job#Title."
+        }
+      ]
+    }
+  ],
+  "external_symbols": [],
+  "metadata": {
+    "text_document_encoding": 1,
+    "tool_info": {
+      "arguments": [
+        "--output",
+        "index.scip"
+      ],
+      "name": "scip-go",
+      "version": "0.2.7"
+    }
+  }
+}

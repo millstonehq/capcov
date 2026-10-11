@@ -1,0 +1,1 @@
+"""Independent semantic corpus tests."""

@@ -1,0 +1,11 @@
+--- a/src/capcov/core/gate.py
++++ b/src/capcov/core/gate.py
+@@ -119,7 +119,7 @@
+     # route cannot waive its required behavioral checks.
+-    flow_failures = coverage.get("flows_failures", [])
++    flow_failures = []
+     if not isinstance(flow_failures, list):
+         failures.append(Failure("invalid-flow-evidence", "browser", "flows_failures must be a list"))
+     else:
+         for entry in flow_failures:
+             if not isinstance(entry, dict) or not entry.get("id") or not entry.get("reason"):

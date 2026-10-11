@@ -1,0 +1,19 @@
+# Deep capcov config for the Go fixture: the treesitter-routes adapter with a
+# deep block, resolved by scip-go. The four tree-sitter queries are the generic
+# per-framework opinion (routes, the function universe, gorm model structs, gorm
+# data-access sites); the recognizer + SCIP + fixpoint are language-generic.
+[capcov]
+source = "."
+
+[[adapters]]
+name = "treesitter-routes"
+language = "go"
+scip_language = "go"
+globs = ["**/*.go"]
+query = '((call_expression function: (identifier) @fn (#eq? @fn "handle") arguments: (argument_list (interpreted_string_literal) @path . (identifier) @handler)))'
+
+[adapters.deep]
+recognizer = "go_gorm"
+function_query = '[(function_declaration name: (identifier) @name) @function (method_declaration name: (field_identifier) @name) @function]'
+entity_query = '(type_spec name: (type_identifier) @type type: (struct_type (field_declaration_list (field_declaration type: (qualified_type) @gorm))) (#eq? @gorm "gorm.Model")) @entity'
+op_query = '(call_expression function: (selector_expression field: (field_identifier) @verb) arguments: (argument_list (unary_expression operand: (composite_literal type: (qualified_type name: (type_identifier) @target))))) @op'

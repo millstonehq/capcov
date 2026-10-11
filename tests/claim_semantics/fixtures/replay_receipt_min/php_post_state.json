@@ -1,0 +1,30 @@
+{
+  "producer": "php target-cloud php0000000000000000000000000000000000001",
+  "rows": [
+    {
+      "req": "req-1",
+      "run": "run-fixture-1",
+      "state_digest": "97f7bee595ea2f9b87aaf02a677347d557f2a6bf7b2928c2e7cf4ba5740ad1c4"
+    },
+    {
+      "req": "req-2",
+      "run": "run-fixture-1",
+      "state_digest": "15443b740dbf15e513c6c1e7eacc60a85a026d824cd1b31e388bc697ae38edcb"
+    },
+    {
+      "req": "req-3",
+      "run": "run-fixture-1",
+      "state_digest": "9adba6ea8163d8305de6471b138f046d19cfb019c96b4df9c3ee63b03fcfb90e"
+    },
+    {
+      "req": "req-4",
+      "run": "run-fixture-1",
+      "state_digest": "e1406e7d2cb297c23fe0c502af738881d547b56b736e52217fe4415550bcc495"
+    },
+    {
+      "req": "req-5",
+      "run": "run-fixture-1",
+      "state_digest": "e1406e7d2cb297c23fe0c502af738881d547b56b736e52217fe4415550bcc495"
+    }
+  ]
+}

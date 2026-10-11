@@ -1,0 +1,388 @@
+{
+  "documents": [
+    {
+      "path": "shop/__init__.py",
+      "symbols": [
+        {
+          "symbol": "scip-python python spike 0.0.1 shop/__init__:",
+          "kind": null,
+          "display_name": null
+        }
+      ],
+      "occurrences": [
+        {
+          "symbol": "scip-python python spike 0.0.1 shop/__init__:",
+          "is_definition": true,
+          "start_line": 0,
+          "start_col": 0,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        }
+      ]
+    },
+    {
+      "path": "shop/db.py",
+      "symbols": [
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.db`/__init__:",
+          "kind": null,
+          "display_name": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.db`/Base#",
+          "kind": "type",
+          "display_name": null
+        }
+      ],
+      "occurrences": [
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.db`/__init__:",
+          "is_definition": true,
+          "start_line": 0,
+          "start_col": 0,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.db`/Base#",
+          "is_definition": true,
+          "start_line": 0,
+          "start_col": 6,
+          "enclosing_start_line": 0,
+          "enclosing_end_line": 1
+        }
+      ]
+    },
+    {
+      "path": "shop/models.py",
+      "symbols": [
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.models`/__init__:",
+          "kind": null,
+          "display_name": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.models`/Job#",
+          "kind": "type",
+          "display_name": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.models`/Job#__tablename__.",
+          "kind": "term",
+          "display_name": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.models`/Run#",
+          "kind": "type",
+          "display_name": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.models`/Run#__tablename__.",
+          "kind": "term",
+          "display_name": null
+        }
+      ],
+      "occurrences": [
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.models`/__init__:",
+          "is_definition": true,
+          "start_line": 0,
+          "start_col": 0,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 db/__init__:",
+          "is_definition": false,
+          "start_line": 0,
+          "start_col": 5,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.db`/Base#",
+          "is_definition": false,
+          "start_line": 0,
+          "start_col": 16,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.models`/Job#",
+          "is_definition": true,
+          "start_line": 3,
+          "start_col": 6,
+          "enclosing_start_line": 3,
+          "enclosing_end_line": 4
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.db`/Base#",
+          "is_definition": false,
+          "start_line": 3,
+          "start_col": 10,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.models`/Job#__tablename__.",
+          "is_definition": true,
+          "start_line": 4,
+          "start_col": 4,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.models`/Run#",
+          "is_definition": true,
+          "start_line": 7,
+          "start_col": 6,
+          "enclosing_start_line": 7,
+          "enclosing_end_line": 8
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.db`/Base#",
+          "is_definition": false,
+          "start_line": 7,
+          "start_col": 10,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.models`/Run#__tablename__.",
+          "is_definition": true,
+          "start_line": 8,
+          "start_col": 4,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        }
+      ]
+    },
+    {
+      "path": "shop/router.py",
+      "symbols": [
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.router`/__init__:",
+          "kind": null,
+          "display_name": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.router`/make_job().",
+          "kind": "method",
+          "display_name": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.router`/make_job().(session)",
+          "kind": null,
+          "display_name": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.router`/make_job().(name)",
+          "kind": null,
+          "display_name": null
+        }
+      ],
+      "occurrences": [
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.router`/__init__:",
+          "is_definition": true,
+          "start_line": 0,
+          "start_col": 0,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        },
+        {
+          "symbol": "local 0",
+          "is_definition": false,
+          "start_line": 0,
+          "start_col": 5,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 service/__init__:",
+          "is_definition": false,
+          "start_line": 0,
+          "start_col": 14,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.router`/make_job().",
+          "is_definition": true,
+          "start_line": 3,
+          "start_col": 4,
+          "enclosing_start_line": 3,
+          "enclosing_end_line": 4
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.router`/make_job().(session)",
+          "is_definition": true,
+          "start_line": 3,
+          "start_col": 13,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.router`/make_job().(name)",
+          "is_definition": true,
+          "start_line": 3,
+          "start_col": 22,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 service/__init__:",
+          "is_definition": false,
+          "start_line": 4,
+          "start_col": 11,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.service`/create_job().",
+          "is_definition": false,
+          "start_line": 4,
+          "start_col": 19,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.router`/make_job().(session)",
+          "is_definition": false,
+          "start_line": 4,
+          "start_col": 30,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.router`/make_job().(name)",
+          "is_definition": false,
+          "start_line": 4,
+          "start_col": 39,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        }
+      ]
+    },
+    {
+      "path": "shop/service.py",
+      "symbols": [
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.service`/__init__:",
+          "kind": null,
+          "display_name": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.service`/create_job().",
+          "kind": "method",
+          "display_name": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.service`/create_job().(session)",
+          "kind": null,
+          "display_name": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.service`/create_job().(name)",
+          "kind": null,
+          "display_name": null
+        },
+        {
+          "symbol": "local 0",
+          "kind": null,
+          "display_name": null
+        }
+      ],
+      "occurrences": [
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.service`/__init__:",
+          "is_definition": true,
+          "start_line": 0,
+          "start_col": 0,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 models/__init__:",
+          "is_definition": false,
+          "start_line": 0,
+          "start_col": 5,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.models`/Job#",
+          "is_definition": false,
+          "start_line": 0,
+          "start_col": 20,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.service`/create_job().",
+          "is_definition": true,
+          "start_line": 3,
+          "start_col": 4,
+          "enclosing_start_line": 3,
+          "enclosing_end_line": 6
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.service`/create_job().(session)",
+          "is_definition": true,
+          "start_line": 3,
+          "start_col": 15,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.service`/create_job().(name)",
+          "is_definition": true,
+          "start_line": 3,
+          "start_col": 24,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        },
+        {
+          "symbol": "local 0",
+          "is_definition": true,
+          "start_line": 4,
+          "start_col": 4,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.models`/Job#",
+          "is_definition": false,
+          "start_line": 4,
+          "start_col": 10,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 `shop.service`/create_job().(session)",
+          "is_definition": false,
+          "start_line": 5,
+          "start_col": 4,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        },
+        {
+          "symbol": "local 0",
+          "is_definition": false,
+          "start_line": 5,
+          "start_col": 16,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        },
+        {
+          "symbol": "local 0",
+          "is_definition": false,
+          "start_line": 6,
+          "start_col": 11,
+          "enclosing_start_line": null,
+          "enclosing_end_line": null
+        }
+      ]
+    }
+  ]
+}

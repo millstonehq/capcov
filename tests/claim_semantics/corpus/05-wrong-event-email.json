@@ -1,0 +1,202 @@
+{
+  "schema_version": 1,
+  "program_schema_version": 1,
+  "id": "05-wrong-event-email",
+  "title": "Accepted email for another event is not target delivery",
+  "provenance": {
+    "kind": "synthetic",
+    "source": "hand-authored semantic control",
+    "seeded_fault": "event-correlation-dropped"
+  },
+  "context": {
+    "tenant": "tenant-a",
+    "run": "run-5",
+    "event": "evt-target",
+    "recipient": "a@example.test",
+    "attempt": "attempt-05"
+  },
+  "outputs": [{"kind":"observed","claim_id":"claim-target-mail","evidence_id":"fact-mail-other-event"},{"kind":"observed","claim_id":"claim-target-mail","evidence_id":"fact-mail-target"},{"kind":"forbidden","claim_id":"claim-target-mail","evidence_id":"fact-mail-target"},{"kind":"discrepancy","claim_id":"claim-target-mail","fields":{"kind":{"value":"wrong-event"},"observed":{"value":"evt-other"},"claimed":{"value":"evt-target"}}},{"kind":"missing_premise","claim_id":"claim-target-mail","relation":"mail_sent","fields":{"reason":{"value":"no accepted message for target event"}}}],
+  "rules": [{"name":"target_mail_requires_event_match","claim_id":"claim-target-mail","premises":[{"relation":"smtp_accepted","bindings":[{"claim_column":"tenant","evidence_column":"tenant","type":"symbol"},{"claim_column":"event","evidence_column":"event","type":"symbol"},{"claim_column":"recipient","evidence_column":"recipient","type":"symbol"},{"claim_column":"run","evidence_column":"run","type":"symbol"},{"claim_column":"attempt","evidence_column":"attempt","type":"symbol"}]}]}],
+  "claims": [
+    {
+      "id": "claim-target-mail",
+      "arguments": {
+        "tenant": "tenant-a",
+        "event": "evt-target",
+        "recipient": "a@example.test",
+        "run": "run-5",
+        "attempt": "attempt-05"
+      },
+      "relation": "smtp_accepted__claim",
+      "args": [
+        "tenant-a",
+        "evt-target",
+        "a@example.test",
+        "run-5",
+        "attempt-05"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-5",
+        "event": "evt-target",
+        "recipient": "a@example.test",
+        "attempt": "attempt-05"
+      },
+      "provenance": {
+        "source": "reviewed-claim",
+        "depends_on": []
+      },
+      "arg_order": [
+        "tenant",
+        "event",
+        "recipient",
+        "run",
+        "attempt"
+      ],
+      "quantifier": "exists",
+      "domain": null,
+      "mappings": [{"evidence_relation":"smtp_accepted","effect":"support","context_indices":["tenant","event","recipient","run","attempt"],"bindings":[["tenant","tenant"],["event","event"],["recipient","recipient"],["run","run"],["attempt","attempt"]]},{"evidence_relation":"smtp_accepted","effect":"observation","context_indices":["tenant"],"bindings":[["tenant","tenant"]]},{"evidence_relation":"smtp_acceptance_missing","effect":"observation","context_indices":["tenant","event","recipient","run"],"bindings":[["tenant","tenant"],["event","event"],["recipient","recipient"],["run","run"]]}], "diagnostics": []
+    }
+  ],
+  "facts": [
+    {
+      "id": "fact-mail-other-event",
+      "arguments": {
+        "tenant": "tenant-a",
+        "event": "evt-other",
+        "recipient": "a@example.test",
+        "run": "run-5",
+        "attempt": "attempt-05"
+      },
+      "source": "smtp",
+      "relation": "smtp_accepted",
+      "args": [
+        "tenant-a",
+        "evt-other",
+        "a@example.test",
+        "run-5",
+        "attempt-05"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-5",
+        "event": "evt-target",
+        "recipient": "a@example.test",
+        "attempt": "attempt-05"
+      },
+      "provenance": {
+        "source": "smtp",
+        "depends_on": []
+      },
+      "arg_order": [
+        "tenant",
+        "event",
+        "recipient",
+        "run",
+        "attempt"
+      ]
+    },
+    {
+      "id": "fact-mail-target",
+      "arguments": {
+        "tenant": "tenant-a",
+        "event": "evt-target",
+        "recipient": "a@example.test",
+        "run": "run-5"
+      },
+      "source": "smtp",
+      "relation": "smtp_acceptance_missing",
+      "args": [
+        "tenant-a",
+        "evt-target",
+        "a@example.test",
+        "run-5"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-5",
+        "event": "evt-target",
+        "recipient": "a@example.test",
+        "attempt": "attempt-05"
+      },
+      "provenance": {
+        "source": "smtp",
+        "depends_on": []
+      },
+      "arg_order": [
+        "tenant",
+        "event",
+        "recipient",
+        "run"
+      ]
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "assumption-event-join",
+      "arguments": {
+        "observed": "evt-other",
+        "claimed": "evt-target"
+      },
+      "relation": "same_event__rejected",
+      "args": [
+        "evt-other",
+        "evt-target"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-5",
+        "event": "evt-target",
+        "recipient": "a@example.test",
+        "attempt": "attempt-05"
+      },
+      "provenance": {
+        "source": "reviewed-assumption",
+        "depends_on": []
+      },
+      "subject_relation": "same_event",
+      "arg_order": [
+        "observed",
+        "claimed"
+      ]
+    }
+  ],
+  "expected": {
+    "claims": {
+      "claim-target-mail": {
+        "semantic_verdict": "unresolved",
+        "operational_status": "complete",
+        "support_leaves": [],
+        "refutation_leaves": [],
+        "observed_leaves": [
+          "fact-mail-other-event",
+          "fact-mail-target"
+        ],
+        "forbidden_leaves": [
+          "fact-mail-target"
+        ],
+        "discrepancies": [
+          {
+            "kind": "wrong-event",
+            "observed": "evt-other",
+            "claimed": "evt-target"
+          }
+        ],
+        "missing_premises": [
+          {
+            "reason": "no accepted message for target event",
+            "relation": "mail_sent"
+          }
+        ]
+      }
+    }
+  },
+  "schema_ref": "schema-v1",
+  "context_indices": [
+    "tenant",
+    "run",
+    "event",
+    "recipient",
+    "attempt"
+  ]
+}

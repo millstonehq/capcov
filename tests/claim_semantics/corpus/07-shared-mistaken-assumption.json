@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "program_schema_version": 1,
+  "id": "07-shared-mistaken-assumption",
+  "title": "Shared false assumption is not independent support",
+  "provenance": {
+    "kind": "synthetic",
+    "source": "hand-authored semantic control",
+    "seeded_fault": "shared-fake-provider"
+  },
+  "context": {
+    "tenant": "tenant-a",
+    "run": "run-7",
+    "event": "evt-7",
+    "attempt": "attempt-07",
+    "recipient": "a@example.test"
+  },
+  "rules": [{"name":"delivery_requires_indexed_static_and_runtime_path","claim_id":"claim-delivered","premises":[{"relation":"mail_path_declared","bindings":[{"claim_column":"tenant","evidence_column":"tenant","type":"symbol"},{"claim_column":"event","evidence_column":"event","type":"symbol"},{"claim_column":"run","evidence_column":"run","type":"symbol"}]},{"relation":"mail_path_observed","bindings":[{"claim_column":"tenant","evidence_column":"tenant","type":"symbol"},{"claim_column":"event","evidence_column":"event","type":"symbol"},{"claim_column":"run","evidence_column":"run","type":"symbol"}]},{"relation":"index_describes_run","bindings":[{"claim_column":"run","evidence_column":"run","type":"symbol"}]}]}],
+  "outputs": [{"kind":"observed","claim_id":"claim-delivered","evidence_id":"fact-static"},{"kind":"observed","claim_id":"claim-delivered","evidence_id":"fact-runtime"},{"kind":"forbidden","claim_id":"claim-delivered","evidence_id":"assumption-false-independent"},{"kind":"discrepancy","claim_id":"claim-delivered","fields":{"kind":{"value":"shared-assumption"},"assumption":{"value":"assumption-false"}}},{"kind":"missing_premise","claim_id":"claim-delivered","relation":"independent_support","fields":{"reason":{"value":"both producers depend on one false assumption"}}}],
+  "claims": [
+    {
+      "id": "claim-delivered",
+      "arguments": {
+        "tenant": "tenant-a",
+        "event": "evt-7",
+        "run": "run-7",
+        "recipient": "a@example.test",
+        "attempt": "attempt-07"
+      },
+      "relation": "notification_delivery_terminal",
+      "args": [
+        "tenant-a",
+        "evt-7",
+        "a@example.test",
+        "run-7",
+        "attempt-07"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-7",
+        "event": "evt-7",
+        "attempt": "attempt-07",
+        "recipient": "a@example.test"
+      },
+      "provenance": {
+        "source": "reviewed-claim",
+        "depends_on": []
+      },
+      "arg_order": [
+        "tenant",
+        "event",
+        "recipient",
+        "run",
+        "attempt"
+      ],
+      "quantifier": "exists",
+      "domain": null,
+      "mappings": [{"evidence_relation":"mail_path_declared","effect":"observation","context_indices":[],"bindings":[["tenant","tenant"],["event","event"],["run","run"]]},{"evidence_relation":"mail_path_observed","effect":"observation","context_indices":["tenant","event","run"],"bindings":[["tenant","tenant"],["event","event"],["run","run"]]}], "diagnostics": [{"trigger_relation":"provider_is_real__rejected","effect":"forbidden","operational_status":"invalid-input","context_indices":[],"required":true},{"trigger_relation":"independent_support__rejected","effect":"forbidden","operational_status":"invalid-input","context_indices":[],"required":true}]
+    }
+  ],
+  "facts": [
+    {
+      "id": "fact-static",
+      "arguments": {
+        "index": "index-07",
+        "tenant": "tenant-a",
+        "event": "evt-7",
+        "run": "run-7"
+      },
+      "source": "static",
+      "relation": "mail_path_declared",
+      "args": [
+        "index-07",
+        "tenant-a",
+        "evt-7",
+        "run-7"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-7",
+        "event": "evt-7",
+        "attempt": "attempt-07",
+        "recipient": "a@example.test"
+      },
+      "provenance": {
+        "source": "static",
+        "depends_on": [
+          "assumption-false"
+        ]
+      },
+      "arg_order": [
+        "index",
+        "tenant",
+        "event",
+        "run"
+      ]
+    },
+    {
+      "id": "fact-index-describes-run",
+      "arguments": {
+        "index": "index-07",
+        "run": "run-7"
+      },
+      "source": "reviewed-compatibility",
+      "relation": "index_describes_run",
+      "args": [
+        "index-07",
+        "run-7"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-7",
+        "event": "evt-7",
+        "attempt": "attempt-07",
+        "recipient": "a@example.test"
+      },
+      "provenance": {
+        "source": "reviewed-compatibility",
+        "depends_on": []
+      },
+      "arg_order": [
+        "index",
+        "run"
+      ]
+    },
+    {
+      "id": "fact-runtime",
+      "arguments": {
+        "tenant": "tenant-a",
+        "event": "evt-7",
+        "run": "run-7"
+      },
+      "source": "runtime",
+      "relation": "mail_path_observed",
+      "args": [
+        "tenant-a",
+        "evt-7",
+        "run-7"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-7",
+        "event": "evt-7",
+        "attempt": "attempt-07",
+        "recipient": "a@example.test"
+      },
+      "provenance": {
+        "source": "runtime",
+        "depends_on": [
+          "assumption-false"
+        ]
+      },
+      "arg_order": [
+        "tenant",
+        "event",
+        "run"
+      ]
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "assumption-false",
+      "arguments": {
+        "provider": "loopback"
+      },
+      "relation": "provider_is_real__rejected",
+      "args": [
+        "loopback"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-7",
+        "event": "evt-7",
+        "attempt": "attempt-07",
+        "recipient": "a@example.test"
+      },
+      "provenance": {
+        "source": "reviewed-assumption",
+        "depends_on": []
+      },
+      "subject_relation": "provider_is_real",
+      "arg_order": [
+        "provider"
+      ]
+    },
+    {
+      "id": "assumption-false-independent",
+      "arguments": {
+        "paths": [
+          "static",
+          "runtime"
+        ]
+      },
+      "relation": "independent_support__rejected",
+      "args": [
+        [
+          "static",
+          "runtime"
+        ]
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-7",
+        "event": "evt-7",
+        "attempt": "attempt-07",
+        "recipient": "a@example.test"
+      },
+      "provenance": {
+        "source": "reviewed-assumption",
+        "depends_on": []
+      },
+      "subject_relation": "independent_support",
+      "arg_order": [
+        "paths"
+      ]
+    }
+  ],
+  "expected": {
+    "claims": {
+      "claim-delivered": {
+        "semantic_verdict": "unresolved",
+        "operational_status": "complete",
+        "support_leaves": [],
+        "refutation_leaves": [],
+        "observed_leaves": [
+          "fact-static",
+          "fact-runtime"
+        ],
+        "forbidden_leaves": [
+          "assumption-false-independent"
+        ],
+        "discrepancies": [
+          {
+            "kind": "shared-assumption",
+            "assumption": "assumption-false"
+          }
+        ],
+        "missing_premises": [
+          {
+            "reason": "both producers depend on one false assumption",
+            "relation": "independent_support"
+          }
+        ]
+      }
+    }
+  },
+  "schema_ref": "schema-v1",
+  "context_indices": [
+    "tenant",
+    "run",
+    "event",
+    "attempt"
+  ]
+}

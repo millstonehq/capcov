@@ -1,0 +1,94 @@
+{
+  "version": 1,
+  "accepted": [
+    {
+      "reason": "Needs the patch command to make a mutant in a copy of the fault-notes example. The plain Python image does not carry it; the test runs in the flake dev shell, where tests/skips-allowed.json does not accept this skip.",
+      "tests": [
+        "tests.test_faults_example.JudgedBeforeSettleTest.test_a_pending_write_leaves_the_run_unresolved_naming_applied_closed",
+        "tests.test_faults_example.JudgedBeforeSettleTest.test_a_run_with_no_fault_holds_no_pending_write_and_still_passes",
+        "tests.test_faults_example.JudgedBeforeSettleTest.test_the_patch_removes_only_the_settle_step",
+        "tests.test_faults_example.MutantTest.test_a_crash_after_the_send_is_applied_twice",
+        "tests.test_faults_example.MutantTest.test_a_lost_response_is_applied_twice",
+        "tests.test_faults_example.MutantTest.test_a_refused_send_is_still_sent_once",
+        "tests.test_faults_example.MutantTest.test_the_enumerator_finds_the_mutant",
+        "tests.test_faults_example.MutantTest.test_the_mutant_exists_only_in_the_copy"
+      ]
+    },
+    {
+      "reason": "Needs go, scip-go and the scip CLI. The plain Python image does not carry them; the test runs in the flake dev shell, where tests/skips-allowed.json does not accept this skip.",
+      "tests": [
+        "tests.test_deep_go_e2e.DeepGoEndToEndTest.test_creates_audit_logs_through_the_write_chain",
+        "tests.test_deep_go_e2e.DeepGoEndToEndTest.test_entity_axis_names_data_entities_not_the_route",
+        "tests.test_deep_go_e2e.DeepGoEndToEndTest.test_no_edge_was_silently_dropped",
+        "tests.test_deep_go_e2e.DeepGoEndToEndTest.test_reads_jobs_through_a_two_hop_cross_file_chain",
+        "tests.test_deep_go_e2e.DeepGoEndToEndTest.test_the_chain_crosses_three_packages_and_three_files",
+        "tests.test_deep_go_e2e.DeepGoEndToEndTest.test_the_provisional_node_locations_never_leak_into_the_artifact"
+      ]
+    },
+    {
+      "reason": "Needs php, the scip-php script and the scip CLI. The plain Python image does not carry them; the test runs in the flake dev shell, where tests/skips-allowed.json does not accept this skip.",
+      "tests": [
+        "tests.test_deep_php_e2e.DeepPhpEndToEndTest.test_creates_audit_logs_bound_through_typed_references",
+        "tests.test_deep_php_e2e.DeepPhpEndToEndTest.test_entity_axis_names_data_entities_not_the_route",
+        "tests.test_deep_php_e2e.DeepPhpEndToEndTest.test_no_edge_was_silently_dropped",
+        "tests.test_deep_php_e2e.DeepPhpEndToEndTest.test_reads_jobs_bound_through_typed_references",
+        "tests.test_deep_php_e2e.DeepPhpEndToEndTest.test_the_chain_crosses_files",
+        "tests.test_deep_php_e2e.DeepPhpEndToEndTest.test_the_provisional_node_locations_never_leak_into_the_artifact",
+        "tests.test_deep_php_e2e.DeepPhpEndToEndTest.test_the_untyped_facade_chain_is_enumerated_as_a_blind_spot",
+        "tests.test_deep_php_e2e.DeepPhpEndToEndTest.test_the_untyped_facade_chain_is_never_guessed_into_a_capability"
+      ]
+    },
+    {
+      "reason": "Needs scip-python and the scip CLI. The plain Python image does not carry them; the test runs in the flake dev shell, where tests/skips-allowed.json does not accept this skip.",
+      "tests": [
+        "tests.test_deep_python_differential.PythonDifferentialTest.test_capability_sets_are_identical",
+        "tests.test_deep_python_differential.PythonDifferentialTest.test_chain_node_sets_are_identical",
+        "tests.test_deep_python_differential.PythonDifferentialTest.test_the_differential_is_not_vacuous",
+        "tests.test_scip_map.LiveToolTest.test_index_read_map_recovers_the_cross_file_edge",
+        "tests.test_scip_resolve.LiveResolveTest.test_scip_resolved_graph_binds_an_entity_through_a_call_chain",
+        "tests.test_scip_resolve.LiveResolveTest.test_scip_stays_silent_about_the_dynamic_sites_and_the_residue_names_them",
+        "tests.test_scip_resolve.LiveResolveTest.test_the_transient_index_is_cleaned_up",
+        "tests.test_scip_runner.LiveToolTest.test_end_to_end_index_then_read",
+        "tests.test_scip_runner.LiveToolTest.test_scip_python_indexes_a_tiny_project"
+      ]
+    },
+    {
+      "reason": "Needs the souffle binary. The plain Python image does not carry it; the test runs in the flake dev shell, where tests/skips-allowed.json does not accept this skip.",
+      "tests": [
+        "tests.test_claim_souffle.SouffleBackendTests.test_any_and_all_compile_to_boolean_rows",
+        "tests.test_claim_souffle.SouffleBackendTests.test_boolean_aggregates_count_truth_values_not_rows",
+        "tests.test_claim_souffle.SouffleBackendTests.test_boolean_aggregates_support_global_zero_group",
+        "tests.test_claim_souffle.SouffleBackendTests.test_boolean_all_compares_exact_domain_identity_and_projects_source_dimensions",
+        "tests.test_claim_souffle.SouffleBackendTests.test_boolean_all_false_is_a_guard_when_value_is_absent_from_head",
+        "tests.test_claim_souffle.SouffleBackendTests.test_boolean_all_requires_closed_domain_coverage",
+        "tests.test_claim_souffle.SouffleBackendTests.test_claim_context_filters_rule_derived_negative_evidence",
+        "tests.test_claim_souffle.SouffleBackendTests.test_claim_local_reruns_share_one_process_budget",
+        "tests.test_claim_souffle.SouffleBackendTests.test_context_columns_are_emitted_in_declared_order",
+        "tests.test_claim_souffle.SouffleBackendTests.test_count_aggregation_binds_result_and_agrees_for_nonempty_and_zero_groups",
+        "tests.test_claim_souffle.SouffleBackendTests.test_empty_forall_is_inconsistent_with_bounded_basis",
+        "tests.test_claim_souffle.SouffleBackendTests.test_forall_binds_by_domain_column_name_when_columns_are_reordered",
+        "tests.test_claim_souffle.SouffleBackendTests.test_forall_domain_is_scoped_by_shared_noncontext_constants",
+        "tests.test_claim_souffle.SouffleBackendTests.test_forall_requires_every_finite_domain_member",
+        "tests.test_claim_souffle.SouffleBackendTests.test_forall_revocation_cannot_shrink_the_quantified_domain",
+        "tests.test_claim_souffle.SouffleBackendTests.test_forall_support_requires_attributed_domain_closure",
+        "tests.test_claim_souffle.SouffleBackendTests.test_irrelevant_rule_does_not_suppress_another_claims_mapping",
+        "tests.test_claim_souffle.SouffleBackendTests.test_json_metadata_round_trips_without_hashing_mapping",
+        "tests.test_claim_souffle.SouffleBackendTests.test_missing_premise_templates_use_triggers_and_unrelated_outputs_keep_fallback",
+        "tests.test_claim_souffle.SouffleBackendTests.test_negation_requires_and_uses_completeness",
+        "tests.test_claim_souffle.SouffleBackendTests.test_negative_rule_evidence_and_positive_mapping_conflict",
+        "tests.test_claim_souffle.SouffleBackendTests.test_nonprimitive_facts_are_rejected",
+        "tests.test_claim_souffle.SouffleBackendTests.test_nullary_input_and_derived_predicates_round_trip",
+        "tests.test_claim_souffle.SouffleBackendTests.test_output_limit_is_reported",
+        "tests.test_claim_souffle.SouffleBackendTests.test_output_subset_does_not_echo_unrequested_primitive_relations",
+        "tests.test_claim_souffle.SouffleBackendTests.test_output_subset_keeps_omitted_derived_claim_semantics",
+        "tests.test_claim_souffle.SouffleBackendTests.test_producer_authored_claim_facts_are_rejected",
+        "tests.test_claim_souffle.SouffleBackendTests.test_recursive_transitive_closure_and_digests_are_deterministic",
+        "tests.test_claim_souffle.SouffleBackendTests.test_sanitized_column_names_do_not_collide",
+        "tests.test_claim_souffle.SouffleBackendTests.test_supported_claim_does_not_mask_runtime_stale_status",
+        "tests.test_claim_souffle.SouffleBackendTests.test_timeout_is_reported",
+        "tests.test_faults_checker.EngineTest.test_python_and_souffle_agree_on_the_pack",
+        "tests.test_faults_checker.EngineTest.test_souffle_reports_the_same_closure_and_claims"
+      ]
+    }
+  ]
+}

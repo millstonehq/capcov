@@ -1,0 +1,10 @@
+[capcov]
+source = "."
+flows_model = "flows.json"
+flows_target = "browser"
+
+[[adapters]]
+name = "treesitter-routes"
+language = "go"
+globs = ["*.go"]
+query = '((call_expression function: (identifier) @fn (#eq? @fn "handle") arguments: (argument_list (interpreted_string_literal) @path . (identifier) @handler)))'

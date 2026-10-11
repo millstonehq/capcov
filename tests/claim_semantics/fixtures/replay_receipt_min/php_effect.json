@@ -1,0 +1,61 @@
+{
+  "producer": "php target-cloud php0000000000000000000000000000000000001",
+  "rows": [
+    {
+      "cols_digest": "18d494dabf129a2007d65fad8f4744b7d4e51368e58c142ff512514828b80c91",
+      "kind": "insert",
+      "pk": "286bbc3165c77702a9a2c88c60a87d0cdb9f625f8d8b6863a90f25a9b6c07ceb",
+      "req": "req-1",
+      "run": "run-fixture-1",
+      "table": "issue"
+    },
+    {
+      "cols_digest": "121890fc68623e4bef0bf61ff89c850c97b63cd544c8a21cc90f348531edf1f5",
+      "kind": "update",
+      "pk": "3b65dbc7d7f67c28250ab49afa4db2edc47b47b85d158d1e66c9490b030ce41b",
+      "req": "req-1",
+      "run": "run-fixture-1",
+      "table": "entity_statistics"
+    },
+    {
+      "cols_digest": "34cca5168fd44d787e707172ecc1ebfccd7c73c1f11144c206f326f0d996a420",
+      "kind": "update",
+      "pk": "286bbc3165c77702a9a2c88c60a87d0cdb9f625f8d8b6863a90f25a9b6c07ceb",
+      "req": "req-2",
+      "run": "run-fixture-1",
+      "table": "issue"
+    },
+    {
+      "cols_digest": "8082a007486cc9272de1ff8240e3f24fc10967ba0628eac33c50b926769db3b5",
+      "kind": "update",
+      "pk": "3b65dbc7d7f67c28250ab49afa4db2edc47b47b85d158d1e66c9490b030ce41b",
+      "req": "req-2",
+      "run": "run-fixture-1",
+      "table": "entity_statistics"
+    },
+    {
+      "cols_digest": "e0962d93f20719f1cfc01d722aaeb6ca4bb040bdef2fea31d7255de7752865fd",
+      "kind": "insert",
+      "pk": "8a4c92af3b73b36336ef48adaca25fe10d26d4828bbf005821bcae3fec69746e",
+      "req": "req-3",
+      "run": "run-fixture-1",
+      "table": "issue"
+    },
+    {
+      "cols_digest": "5716922565d9d93a2d1d55f5084ae2870c5c0dc3e9decdfa756aeb6aa72a3c08",
+      "kind": "update",
+      "pk": "286bbc3165c77702a9a2c88c60a87d0cdb9f625f8d8b6863a90f25a9b6c07ceb",
+      "req": "req-4",
+      "run": "run-fixture-1",
+      "table": "issue"
+    },
+    {
+      "cols_digest": "80482024f69bda1d5a39ddf39b8f2b59461e1d0fed79a4ec7703e69d6b9a7908",
+      "kind": "update",
+      "pk": "3b65dbc7d7f67c28250ab49afa4db2edc47b47b85d158d1e66c9490b030ce41b",
+      "req": "req-4",
+      "run": "run-fixture-1",
+      "table": "entity_statistics"
+    }
+  ]
+}

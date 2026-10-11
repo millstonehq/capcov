@@ -1,0 +1,111 @@
+[project]
+name = "capcov"
+version = "0.2.0"
+description = "Capability coverage: derive what a system can do, map each to a test, fail when they drift"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+license = "MIT"
+license-files = ["LICENSE"]
+
+[project.urls]
+Repository = "https://github.com/millstonehq/capcov"
+Documentation = "https://github.com/millstonehq/capcov#readme"
+
+# discover / reconcile / gate / map are stdlib-only ON PURPOSE. They are the
+# half that runs in CI. A check which
+# cannot run must not print ok. A gate with no dependencies cannot take the
+# skip path.
+#
+# The probe is the half that needs the TARGET's libraries -- sqlalchemy and a
+# web framework -- and it imports them lazily, inside the install functions, so
+# `capcov gate` never pays for them.
+#
+# The optional SCIP resolver (`capcov discover --resolver scip`) is type-aware,
+# cross-file and multi-language where the default AST resolver is none of those.
+# Its dependencies are EXTERNAL command-line tools, not Python packages, so there
+# is no pip extra that installs them -- an empty marker would only lie about what
+# `pip install .[scip]` gives you. Install the CLIs directly and capcov finds
+# them on PATH (the `scip` CLI is also located via $SCIP_CLI or a binary dropped
+# at src/capcov/scip/vendor/scip):
+#
+#   * a SCIP indexer for the target's language:
+#       python -> npm install -g @sourcegraph/scip-python
+#       go     -> go install github.com/scip-code/scip-go/cmd/scip-go@latest
+#   * the scip CLI (reads an index as JSON):
+#       git clone --depth 1 https://github.com/sourcegraph/scip.git
+#       cd scip && go build -o scip ./cmd/scip
+#
+# capcov.scip imports with none of these present; only `--resolver scip` needs
+# them, and it fails with a named, actionable error when they are absent. The
+# resolver's own tests skip cleanly wherever the tooling is not installed.
+
+[project.optional-dependencies]
+# The default `pytest` probe needs the TARGET's libraries -- sqlalchemy and a web
+# framework -- imported lazily inside the probe so `capcov gate` never pays for
+# them.
+probe-python = ["sqlalchemy>=2.0", "pytest>=8"]
+# One dependency buys a real parse tree for every language the pack ships. The
+# route opinion lives in a config-supplied query, so no per-language engine
+# code -- and core discovery stays stdlib-only, this extra is never imported by
+# `capcov gate`.
+treesitter = ["tree-sitter>=0.25,<0.27", "tree-sitter-language-pack>=0.7"]
+# `capcov.faults` is standard library only. This extra is for
+# `capcov.faults.machine.hypothesis_machine`, which imports Hypothesis inside the
+# function; the explicit enumerator beside it needs nothing.
+faults-property = ["hypothesis>=6.100"]
+#
+# The other two probes (`capcov observe --probe browser|load`) declare no pip
+# extra, for the same reason the SCIP resolver below declares none: their real
+# dependencies are not Python packages this project can install. The `browser`
+# probe drives an EXTERNAL runner (a browser/DOM driver invoked after `--`, like
+# `flows run`), and the `load` probe ships as a stdlib-only contract stub whose
+# real ELT driver is out of scope for now. An empty `browser`/`load` marker would
+# only lie about what `pip install .[browser]` gives you, so there is none; when a
+# driver lands with genuine Python deps, its extra is added here. Neither probe is
+# ever imported by the stdlib-only discover/reconcile/gate path -- the registry
+# references them by dotted path and imports lazily.
+
+[project.scripts]
+capcov = "capcov.cli:main"
+# The distribution was named synapse-capabilities before 0.2.0. This entry point
+# keeps that command working and is removed in 0.3.0.
+synapse-capabilities = "capcov.cli:main"
+
+[project.entry-points.pytest11]
+capcov = "capcov.probes.pytest_probe"
+
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+# The frozen static claim schema (EXPERIMENT-PLAN section 29) ships inside the
+# wheel: capcov.claims.static loads it through importlib.resources, so an
+# installed distribution must carry the JSON next to the module.  The same is
+# true of capcov.claims.replay, which carries both the frozen replay schema and
+# the judge's rule pack rules-replay-v1.json -- a byte-identical mirror of the
+# reviewed experiments/claim-semantics/replay copy, so the replay join, the
+# compiled checker and `capcov experiment claims assumptions` run from an
+# installed wheel with no source tree (tests/claim_semantics/
+# test_replay_pack_package_data.py fails if the two ever drift).
+[tool.setuptools.package-data]
+"capcov.claims.static" = ["*.json"]
+"capcov.claims.replay" = ["*.json"]
+"capcov.faults" = ["*.json"]
+
+# Lint is a floor: syntax errors, undefined names and broken comparisons. It does
+# not enforce style. tests/fixtures holds sources that are read as test input.
+[dependency-groups]
+lint = ["ruff>=0.9"]
+# The installed-distribution test builds this project with pip, without build
+# isolation, so both must be importable in the interpreter running the suite.
+packaging = ["pip>=25", "setuptools>=77"]
+
+[tool.ruff]
+extend-exclude = ["tests/fixtures"]
+
+[tool.ruff.lint]
+select = ["E9", "F63", "F7", "F82"]

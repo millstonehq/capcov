@@ -1,0 +1,57 @@
+{
+ "version": 1,
+ "default": "base",
+ "families": {
+  "souffle": {
+   "needs": "Runs the souffle binary, interpreted or compiled.",
+   "classes": [
+    "tests.claim_semantics.test_bounds_static.StaticBoundsTest",
+    "tests.claim_semantics.test_claims_assumptions_cli.AssumptionsCommandLineTest",
+    "tests.claim_semantics.test_compiled_checker_script.CompiledCheckerScriptTests",
+    "tests.claim_semantics.test_differential_adversarial_matrix.AdversarialDifferentialMatrixTests",
+    "tests.claim_semantics.test_differential_kernels.DifferentialCorpusTests",
+    "tests.claim_semantics.test_differential_static_certificate.GoAppCertificateTest",
+    "tests.claim_semantics.test_differential_static_certificate.StaticCaseCertificateTest",
+    "tests.claim_semantics.test_differential_static_reachability.GoAppDifferentialTest",
+    "tests.claim_semantics.test_kernel_closure.KernelClosureTests",
+    "tests.claim_semantics.test_kernel_closure.SouffleVariableOutputRelevanceTests",
+    "tests.claim_semantics.test_replay_adversarial_both_engines.AdversarialReplayCasesInBothEngines",
+    "tests.claim_semantics.test_replay_corpus_evaluation.SouffleAgreesWithPythonOnEveryReplayCase",
+    "tests.claim_semantics.test_replay_evidence_policy.ReplayEvidencePolicyTest",
+    "tests.claim_semantics.test_shrinker_bundle.ShrinkerTests",
+    "tests.claim_semantics.test_souffle_compiled_kernel.SouffleCompiledCorpusTests",
+    "tests.claim_semantics.test_souffle_evaluator.SouffleCorpusSmokeTests",
+    "tests.claim_semantics.test_static_adversarial_both_engines.AdversarialCasesInBothEngines",
+    "tests.claim_semantics.test_static_corpus_evaluation.SouffleAgreesWithPythonOnEveryStaticCase",
+    "tests.claim_semantics.test_static_evidence_policy.StaticEvidencePolicyTest",
+    "tests.test_claim_souffle.SouffleBackendTests",
+    "tests.test_faults_checker.EngineTest"
+   ]
+  },
+  "shen": {
+   "needs": "Starts the Shen runtime through bifrost.",
+   "classes": [
+    "tests.claim_semantics.test_modelcheck.CheckerTest",
+    "tests.claim_semantics.test_modelcheck.LiveModelTest",
+    "tests.claim_semantics.test_modelcheck.PreflightTest",
+    "tests.claim_semantics.test_shen_transport.ExperimentCliTest",
+    "tests.claim_semantics.test_shen_transport.FakeLauncherFailureTest",
+    "tests.claim_semantics.test_shen_workbench.ShenAuthorityTest",
+    "tests.claim_semantics.test_shen_workbench.ShenDeriveTest",
+    "tests.claim_semantics.test_shen_workbench.ShenFrozenPackTest"
+   ]
+  },
+  "indexers": {
+   "needs": "Runs a SCIP indexer (scip-go, scip-php or scip-python) and the scip CLI.",
+   "classes": [
+    "tests.claim_semantics.test_scip_facts_live.LiveGoExportTest",
+    "tests.test_deep_go_e2e.DeepGoEndToEndTest",
+    "tests.test_deep_php_e2e.DeepPhpEndToEndTest",
+    "tests.test_deep_python_differential.PythonDifferentialTest",
+    "tests.test_scip_map.LiveToolTest",
+    "tests.test_scip_resolve.LiveResolveTest",
+    "tests.test_scip_runner.LiveToolTest"
+   ]
+  }
+ }
+}

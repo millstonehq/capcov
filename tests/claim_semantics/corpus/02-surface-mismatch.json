@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "program_schema_version": 1,
+  "id": "02-surface-mismatch",
+  "title": "Static and runtime routes are different surfaces",
+  "provenance": {
+    "kind": "synthetic",
+    "source": "hand-authored semantic control",
+    "seeded_fault": "route-a-static-route-b-runtime",
+    "legacy_comparator": "non-authoritative: a Boolean route hit"
+  },
+  "context": {
+    "tenant": "tenant-a",
+    "run": "run-2",
+    "event": "evt-2",
+    "surface": "route-b",
+    "attempt": "attempt-02"
+  },
+  "outputs": [{"kind":"observed","claim_id":"claim-effect","evidence_id":"fact-route-a-static","requires_all_evidence":["fact-route-a-static"]},{"kind":"observed","claim_id":"claim-effect","evidence_id":"fact-route-b-runtime","requires_all_evidence":["fact-route-b-runtime"]},{"kind":"discrepancy","claim_id":"claim-effect","requires_all_evidence":["fact-route-a-static","fact-route-b-runtime"],"fields":{"kind":{"value":"surface-mismatch"},"surfaces":{"value":["route-a","route-b"],"type":"json-metadata-only"}}},{"kind":"missing_premise","claim_id":"claim-effect","relation":"same_surface","requires_all_evidence":["fact-route-a-static","fact-route-b-runtime"],"fields":{"reason":{"value":"static and runtime observations name different routes"}}}],
+  "rules": [{"name":"effect_requires_same_indexed_surface","claim_id":"claim-effect","premises":[{"relation":"static_route_exists","bindings":[{"claim_column":"tenant","evidence_column":"tenant","type":"symbol"},{"claim_column":"surface","evidence_column":"surface","type":"symbol"}]},{"relation":"runtime_route_observed","bindings":[{"claim_column":"tenant","evidence_column":"tenant","type":"symbol"},{"claim_column":"surface","evidence_column":"surface","type":"symbol"},{"claim_column":"event","evidence_column":"event","type":"symbol"},{"claim_column":"run","evidence_column":"run","type":"symbol"}]},{"relation":"index_describes_run","bindings":[{"claim_column":"run","evidence_column":"run","type":"symbol"}]}]}],
+  "claims": [
+    {
+      "id": "claim-effect",
+      "arguments": {
+        "tenant": "tenant-a",
+        "event": "evt-2",
+        "surface": "route-a",
+        "run": "run-2"
+      },
+      "relation": "effect_reached",
+      "args": [
+        "tenant-a",
+        "evt-2",
+        "route-a",
+        "run-2"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-2",
+        "event": "evt-2",
+        "surface": "route-a",
+        "attempt": "attempt-02"
+      },
+      "provenance": {
+        "source": "reviewed-claim",
+        "depends_on": []
+      },
+      "arg_order": [
+        "tenant",
+        "event",
+        "surface",
+        "run"
+      ],
+      "quantifier": "exists",
+      "domain": null,
+      "mappings": [{"evidence_relation":"static_route_exists","effect":"observation","context_indices":[],"bindings":[["tenant","tenant"]]},{"evidence_relation":"runtime_route_observed","effect":"observation","context_indices":["tenant"],"bindings":[["tenant","tenant"]]}],
+      "diagnostics": []
+    }
+  ],
+  "facts": [
+    {
+      "id": "fact-route-a-static",
+      "arguments": {
+        "index": "index-02",
+        "tenant": "tenant-a",
+        "surface": "route-a"
+      },
+      "source": "static",
+      "relation": "static_route_exists",
+      "args": [
+        "index-02",
+        "tenant-a",
+        "route-a"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-2",
+        "event": "evt-2",
+        "surface": "route-b",
+        "attempt": "attempt-02"
+      },
+      "provenance": {
+        "source": "static",
+        "depends_on": []
+      },
+      "arg_order": [
+        "index",
+        "tenant",
+        "surface"
+      ]
+    },
+    {
+      "id": "fact-index-describes-run",
+      "arguments": {
+        "index": "index-02",
+        "run": "run-2"
+      },
+      "source": "reviewed-compatibility",
+      "relation": "index_describes_run",
+      "args": [
+        "index-02",
+        "run-2"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-2",
+        "event": "evt-2",
+        "surface": "route-b",
+        "attempt": "attempt-02"
+      },
+      "provenance": {
+        "source": "reviewed-compatibility",
+        "depends_on": []
+      },
+      "arg_order": [
+        "index",
+        "run"
+      ]
+    },
+    {
+      "id": "fact-route-b-runtime",
+      "arguments": {
+        "tenant": "tenant-a",
+        "surface": "route-b",
+        "event": "evt-2",
+        "run": "run-2"
+      },
+      "source": "runtime",
+      "relation": "runtime_route_observed",
+      "args": [
+        "tenant-a",
+        "route-b",
+        "evt-2",
+        "run-2"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-2",
+        "event": "evt-2",
+        "surface": "route-b",
+        "attempt": "attempt-02"
+      },
+      "provenance": {
+        "source": "runtime",
+        "depends_on": []
+      },
+      "arg_order": [
+        "tenant",
+        "surface",
+        "event",
+        "run"
+      ]
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "assumption-surface-equality",
+      "arguments": {
+        "static": "route-a",
+        "runtime": "route-b"
+      },
+      "relation": "same_surface__rejected",
+      "args": [
+        "route-a",
+        "route-b"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-2",
+        "event": "evt-2",
+        "surface": "route-b",
+        "attempt": "attempt-02"
+      },
+      "provenance": {
+        "source": "reviewed-assumption",
+        "depends_on": []
+      },
+      "subject_relation": "same_surface",
+      "arg_order": [
+        "static",
+        "runtime"
+      ]
+    }
+  ],
+  "expected": {
+    "claims": {
+      "claim-effect": {
+        "semantic_verdict": "unresolved",
+        "operational_status": "complete",
+        "support_leaves": [],
+        "refutation_leaves": [],
+        "observed_leaves": [
+          "fact-route-a-static",
+          "fact-route-b-runtime"
+        ],
+        "forbidden_leaves": [],
+        "discrepancies": [
+          {
+            "kind": "surface-mismatch",
+            "surfaces": [
+              "route-a",
+              "route-b"
+            ]
+          }
+        ],
+        "missing_premises": [
+          {
+            "reason": "static and runtime observations name different routes",
+            "relation": "same_surface"
+          }
+        ]
+      }
+    }
+  },
+  "schema_ref": "schema-v1",
+  "context_indices": [
+    "tenant",
+    "run",
+    "event",
+    "surface",
+    "attempt"
+  ]
+}

@@ -1,0 +1,1487 @@
+{
+  "schema_version": 1,
+  "id": "05-stale-index",
+  "title": "Stale index: the observed source tree differs from the tree the index was built from",
+  "rule_pack": "rules-static-v1",
+  "provenance": {
+    "kind": "synthetic",
+    "source": "hand-authored adversarial static case",
+    "seeded_fault": "stale-index"
+  },
+  "context": {
+    "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+  },
+  "review_notes": [
+    "scip_index_tree carries T1 and source_tree_observed carries T2 != T1, so scip_index_stale derives and static_index_current does not.",
+    "static_path_to_storage still derives (it is a fact about the index), but static_capability requires static_index_current: unresolved with missing premise static_index_current.",
+    "The diagnostic on scip_index_stale sets the operational status to stale."
+  ],
+  "facts": [
+    {
+      "id": "scip:bf7c3d393f11:scip_index:d5705f956606",
+      "kind": "fact",
+      "relation": "scip_index",
+      "arg_order": [
+        "index",
+        "indexer",
+        "indexer_version",
+        "language",
+        "project_root",
+        "digest_kind"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "scip-go",
+        "0.2.7",
+        "go",
+        "tests/fixtures/go_app",
+        "binary"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "capcov.claims.static.scip_facts v1",
+      "provenance": {
+        "depends_on": []
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_index_tree:dcc715240585",
+      "kind": "fact",
+      "relation": "scip_index_tree",
+      "arg_order": [
+        "index",
+        "tree_digest",
+        "file_count",
+        "pattern"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "8e9d2d0be9228105db7e518f90d0f9a78ae91fa2a10f6e4aecdb2c5ed9afb0fa",
+        5,
+        "**/*.go"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "capcov.claims.static.scip_facts v1",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index:d5705f956606"
+        ]
+      }
+    },
+    {
+      "id": "static:claim-time:source_tree_observed:e3c6dc91ffb2",
+      "kind": "fact",
+      "relation": "source_tree_observed",
+      "arg_order": [
+        "tree_digest"
+      ],
+      "args": [
+        "fae48afcefba2a425aa23fc9c7fbced5cdbbf0377fb2a8f685146fd5508293b8"
+      ],
+      "context": {},
+      "source": "reviewer claim-time observation",
+      "provenance": {
+        "depends_on": []
+      }
+    },
+    {
+      "id": "static:bf7c3d393f11:static_language_covered:129a0f2fc4c5",
+      "kind": "fact",
+      "relation": "static_language_covered",
+      "arg_order": [
+        "index",
+        "language"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "go"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "capcov.claims.static.scip_facts v1",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index:d5705f956606"
+        ]
+      }
+    },
+    {
+      "id": "static:bf7c3d393f11:static_scope:b38133c8938c",
+      "kind": "fact",
+      "relation": "static_scope",
+      "arg_order": [
+        "index",
+        "scope_kind",
+        "scope_value"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "all",
+        "."
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "capcov.claims.static.scip_facts v1",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index:d5705f956606"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_document:cbefe00c6a6d",
+      "kind": "fact",
+      "relation": "scip_document",
+      "arg_order": [
+        "index",
+        "path",
+        "language",
+        "occurrence_count",
+        "symbol_count",
+        "enclosing_synthesized"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "api/jobs.go",
+        "go",
+        8,
+        3,
+        false
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "scip-go 0.2.7",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index:d5705f956606"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_document:9aaa55827cd8",
+      "kind": "fact",
+      "relation": "scip_document",
+      "arg_order": [
+        "index",
+        "path",
+        "language",
+        "occurrence_count",
+        "symbol_count",
+        "enclosing_synthesized"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "internal/service/service.go",
+        "go",
+        8,
+        3,
+        false
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "scip-go 0.2.7",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index:d5705f956606"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_document:a5e995c27896",
+      "kind": "fact",
+      "relation": "scip_document",
+      "arg_order": [
+        "index",
+        "path",
+        "language",
+        "occurrence_count",
+        "symbol_count",
+        "enclosing_synthesized"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "internal/jobs/repo.go",
+        "go",
+        8,
+        3,
+        false
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "scip-go 0.2.7",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index:d5705f956606"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_document:fffe04ec1070",
+      "kind": "fact",
+      "relation": "scip_document",
+      "arg_order": [
+        "index",
+        "path",
+        "language",
+        "occurrence_count",
+        "symbol_count",
+        "enclosing_synthesized"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "models/models.go",
+        "go",
+        8,
+        3,
+        false
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "scip-go 0.2.7",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index:d5705f956606"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_document:18352bc0c9fc",
+      "kind": "fact",
+      "relation": "scip_document",
+      "arg_order": [
+        "index",
+        "path",
+        "language",
+        "occurrence_count",
+        "symbol_count",
+        "enclosing_synthesized"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "internal/authz/authz.go",
+        "go",
+        8,
+        3,
+        false
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "scip-go 0.2.7",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index:d5705f956606"
+        ]
+      }
+    },
+    {
+      "id": "static:bf7c3d393f11:static_source_file:e9904f2ccb16",
+      "kind": "fact",
+      "relation": "static_source_file",
+      "arg_order": [
+        "index",
+        "path",
+        "language"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "api/jobs.go",
+        "go"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "treesitter-routes go",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index_tree:dcc715240585"
+        ]
+      }
+    },
+    {
+      "id": "static:bf7c3d393f11:static_source_file:dbda6bb6ee25",
+      "kind": "fact",
+      "relation": "static_source_file",
+      "arg_order": [
+        "index",
+        "path",
+        "language"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "internal/service/service.go",
+        "go"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "treesitter-routes go",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index_tree:dcc715240585"
+        ]
+      }
+    },
+    {
+      "id": "static:bf7c3d393f11:static_source_file:46b485c84609",
+      "kind": "fact",
+      "relation": "static_source_file",
+      "arg_order": [
+        "index",
+        "path",
+        "language"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "internal/jobs/repo.go",
+        "go"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "treesitter-routes go",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index_tree:dcc715240585"
+        ]
+      }
+    },
+    {
+      "id": "static:bf7c3d393f11:static_source_file:ebf5d850f91e",
+      "kind": "fact",
+      "relation": "static_source_file",
+      "arg_order": [
+        "index",
+        "path",
+        "language"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "models/models.go",
+        "go"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "treesitter-routes go",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index_tree:dcc715240585"
+        ]
+      }
+    },
+    {
+      "id": "static:bf7c3d393f11:static_source_file:91df24180ff4",
+      "kind": "fact",
+      "relation": "static_source_file",
+      "arg_order": [
+        "index",
+        "path",
+        "language"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "internal/authz/authz.go",
+        "go"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "treesitter-routes go",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index_tree:dcc715240585"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_symbol:1b83375d1cf2",
+      "kind": "fact",
+      "relation": "scip_symbol",
+      "arg_order": [
+        "index",
+        "symbol",
+        "kind",
+        "category",
+        "display_name"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "scip-go gomod github.com/example/jobsvc . api/Handler#GetJob().",
+        "Function",
+        "callable",
+        "GetJob"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "scip-go 0.2.7",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index:d5705f956606"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_symbol_node:61a616dbbdde",
+      "kind": "fact",
+      "relation": "scip_symbol_node",
+      "arg_order": [
+        "index",
+        "symbol",
+        "node"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "scip-go gomod github.com/example/jobsvc . api/Handler#GetJob().",
+        "api.GetJob"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "scip-go 0.2.7",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_symbol:1b83375d1cf2"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_symbol:1f594158eba9",
+      "kind": "fact",
+      "relation": "scip_symbol",
+      "arg_order": [
+        "index",
+        "symbol",
+        "kind",
+        "category",
+        "display_name"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "scip-go gomod github.com/example/jobsvc . service/Service#Fetch().",
+        "Method",
+        "callable",
+        "Fetch"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "scip-go 0.2.7",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index:d5705f956606"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_symbol_node:f21d29a15f0e",
+      "kind": "fact",
+      "relation": "scip_symbol_node",
+      "arg_order": [
+        "index",
+        "symbol",
+        "node"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "scip-go gomod github.com/example/jobsvc . service/Service#Fetch().",
+        "service.Service.Fetch"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "scip-go 0.2.7",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_symbol:1f594158eba9"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_symbol:ee521196506c",
+      "kind": "fact",
+      "relation": "scip_symbol",
+      "arg_order": [
+        "index",
+        "symbol",
+        "kind",
+        "category",
+        "display_name"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "scip-go gomod github.com/example/jobsvc . jobs/Repo#Get().",
+        "Method",
+        "callable",
+        "Get"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "scip-go 0.2.7",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index:d5705f956606"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_symbol_node:ab7f7fe893bd",
+      "kind": "fact",
+      "relation": "scip_symbol_node",
+      "arg_order": [
+        "index",
+        "symbol",
+        "node"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "scip-go gomod github.com/example/jobsvc . jobs/Repo#Get().",
+        "jobs.Repo.Get"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "scip-go 0.2.7",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_symbol:ee521196506c"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_symbol:d49373973d7c",
+      "kind": "fact",
+      "relation": "scip_symbol",
+      "arg_order": [
+        "index",
+        "symbol",
+        "kind",
+        "category",
+        "display_name"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "scip-go gomod github.com/example/jobsvc . jobs/Repo#Write().",
+        "Method",
+        "callable",
+        "Write"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "scip-go 0.2.7",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index:d5705f956606"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_symbol_node:34c03be9ad95",
+      "kind": "fact",
+      "relation": "scip_symbol_node",
+      "arg_order": [
+        "index",
+        "symbol",
+        "node"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "scip-go gomod github.com/example/jobsvc . jobs/Repo#Write().",
+        "jobs.Repo.Write"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "scip-go 0.2.7",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_symbol:d49373973d7c"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_symbol:5a45b3db0d62",
+      "kind": "fact",
+      "relation": "scip_symbol",
+      "arg_order": [
+        "index",
+        "symbol",
+        "kind",
+        "category",
+        "display_name"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "scip-go gomod github.com/example/jobsvc . authz/Require().",
+        "Function",
+        "callable",
+        "Require"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "scip-go 0.2.7",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index:d5705f956606"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_symbol_node:25d61274eb04",
+      "kind": "fact",
+      "relation": "scip_symbol_node",
+      "arg_order": [
+        "index",
+        "symbol",
+        "node"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "scip-go gomod github.com/example/jobsvc . authz/Require().",
+        "authz.Require"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "scip-go 0.2.7",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_symbol:5a45b3db0d62"
+        ]
+      }
+    },
+    {
+      "id": "static:bf7c3d393f11:route_site:0f6224fc37b2",
+      "kind": "fact",
+      "relation": "route_site",
+      "arg_order": [
+        "index",
+        "surface",
+        "path",
+        "line",
+        "handler_name"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "GET /jobs/{id}",
+        "api/jobs.go",
+        17,
+        "GetJob"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "treesitter-routes go",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index_tree:dcc715240585"
+        ]
+      }
+    },
+    {
+      "id": "static:bf7c3d393f11:route_handler_location:46cffa380072",
+      "kind": "fact",
+      "relation": "route_handler_location",
+      "arg_order": [
+        "index",
+        "surface",
+        "path",
+        "line"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "GET /jobs/{id}",
+        "api/jobs.go",
+        10
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "treesitter-routes go",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index_tree:dcc715240585"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_definition_site:fd4e3c154316",
+      "kind": "fact",
+      "relation": "scip_definition_site",
+      "arg_order": [
+        "index",
+        "path",
+        "line",
+        "symbol"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "api/jobs.go",
+        10,
+        "scip-go gomod github.com/example/jobsvc . api/Handler#GetJob()."
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "scip-go 0.2.7",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_document:cbefe00c6a6d",
+          "external:scip-occurrence:bf7c3d393f11:83a18c57d314"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_definition_site:b3ef92f63562",
+      "kind": "fact",
+      "relation": "scip_definition_site",
+      "arg_order": [
+        "index",
+        "path",
+        "line",
+        "symbol"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "internal/service/service.go",
+        12,
+        "scip-go gomod github.com/example/jobsvc . service/Service#Fetch()."
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "scip-go 0.2.7",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_document:9aaa55827cd8",
+          "external:scip-occurrence:bf7c3d393f11:c333a18b6429"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_definition_site:edb9dfc15c67",
+      "kind": "fact",
+      "relation": "scip_definition_site",
+      "arg_order": [
+        "index",
+        "path",
+        "line",
+        "symbol"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "internal/jobs/repo.go",
+        14,
+        "scip-go gomod github.com/example/jobsvc . jobs/Repo#Get()."
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "scip-go 0.2.7",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_document:a5e995c27896",
+          "external:scip-occurrence:bf7c3d393f11:0ffbc2e73dbd"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_definition_site:adb074cbc14d",
+      "kind": "fact",
+      "relation": "scip_definition_site",
+      "arg_order": [
+        "index",
+        "path",
+        "line",
+        "symbol"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "internal/jobs/repo.go",
+        19,
+        "scip-go gomod github.com/example/jobsvc . jobs/Repo#Write()."
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "scip-go 0.2.7",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_document:a5e995c27896",
+          "external:scip-occurrence:bf7c3d393f11:120129235c24"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_definition_site:a89372dc478d",
+      "kind": "fact",
+      "relation": "scip_definition_site",
+      "arg_order": [
+        "index",
+        "path",
+        "line",
+        "symbol"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "internal/authz/authz.go",
+        5,
+        "scip-go gomod github.com/example/jobsvc . authz/Require()."
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "scip-go 0.2.7",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_document:18352bc0c9fc",
+          "external:scip-occurrence:bf7c3d393f11:38f7a8d1991c"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_may_reference:9daf02e4174f",
+      "kind": "fact",
+      "relation": "scip_may_reference",
+      "arg_order": [
+        "index",
+        "caller",
+        "callee",
+        "path",
+        "line",
+        "occurrence",
+        "caller_synthesized"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "scip-go gomod github.com/example/jobsvc . api/Handler#GetJob().",
+        "scip-go gomod github.com/example/jobsvc . service/Service#Fetch().",
+        "api/jobs.go",
+        11,
+        "79084c35083cc2dc945cb02a190bbca2e67444be7183cd7ab427e77017994414",
+        false
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "scip-go 0.2.7",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_document:cbefe00c6a6d",
+          "external:scip-occurrence:bf7c3d393f11:79084c35083c",
+          "scip:bf7c3d393f11:scip_definition_site:fd4e3c154316"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_may_reference:a6e0265af731",
+      "kind": "fact",
+      "relation": "scip_may_reference",
+      "arg_order": [
+        "index",
+        "caller",
+        "callee",
+        "path",
+        "line",
+        "occurrence",
+        "caller_synthesized"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "scip-go gomod github.com/example/jobsvc . service/Service#Fetch().",
+        "scip-go gomod github.com/example/jobsvc . jobs/Repo#Get().",
+        "internal/service/service.go",
+        13,
+        "566b07193b8d1546b324976ddfcdeaea0e482b222b616ce14bdb9a205c41df74",
+        false
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "scip-go 0.2.7",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_document:9aaa55827cd8",
+          "external:scip-occurrence:bf7c3d393f11:566b07193b8d",
+          "scip:bf7c3d393f11:scip_definition_site:b3ef92f63562"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_may_reference:3bffe18bb4fe",
+      "kind": "fact",
+      "relation": "scip_may_reference",
+      "arg_order": [
+        "index",
+        "caller",
+        "callee",
+        "path",
+        "line",
+        "occurrence",
+        "caller_synthesized"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "scip-go gomod github.com/example/jobsvc . service/Service#Fetch().",
+        "scip-go gomod github.com/example/jobsvc . jobs/Repo#Write().",
+        "internal/service/service.go",
+        14,
+        "6b2001ee55b3e33f6d36e904401b26a105aba1cf3d39b712f42801fae0ad3180",
+        false
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "scip-go 0.2.7",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_document:9aaa55827cd8",
+          "external:scip-occurrence:bf7c3d393f11:6b2001ee55b3",
+          "scip:bf7c3d393f11:scip_definition_site:b3ef92f63562"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_may_reference:6e24adc607f6",
+      "kind": "fact",
+      "relation": "scip_may_reference",
+      "arg_order": [
+        "index",
+        "caller",
+        "callee",
+        "path",
+        "line",
+        "occurrence",
+        "caller_synthesized"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "scip-go gomod github.com/example/jobsvc . api/Handler#GetJob().",
+        "scip-go gomod github.com/example/jobsvc . authz/Require().",
+        "api/jobs.go",
+        12,
+        "34b8c56ce05cfa4c297d7456121614bf744d9734acb68fcca39a9ea9b08e826a",
+        false
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "scip-go 0.2.7",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_document:cbefe00c6a6d",
+          "external:scip-occurrence:bf7c3d393f11:34b8c56ce05c",
+          "scip:bf7c3d393f11:scip_definition_site:fd4e3c154316"
+        ]
+      }
+    },
+    {
+      "id": "static:bf7c3d393f11:static_op_site:a368560e94a6",
+      "kind": "fact",
+      "relation": "static_op_site",
+      "arg_order": [
+        "index",
+        "path",
+        "line",
+        "verb",
+        "entity"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "internal/jobs/repo.go",
+        15,
+        "read",
+        "jobs"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "treesitter-routes go",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index_tree:dcc715240585"
+        ]
+      }
+    },
+    {
+      "id": "static:bf7c3d393f11:static_site_owner:ce2797a9a32e",
+      "kind": "fact",
+      "relation": "static_site_owner",
+      "arg_order": [
+        "index",
+        "path",
+        "line",
+        "symbol"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "internal/jobs/repo.go",
+        15,
+        "scip-go gomod github.com/example/jobsvc . jobs/Repo#Get()."
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "treesitter-routes go",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index_tree:dcc715240585",
+          "scip:bf7c3d393f11:scip_definition_site:edb9dfc15c67"
+        ]
+      }
+    },
+    {
+      "id": "static:bf7c3d393f11:static_op_site:afa58c0db80e",
+      "kind": "fact",
+      "relation": "static_op_site",
+      "arg_order": [
+        "index",
+        "path",
+        "line",
+        "verb",
+        "entity"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "internal/jobs/repo.go",
+        20,
+        "create",
+        "audit_logs"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "treesitter-routes go",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index_tree:dcc715240585"
+        ]
+      }
+    },
+    {
+      "id": "static:bf7c3d393f11:static_site_owner:56d86d6f4a8a",
+      "kind": "fact",
+      "relation": "static_site_owner",
+      "arg_order": [
+        "index",
+        "path",
+        "line",
+        "symbol"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "internal/jobs/repo.go",
+        20,
+        "scip-go gomod github.com/example/jobsvc . jobs/Repo#Write()."
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "treesitter-routes go",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index_tree:dcc715240585",
+          "scip:bf7c3d393f11:scip_definition_site:adb074cbc14d"
+        ]
+      }
+    },
+    {
+      "id": "static:bf7c3d393f11:static_entity:63630743e3f8",
+      "kind": "fact",
+      "relation": "static_entity",
+      "arg_order": [
+        "index",
+        "entity",
+        "path",
+        "line",
+        "table"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "jobs",
+        "models/models.go",
+        7,
+        "jobs"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "treesitter-routes go",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index_tree:dcc715240585"
+        ]
+      }
+    },
+    {
+      "id": "static:bf7c3d393f11:static_entity:4cc79a41d1c0",
+      "kind": "fact",
+      "relation": "static_entity",
+      "arg_order": [
+        "index",
+        "entity",
+        "path",
+        "line",
+        "table"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "audit_logs",
+        "models/models.go",
+        13,
+        "audit_logs"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "treesitter-routes go",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index_tree:dcc715240585"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_documents_closed:92e375ed3a2b",
+      "kind": "fact",
+      "relation": "scip_documents_closed",
+      "arg_order": [
+        "index"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "capcov.claims.static.scip_facts v1",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index:d5705f956606",
+          "scip:bf7c3d393f11:scip_index_tree:dcc715240585"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_references_closed:b66afc193c95",
+      "kind": "fact",
+      "relation": "scip_references_closed",
+      "arg_order": [
+        "index",
+        "path"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "api/jobs.go"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "capcov.claims.static.scip_facts v1",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_document:cbefe00c6a6d",
+          "scip:bf7c3d393f11:scip_index_tree:dcc715240585"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_references_closed:c869419d547a",
+      "kind": "fact",
+      "relation": "scip_references_closed",
+      "arg_order": [
+        "index",
+        "path"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "internal/service/service.go"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "capcov.claims.static.scip_facts v1",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_document:9aaa55827cd8",
+          "scip:bf7c3d393f11:scip_index_tree:dcc715240585"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_references_closed:ad6aeb80674e",
+      "kind": "fact",
+      "relation": "scip_references_closed",
+      "arg_order": [
+        "index",
+        "path"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "internal/jobs/repo.go"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "capcov.claims.static.scip_facts v1",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_document:a5e995c27896",
+          "scip:bf7c3d393f11:scip_index_tree:dcc715240585"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_references_closed:98d3ba35b61c",
+      "kind": "fact",
+      "relation": "scip_references_closed",
+      "arg_order": [
+        "index",
+        "path"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "models/models.go"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "capcov.claims.static.scip_facts v1",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_document:fffe04ec1070",
+          "scip:bf7c3d393f11:scip_index_tree:dcc715240585"
+        ]
+      }
+    },
+    {
+      "id": "scip:bf7c3d393f11:scip_references_closed:26da3a5c36ee",
+      "kind": "fact",
+      "relation": "scip_references_closed",
+      "arg_order": [
+        "index",
+        "path"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "internal/authz/authz.go"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "capcov.claims.static.scip_facts v1",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_document:18352bc0c9fc",
+          "scip:bf7c3d393f11:scip_index_tree:dcc715240585"
+        ]
+      }
+    },
+    {
+      "id": "static:bf7c3d393f11:static_route_inventory_closed:041f41840c3c",
+      "kind": "fact",
+      "relation": "static_route_inventory_closed",
+      "arg_order": [
+        "index"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "capcov.claims.static.scip_facts v1",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index_tree:dcc715240585"
+        ]
+      }
+    },
+    {
+      "id": "static:bf7c3d393f11:static_reachability_closed:bbdc30825970",
+      "kind": "fact",
+      "relation": "static_reachability_closed",
+      "arg_order": [
+        "index"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "capcov.claims.static.scip_facts v1",
+      "provenance": {
+        "depends_on": [
+          "scip:bf7c3d393f11:scip_index_tree:dcc715240585",
+          "scip:bf7c3d393f11:scip_references_closed:b66afc193c95",
+          "scip:bf7c3d393f11:scip_references_closed:c869419d547a",
+          "scip:bf7c3d393f11:scip_references_closed:ad6aeb80674e",
+          "scip:bf7c3d393f11:scip_references_closed:98d3ba35b61c",
+          "scip:bf7c3d393f11:scip_references_closed:26da3a5c36ee"
+        ]
+      }
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "static:bf7c3d393f11:authz_symbol__accepted:440bc350e2ec",
+      "kind": "assumption",
+      "relation": "authz_symbol__accepted",
+      "arg_order": [
+        "index",
+        "symbol"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "scip-go gomod github.com/example/jobsvc . authz/Require()."
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "source": "reviewed-assumption",
+      "provenance": {
+        "depends_on": []
+      }
+    }
+  ],
+  "claims": [
+    {
+      "id": "claim-path-in-index",
+      "relation": "static_path_to_storage",
+      "arg_order": [
+        "index",
+        "surface",
+        "entity",
+        "verb"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "GET /jobs/{id}",
+        "jobs",
+        "read"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "quantifier": "exists",
+      "domain": null,
+      "mappings": [],
+      "diagnostics": [],
+      "reading": "The index alone shows GetJob -> Fetch -> Repo#Get -> read jobs."
+    },
+    {
+      "id": "claim-cap-jobs-read",
+      "relation": "static_capability",
+      "arg_order": [
+        "index",
+        "surface",
+        "entity",
+        "verb"
+      ],
+      "args": [
+        "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11",
+        "GET /jobs/{id}",
+        "jobs",
+        "read"
+      ],
+      "context": {
+        "index": "bf7c3d393f11de1a79d0d36ba9eb27b38adf761e48454765cdb080fe2ca7bc11"
+      },
+      "quantifier": "exists",
+      "domain": null,
+      "mappings": [],
+      "diagnostics": [
+        {
+          "trigger_relation": "scip_index_stale",
+          "effect": "observation",
+          "operational_status": "stale",
+          "context_indices": [
+            "index"
+          ]
+        }
+      ],
+      "reading": ""
+    }
+  ],
+  "outputs": [
+    {
+      "kind": "missing_premise",
+      "claim_id": "claim-cap-jobs-read",
+      "relation": "static_index_current",
+      "fields": {
+        "reason": {
+          "value": "the index tree digest does not equal the observed source tree digest"
+        }
+      }
+    }
+  ],
+  "expected": {
+    "claims": {
+      "claim-path-in-index": {
+        "semantic_verdict": "supported",
+        "operational_status": "complete",
+        "support_leaves": [
+          "scip:bf7c3d393f11:scip_definition_site:fd4e3c154316",
+          "scip:bf7c3d393f11:scip_may_reference:9daf02e4174f",
+          "scip:bf7c3d393f11:scip_may_reference:a6e0265af731",
+          "scip:bf7c3d393f11:scip_symbol:1b83375d1cf2",
+          "static:bf7c3d393f11:route_handler_location:46cffa380072",
+          "static:bf7c3d393f11:static_op_site:a368560e94a6",
+          "static:bf7c3d393f11:static_site_owner:ce2797a9a32e"
+        ],
+        "refutation_leaves": [],
+        "observed_leaves": [
+          "scip:bf7c3d393f11:scip_definition_site:fd4e3c154316",
+          "scip:bf7c3d393f11:scip_may_reference:9daf02e4174f",
+          "scip:bf7c3d393f11:scip_may_reference:a6e0265af731",
+          "scip:bf7c3d393f11:scip_symbol:1b83375d1cf2",
+          "static:bf7c3d393f11:route_handler_location:46cffa380072",
+          "static:bf7c3d393f11:static_op_site:a368560e94a6",
+          "static:bf7c3d393f11:static_site_owner:ce2797a9a32e"
+        ],
+        "forbidden_leaves": [],
+        "discrepancies": [],
+        "missing_premises": []
+      },
+      "claim-cap-jobs-read": {
+        "semantic_verdict": "unresolved",
+        "operational_status": "stale",
+        "support_leaves": [],
+        "refutation_leaves": [],
+        "observed_leaves": [
+          "scip:bf7c3d393f11:scip_definition_site:fd4e3c154316",
+          "scip:bf7c3d393f11:scip_index_tree:dcc715240585",
+          "scip:bf7c3d393f11:scip_may_reference:9daf02e4174f",
+          "scip:bf7c3d393f11:scip_may_reference:a6e0265af731",
+          "scip:bf7c3d393f11:scip_symbol:1b83375d1cf2",
+          "static:bf7c3d393f11:route_handler_location:46cffa380072",
+          "static:bf7c3d393f11:static_op_site:a368560e94a6",
+          "static:bf7c3d393f11:static_site_owner:ce2797a9a32e",
+          "static:claim-time:source_tree_observed:e3c6dc91ffb2"
+        ],
+        "forbidden_leaves": [],
+        "discrepancies": [],
+        "missing_premises": [
+          {
+            "relation": "static_index_current",
+            "reason": "the index tree digest does not equal the observed source tree digest"
+          }
+        ]
+      }
+    }
+  }
+}

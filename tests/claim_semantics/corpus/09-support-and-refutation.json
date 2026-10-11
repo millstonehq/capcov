@@ -1,0 +1,196 @@
+{
+  "schema_version": 1,
+  "program_schema_version": 1,
+  "id": "09-support-and-refutation",
+  "title": "One scoped attempt can contain support and refutation",
+  "provenance": {
+    "kind": "synthetic",
+    "source": "hand-authored semantic control",
+    "seeded_fault": "duplicate-attempt-outcomes"
+  },
+  "context": {
+    "tenant": "tenant-a",
+    "run": "run-9",
+    "event": "evt-9",
+    "attempt": "attempt-9",
+    "recipient": "a@example.test"
+  },
+  "rules": [],
+  "outputs": [{"kind":"observed","claim_id":"claim-terminal","evidence_id":"fact-allow"},{"kind":"observed","claim_id":"claim-terminal","evidence_id":"fact-deny"},{"kind":"discrepancy","claim_id":"claim-terminal","when_claim":"conflicting","fields":{"kind":{"value":"same-scope-polarity-conflict"}}}],
+  "claims": [
+    {
+      "id": "claim-terminal",
+      "arguments": {
+        "tenant": "tenant-a",
+        "event": "evt-9",
+        "run": "run-9",
+        "attempt": "attempt-9",
+        "recipient": "a@example.test"
+      },
+      "relation": "notification_delivery_terminal",
+      "args": [
+        "tenant-a",
+        "evt-9",
+        "a@example.test",
+        "run-9",
+        "attempt-9"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-9",
+        "event": "evt-9",
+        "attempt": "attempt-9",
+        "recipient": "a@example.test"
+      },
+      "provenance": {
+        "source": "reviewed-claim",
+        "depends_on": []
+      },
+      "arg_order": [
+        "tenant",
+        "event",
+        "recipient",
+        "run",
+        "attempt"
+      ],
+      "quantifier": "exists",
+      "domain": null,
+      "mappings": [{"evidence_relation":"smtp_accepted","effect":"support","context_indices":["tenant","event","recipient","run","attempt"],"bindings":[["tenant","tenant"],["event","event"],["recipient","recipient"],["run","run"],["attempt","attempt"]]},{"evidence_relation":"smtp_rejected","effect":"refutation","context_indices":["tenant","event","recipient","run","attempt"],"bindings":[["tenant","tenant"],["event","event"],["recipient","recipient"],["run","run"],["attempt","attempt"]]}], "diagnostics": []
+    }
+  ],
+  "facts": [
+    {
+      "id": "fact-allow",
+      "arguments": {
+        "tenant": "tenant-a",
+        "event": "evt-9",
+        "run": "run-9",
+        "attempt": "attempt-9",
+        "recipient": "a@example.test"
+      },
+      "source": "smtp",
+      "relation": "smtp_accepted",
+      "args": [
+        "tenant-a",
+        "evt-9",
+        "a@example.test",
+        "run-9",
+        "attempt-9"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-9",
+        "event": "evt-9",
+        "attempt": "attempt-9",
+        "recipient": "a@example.test"
+      },
+      "provenance": {
+        "source": "smtp",
+        "depends_on": []
+      },
+      "arg_order": [
+        "tenant",
+        "event",
+        "recipient",
+        "run",
+        "attempt"
+      ]
+    },
+    {
+      "id": "fact-deny",
+      "arguments": {
+        "tenant": "tenant-a",
+        "event": "evt-9",
+        "run": "run-9",
+        "attempt": "attempt-9",
+        "recipient": "a@example.test"
+      },
+      "source": "smtp",
+      "relation": "smtp_rejected",
+      "args": [
+        "tenant-a",
+        "evt-9",
+        "a@example.test",
+        "run-9",
+        "attempt-9"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-9",
+        "event": "evt-9",
+        "attempt": "attempt-9",
+        "recipient": "a@example.test"
+      },
+      "provenance": {
+        "source": "smtp",
+        "depends_on": []
+      },
+      "arg_order": [
+        "tenant",
+        "event",
+        "recipient",
+        "run",
+        "attempt"
+      ]
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "assumption-single-outcome",
+      "arguments": {
+        "attempt": "attempt-9"
+      },
+      "relation": "one_terminal_outcome__rejected",
+      "args": [
+        "attempt-9"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-9",
+        "event": "evt-9",
+        "attempt": "attempt-9",
+        "recipient": "a@example.test"
+      },
+      "provenance": {
+        "source": "reviewed-assumption",
+        "depends_on": []
+      },
+      "subject_relation": "one_terminal_outcome",
+      "arg_order": [
+        "attempt"
+      ]
+    }
+  ],
+  "expected": {
+    "claims": {
+      "claim-terminal": {
+        "semantic_verdict": "conflicting",
+        "operational_status": "complete",
+        "support_leaves": [
+          "fact-allow"
+        ],
+        "refutation_leaves": [
+          "fact-deny"
+        ],
+        "observed_leaves": [
+          "fact-allow",
+          "fact-deny"
+        ],
+        "forbidden_leaves": [],
+        "discrepancies": [
+          {
+            "kind": "same-scope-polarity-conflict"
+          }
+        ],
+        "missing_premises": []
+      }
+    }
+  },
+  "schema_ref": "schema-v1",
+  "context_indices": [
+    "tenant",
+    "run",
+    "event",
+    "attempt"
+  ]
+}

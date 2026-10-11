@@ -1,0 +1,2460 @@
+{
+ "derived": [
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "actor",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": null,
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "derived",
+   "name": "actor_seen",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": false,
+   "producer_classes": []
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "store",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "key",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "value",
+     "type": "digest"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": null,
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "derived",
+   "name": "intended",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": false,
+   "producer_classes": []
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": "intended",
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "completeness",
+   "name": "intended_closed",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": false,
+   "producer_classes": []
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "store",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "key",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "value",
+     "type": "digest"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": null,
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "derived",
+   "name": "present",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": false,
+   "producer_classes": []
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "store",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": "present",
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "completeness",
+   "name": "present_closed",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": false,
+   "producer_classes": []
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "intent",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": null,
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "derived",
+   "name": "effect_applied_twice",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": false,
+   "producer_classes": []
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "store",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "seq",
+     "type": "unsigned"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": null,
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "derived",
+   "name": "orphan_change",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": false,
+   "producer_classes": []
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "op",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "intent",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": null,
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "derived",
+   "name": "lost_acknowledgement",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": false,
+   "producer_classes": []
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "store",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "seq",
+     "type": "unsigned"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": null,
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "derived",
+   "name": "silent_overwrite",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": false,
+   "producer_classes": []
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "intent",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": null,
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "derived",
+   "name": "unsettled_effect",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": false,
+   "producer_classes": []
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "intent",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": null,
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "derived",
+   "name": "split_outcome",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": false,
+   "producer_classes": []
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "name",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": null,
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "derived",
+   "name": "violated",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": false,
+   "producer_classes": []
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "name",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": "violated",
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "completeness",
+   "name": "violated_closed",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": false,
+   "producer_classes": []
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "name",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": null,
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "claim",
+   "name": "holds",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": false,
+   "producer_classes": []
+  }
+ ],
+ "description": "Fault-harness invariants over one run. Each invariant is a derived violation relation; violated(run, name) projects it; violated_closed(run, name) is derived only when every completeness relation in that invariant's `requires` list is present; holds(run, name) is the claim, derived from violated_closed and the absence of violated. Intents are compared with stores by (store, key, value digest), so two intents of one run must not share all three.",
+ "id": "rules-faults-v1",
+ "invariants": [
+  {
+   "name": "effect_applied_twice",
+   "requires": [
+    "intents_closed",
+    "applied_closed"
+   ]
+  },
+  {
+   "name": "orphan_change",
+   "requires": [
+    "ops_closed",
+    "changes_closed",
+    "intents_closed"
+   ]
+  },
+  {
+   "name": "lost_acknowledgement",
+   "requires": [
+    "ops_closed",
+    "intents_closed",
+    "finals_closed",
+    "applied_closed"
+   ]
+  },
+  {
+   "name": "silent_overwrite",
+   "requires": [
+    "applied_closed",
+    "reports_closed"
+   ]
+  },
+  {
+   "name": "unsettled_effect",
+   "requires": [
+    "intents_closed",
+    "settled_closed"
+   ]
+  },
+  {
+   "name": "split_outcome",
+   "requires": [
+    "intents_closed",
+    "recorded_closed",
+    "finals_closed",
+    "applied_closed"
+   ]
+  }
+ ],
+ "primitives": [
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "op",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "attempt",
+     "type": "unsigned"
+    },
+    {
+     "context": false,
+     "name": "actor",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "kind",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "target",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": null,
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "observation",
+   "name": "op_invoked",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": true,
+   "producer_classes": [
+    "history"
+   ]
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "op",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "attempt",
+     "type": "unsigned"
+    },
+    {
+     "context": false,
+     "name": "result",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": null,
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "observation",
+   "name": "op_completed",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": true,
+   "producer_classes": [
+    "history"
+   ]
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "op",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "effect",
+     "type": "unsigned"
+    },
+    {
+     "context": false,
+     "name": "store",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "label",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "actor",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "result",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": null,
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "observation",
+   "name": "effect_sent",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": true,
+   "producer_classes": [
+    "history"
+   ]
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": "op_invoked",
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "completeness",
+   "name": "ops_closed",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": true,
+   "producer_classes": [
+    "history"
+   ]
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "store",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "seq",
+     "type": "unsigned"
+    },
+    {
+     "context": false,
+     "name": "actor",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "key",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "value",
+     "type": "digest"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": null,
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "observation",
+   "name": "change",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": true,
+   "producer_classes": [
+    "service-log"
+   ]
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": "change",
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "completeness",
+   "name": "changes_closed",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": true,
+   "producer_classes": [
+    "service-log"
+   ]
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "store",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "seq",
+     "type": "unsigned"
+    },
+    {
+     "context": false,
+     "name": "request",
+     "type": "unsigned"
+    },
+    {
+     "context": false,
+     "name": "key",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "value",
+     "type": "digest"
+    },
+    {
+     "context": false,
+     "name": "origin",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": null,
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "observation",
+   "name": "applied",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": true,
+   "producer_classes": [
+    "ground-truth"
+   ]
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "store",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "seq",
+     "type": "unsigned"
+    },
+    {
+     "context": false,
+     "name": "key",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": null,
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "observation",
+   "name": "overwrote_unread",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": true,
+   "producer_classes": [
+    "ground-truth"
+   ]
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": "applied",
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "completeness",
+   "name": "applied_closed",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": true,
+   "producer_classes": [
+    "ground-truth"
+   ]
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "store",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "key",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "value",
+     "type": "digest"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": null,
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "observation",
+   "name": "final_value",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": true,
+   "producer_classes": [
+    "final-read"
+   ]
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "store",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": "final_value",
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "completeness",
+   "name": "final_closed",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": true,
+   "producer_classes": [
+    "final-read"
+   ]
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": "final_value",
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "completeness",
+   "name": "finals_closed",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": true,
+   "producer_classes": [
+    "final-read"
+   ]
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "intent",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "op",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "store",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "key",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "value",
+     "type": "digest"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": null,
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "observation",
+   "name": "intent",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": true,
+   "producer_classes": [
+    "consumer"
+   ]
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": "intent",
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "completeness",
+   "name": "intents_closed",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": true,
+   "producer_classes": [
+    "consumer"
+   ]
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "intent",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "outcome",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": null,
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "observation",
+   "name": "recorded",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": true,
+   "producer_classes": [
+    "consumer"
+   ]
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": "recorded",
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "completeness",
+   "name": "recorded_closed",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": true,
+   "producer_classes": [
+    "consumer"
+   ]
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "intent",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": null,
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "observation",
+   "name": "settled",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": true,
+   "producer_classes": [
+    "consumer"
+   ]
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": "settled",
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "completeness",
+   "name": "settled_closed",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": true,
+   "producer_classes": [
+    "consumer"
+   ]
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "store",
+     "type": "symbol"
+    },
+    {
+     "context": false,
+     "name": "seq",
+     "type": "unsigned"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": null,
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "observation",
+   "name": "overwrite_reported",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": true,
+   "producer_classes": [
+    "consumer"
+   ]
+  },
+  {
+   "binding": "runtime",
+   "columns": [
+    {
+     "context": true,
+     "name": "run",
+     "type": "symbol"
+    }
+   ],
+   "compatibility_context_indices": [],
+   "compatibility_targets": [],
+   "completes": "overwrite_reported",
+   "context_indices": [
+    "run"
+   ],
+   "finite": false,
+   "modality": "completeness",
+   "name": "reports_closed",
+   "nonempty": false,
+   "polarity": "positive",
+   "primitive": true,
+   "producer_classes": [
+    "consumer"
+   ]
+  }
+ ],
+ "rules": [
+  {
+   "body": [
+    {
+     "relation": "op_invoked",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Op"
+      },
+      {
+       "variable": "Attempt"
+      },
+      {
+       "variable": "Actor"
+      },
+      {
+       "variable": "Kind"
+      },
+      {
+       "variable": "Target"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "actor_seen",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "variable": "Actor"
+     }
+    ]
+   },
+   "name": "actor_seen_op"
+  },
+  {
+   "body": [
+    {
+     "relation": "effect_sent",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Op"
+      },
+      {
+       "variable": "Effect"
+      },
+      {
+       "variable": "Store"
+      },
+      {
+       "variable": "Label"
+      },
+      {
+       "variable": "Actor"
+      },
+      {
+       "variable": "Result"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "actor_seen",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "variable": "Actor"
+     }
+    ]
+   },
+   "name": "actor_seen_effect"
+  },
+  {
+   "body": [
+    {
+     "relation": "intent",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Intent"
+      },
+      {
+       "variable": "Op"
+      },
+      {
+       "variable": "Store"
+      },
+      {
+       "variable": "Key"
+      },
+      {
+       "variable": "Value"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "intended",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "variable": "Store"
+     },
+     {
+      "variable": "Key"
+     },
+     {
+      "variable": "Value"
+     }
+    ]
+   },
+   "name": "intended"
+  },
+  {
+   "body": [
+    {
+     "relation": "intents_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "intended_closed",
+    "terms": [
+     {
+      "variable": "Run"
+     }
+    ]
+   },
+   "name": "intended_closed"
+  },
+  {
+   "body": [
+    {
+     "relation": "final_value",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Store"
+      },
+      {
+       "variable": "Key"
+      },
+      {
+       "variable": "Value"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "present",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "variable": "Store"
+     },
+     {
+      "variable": "Key"
+     },
+     {
+      "variable": "Value"
+     }
+    ]
+   },
+   "name": "present_final"
+  },
+  {
+   "body": [
+    {
+     "relation": "applied",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Store"
+      },
+      {
+       "variable": "Seq"
+      },
+      {
+       "variable": "Request"
+      },
+      {
+       "variable": "Key"
+      },
+      {
+       "variable": "Value"
+      },
+      {
+       "variable": "Origin"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "present",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "variable": "Store"
+     },
+     {
+      "variable": "Key"
+     },
+     {
+      "variable": "Value"
+     }
+    ]
+   },
+   "name": "present_applied"
+  },
+  {
+   "body": [
+    {
+     "relation": "final_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Store"
+      }
+     ]
+    },
+    {
+     "relation": "applied_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "present_closed",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "variable": "Store"
+     }
+    ]
+   },
+   "name": "present_closed"
+  },
+  {
+   "body": [
+    {
+     "relation": "intent",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Intent"
+      },
+      {
+       "variable": "Op"
+      },
+      {
+       "variable": "Store"
+      },
+      {
+       "variable": "Key"
+      },
+      {
+       "variable": "Value"
+      }
+     ]
+    },
+    {
+     "relation": "applied",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Store"
+      },
+      {
+       "variable": "SeqA"
+      },
+      {
+       "variable": "RequestA"
+      },
+      {
+       "variable": "Key"
+      },
+      {
+       "variable": "Value"
+      },
+      {
+       "type": "symbol",
+       "value": "request"
+      }
+     ]
+    },
+    {
+     "relation": "applied",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Store"
+      },
+      {
+       "variable": "SeqB"
+      },
+      {
+       "variable": "RequestB"
+      },
+      {
+       "variable": "Key"
+      },
+      {
+       "variable": "Value"
+      },
+      {
+       "type": "symbol",
+       "value": "request"
+      }
+     ]
+    },
+    {
+     "comparison": {
+      "left": {
+       "variable": "RequestA"
+      },
+      "operator": "<",
+      "right": {
+       "variable": "RequestB"
+      }
+     }
+    }
+   ],
+   "head": {
+    "relation": "effect_applied_twice",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "variable": "Intent"
+     }
+    ]
+   },
+   "name": "effect_applied_twice"
+  },
+  {
+   "body": [
+    {
+     "relation": "change",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Store"
+      },
+      {
+       "variable": "Seq"
+      },
+      {
+       "variable": "Actor"
+      },
+      {
+       "variable": "Key"
+      },
+      {
+       "variable": "Value"
+      }
+     ]
+    },
+    {
+     "relation": "actor_seen",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Actor"
+      }
+     ]
+    },
+    {
+     "relation": "intended_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      }
+     ]
+    },
+    {
+     "negated": true,
+     "relation": "intended",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Store"
+      },
+      {
+       "variable": "Key"
+      },
+      {
+       "variable": "Value"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "orphan_change",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "variable": "Store"
+     },
+     {
+      "variable": "Seq"
+     }
+    ]
+   },
+   "name": "orphan_change"
+  },
+  {
+   "body": [
+    {
+     "relation": "op_completed",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Op"
+      },
+      {
+       "variable": "Attempt"
+      },
+      {
+       "type": "symbol",
+       "value": "ok"
+      }
+     ]
+    },
+    {
+     "relation": "intent",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Intent"
+      },
+      {
+       "variable": "Op"
+      },
+      {
+       "variable": "Store"
+      },
+      {
+       "variable": "Key"
+      },
+      {
+       "variable": "Value"
+      }
+     ]
+    },
+    {
+     "relation": "present_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Store"
+      }
+     ]
+    },
+    {
+     "negated": true,
+     "relation": "present",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Store"
+      },
+      {
+       "variable": "Key"
+      },
+      {
+       "variable": "Value"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "lost_acknowledgement",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "variable": "Op"
+     },
+     {
+      "variable": "Intent"
+     }
+    ]
+   },
+   "name": "lost_acknowledgement"
+  },
+  {
+   "body": [
+    {
+     "relation": "overwrote_unread",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Store"
+      },
+      {
+       "variable": "Seq"
+      },
+      {
+       "variable": "Key"
+      }
+     ]
+    },
+    {
+     "relation": "reports_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      }
+     ]
+    },
+    {
+     "negated": true,
+     "relation": "overwrite_reported",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Store"
+      },
+      {
+       "variable": "Seq"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "silent_overwrite",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "variable": "Store"
+     },
+     {
+      "variable": "Seq"
+     }
+    ]
+   },
+   "name": "silent_overwrite"
+  },
+  {
+   "body": [
+    {
+     "relation": "intent",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Intent"
+      },
+      {
+       "variable": "Op"
+      },
+      {
+       "variable": "Store"
+      },
+      {
+       "variable": "Key"
+      },
+      {
+       "variable": "Value"
+      }
+     ]
+    },
+    {
+     "relation": "settled_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      }
+     ]
+    },
+    {
+     "negated": true,
+     "relation": "settled",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Intent"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "unsettled_effect",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "variable": "Intent"
+     }
+    ]
+   },
+   "name": "unsettled_effect"
+  },
+  {
+   "body": [
+    {
+     "relation": "recorded",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Intent"
+      },
+      {
+       "type": "symbol",
+       "value": "applied"
+      }
+     ]
+    },
+    {
+     "relation": "intent",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Intent"
+      },
+      {
+       "variable": "Op"
+      },
+      {
+       "variable": "Store"
+      },
+      {
+       "variable": "Key"
+      },
+      {
+       "variable": "Value"
+      }
+     ]
+    },
+    {
+     "relation": "present_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Store"
+      }
+     ]
+    },
+    {
+     "negated": true,
+     "relation": "present",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Store"
+      },
+      {
+       "variable": "Key"
+      },
+      {
+       "variable": "Value"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "split_outcome",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "variable": "Intent"
+     }
+    ]
+   },
+   "name": "split_outcome_recorded_applied"
+  },
+  {
+   "body": [
+    {
+     "relation": "recorded",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Intent"
+      },
+      {
+       "type": "symbol",
+       "value": "absent"
+      }
+     ]
+    },
+    {
+     "relation": "intent",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Intent"
+      },
+      {
+       "variable": "Op"
+      },
+      {
+       "variable": "Store"
+      },
+      {
+       "variable": "Key"
+      },
+      {
+       "variable": "Value"
+      }
+     ]
+    },
+    {
+     "relation": "present",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Store"
+      },
+      {
+       "variable": "Key"
+      },
+      {
+       "variable": "Value"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "split_outcome",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "variable": "Intent"
+     }
+    ]
+   },
+   "name": "split_outcome_recorded_absent"
+  },
+  {
+   "body": [
+    {
+     "relation": "effect_applied_twice",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Intent"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "violated",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "type": "symbol",
+      "value": "effect_applied_twice"
+     }
+    ]
+   },
+   "name": "violated_effect_applied_twice"
+  },
+  {
+   "body": [
+    {
+     "relation": "orphan_change",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Store"
+      },
+      {
+       "variable": "Seq"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "violated",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "type": "symbol",
+      "value": "orphan_change"
+     }
+    ]
+   },
+   "name": "violated_orphan_change"
+  },
+  {
+   "body": [
+    {
+     "relation": "lost_acknowledgement",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Op"
+      },
+      {
+       "variable": "Intent"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "violated",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "type": "symbol",
+      "value": "lost_acknowledgement"
+     }
+    ]
+   },
+   "name": "violated_lost_acknowledgement"
+  },
+  {
+   "body": [
+    {
+     "relation": "silent_overwrite",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Store"
+      },
+      {
+       "variable": "Seq"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "violated",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "type": "symbol",
+      "value": "silent_overwrite"
+     }
+    ]
+   },
+   "name": "violated_silent_overwrite"
+  },
+  {
+   "body": [
+    {
+     "relation": "unsettled_effect",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Intent"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "violated",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "type": "symbol",
+      "value": "unsettled_effect"
+     }
+    ]
+   },
+   "name": "violated_unsettled_effect"
+  },
+  {
+   "body": [
+    {
+     "relation": "split_outcome",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Intent"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "violated",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "type": "symbol",
+      "value": "split_outcome"
+     }
+    ]
+   },
+   "name": "violated_split_outcome"
+  },
+  {
+   "body": [
+    {
+     "relation": "intents_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      }
+     ]
+    },
+    {
+     "relation": "applied_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "violated_closed",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "type": "symbol",
+      "value": "effect_applied_twice"
+     }
+    ]
+   },
+   "name": "violated_closed_effect_applied_twice"
+  },
+  {
+   "body": [
+    {
+     "relation": "ops_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      }
+     ]
+    },
+    {
+     "relation": "changes_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      }
+     ]
+    },
+    {
+     "relation": "intents_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "violated_closed",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "type": "symbol",
+      "value": "orphan_change"
+     }
+    ]
+   },
+   "name": "violated_closed_orphan_change"
+  },
+  {
+   "body": [
+    {
+     "relation": "ops_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      }
+     ]
+    },
+    {
+     "relation": "intents_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      }
+     ]
+    },
+    {
+     "relation": "finals_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      }
+     ]
+    },
+    {
+     "relation": "applied_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "violated_closed",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "type": "symbol",
+      "value": "lost_acknowledgement"
+     }
+    ]
+   },
+   "name": "violated_closed_lost_acknowledgement"
+  },
+  {
+   "body": [
+    {
+     "relation": "applied_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      }
+     ]
+    },
+    {
+     "relation": "reports_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "violated_closed",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "type": "symbol",
+      "value": "silent_overwrite"
+     }
+    ]
+   },
+   "name": "violated_closed_silent_overwrite"
+  },
+  {
+   "body": [
+    {
+     "relation": "intents_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      }
+     ]
+    },
+    {
+     "relation": "settled_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "violated_closed",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "type": "symbol",
+      "value": "unsettled_effect"
+     }
+    ]
+   },
+   "name": "violated_closed_unsettled_effect"
+  },
+  {
+   "body": [
+    {
+     "relation": "intents_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      }
+     ]
+    },
+    {
+     "relation": "recorded_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      }
+     ]
+    },
+    {
+     "relation": "finals_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      }
+     ]
+    },
+    {
+     "relation": "applied_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "violated_closed",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "type": "symbol",
+      "value": "split_outcome"
+     }
+    ]
+   },
+   "name": "violated_closed_split_outcome"
+  },
+  {
+   "body": [
+    {
+     "relation": "violated_closed",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Name"
+      }
+     ]
+    },
+    {
+     "negated": true,
+     "relation": "violated",
+     "terms": [
+      {
+       "variable": "Run"
+      },
+      {
+       "variable": "Name"
+      }
+     ]
+    }
+   ],
+   "head": {
+    "relation": "holds",
+    "terms": [
+     {
+      "variable": "Run"
+     },
+     {
+      "variable": "Name"
+     }
+    ]
+   },
+   "name": "holds"
+  }
+ ],
+ "schema_version": 1,
+ "supplementary_primitives": []
+}

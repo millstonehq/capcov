@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "program_schema_version": 1,
+  "id": "03-post-without-creation",
+  "title": "Successful POST does not prove durable creation",
+  "provenance": {
+    "kind": "synthetic",
+    "source": "hand-authored semantic control",
+    "seeded_fault": "missing-commit"
+  },
+  "context": {
+    "tenant": "tenant-a",
+    "run": "run-3",
+    "event": "evt-3",
+    "request": "req-3",
+    "attempt": "attempt-03"
+  },
+  "outputs": [{"kind":"observed","claim_id":"claim-request","evidence_id":"fact-post-200"},{"kind":"observed","claim_id":"claim-created","evidence_id":"fact-post-200"},{"kind":"missing_premise","claim_id":"claim-created","relation":"row_committed","fields":{"reason":{"value":"POST response does not prove durable creation"}}}],
+  "rules": [{"name":"request_from_http_acceptance","claim_id":"claim-request","premises":[{"relation":"http_post_accepted","bindings":[{"claim_column":"tenant","evidence_column":"tenant","type":"symbol"},{"claim_column":"event","evidence_column":"event","type":"symbol"},{"claim_column":"request","evidence_column":"request","type":"symbol"}]}]}],
+  "claims": [
+    {
+      "id": "claim-request",
+      "arguments": {
+        "tenant": "tenant-a",
+        "event": "evt-3",
+        "request": "req-3"
+      },
+      "relation": "post_request_succeeded",
+      "args": [
+        "tenant-a",
+        "evt-3",
+        "req-3"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-3",
+        "event": "evt-3",
+        "request": "req-3",
+        "attempt": "attempt-03"
+      },
+      "provenance": {
+        "source": "reviewed-claim",
+        "depends_on": []
+      },
+      "arg_order": [
+        "tenant",
+        "event",
+        "request"
+      ],
+      "quantifier": "exists",
+      "domain": null,
+      "mappings": [{"evidence_relation":"http_post_accepted","effect":"support","context_indices":["tenant","event"],"bindings":[["tenant","tenant"],["event","event"],["request","request"]]}],
+      "diagnostics": []
+    },
+    {
+      "id": "claim-created",
+      "arguments": {
+        "tenant": "tenant-a",
+        "event": "evt-3",
+        "run": "run-3"
+      },
+      "relation": "row_created",
+      "args": [
+        "tenant-a",
+        "evt-3",
+        "run-3"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-3",
+        "event": "evt-3",
+        "request": "req-3",
+        "attempt": "attempt-03"
+      },
+      "provenance": {
+        "source": "reviewed-claim",
+        "depends_on": []
+      },
+      "arg_order": [
+        "tenant",
+        "event",
+        "run"
+      ],
+      "quantifier": "exists",
+      "domain": null,
+      "mappings": [{"evidence_relation":"http_post_accepted","effect":"observation","context_indices":["tenant","event"],"bindings":[["tenant","tenant"],["event","event"]]}],
+      "diagnostics": [{"trigger_relation":"response_implies_commit__rejected","effect":"forbidden","operational_status":"invalid-input","context_indices":[],"required":true}]
+    }
+  ],
+  "facts": [
+    {
+      "id": "fact-post-200",
+      "arguments": {
+        "tenant": "tenant-a",
+        "event": "evt-3",
+        "request": "req-3",
+        "status": 200,
+        "run": "run-3"
+      },
+      "source": "http",
+      "relation": "http_post_accepted",
+      "args": [
+        "tenant-a",
+        "evt-3",
+        "req-3",
+        200,
+        "run-3"
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-3",
+        "event": "evt-3",
+        "request": "req-3",
+        "attempt": "attempt-03"
+      },
+      "provenance": {
+        "source": "http",
+        "depends_on": []
+      },
+      "arg_order": [
+        "tenant",
+        "event",
+        "request",
+        "status",
+        "run"
+      ]
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "assumption-response-means-commit",
+      "arguments": {
+        "status": 200
+      },
+      "relation": "response_implies_commit__rejected",
+      "args": [
+        200
+      ],
+      "context": {
+        "tenant": "tenant-a",
+        "run": "run-3",
+        "event": "evt-3",
+        "request": "req-3",
+        "attempt": "attempt-03"
+      },
+      "provenance": {
+        "source": "reviewed-assumption",
+        "depends_on": []
+      },
+      "subject_relation": "response_implies_commit",
+      "arg_order": [
+        "status"
+      ]
+    }
+  ],
+  "expected": {
+    "claims": {
+      "claim-request": {
+        "semantic_verdict": "supported",
+        "operational_status": "complete",
+        "support_leaves": [
+          "fact-post-200"
+        ],
+        "refutation_leaves": [],
+        "observed_leaves": [
+          "fact-post-200"
+        ],
+        "forbidden_leaves": [],
+        "discrepancies": [],
+        "missing_premises": []
+      },
+      "claim-created": {
+        "semantic_verdict": "unresolved",
+        "operational_status": "complete",
+        "support_leaves": [],
+        "refutation_leaves": [],
+        "observed_leaves": [
+          "fact-post-200"
+        ],
+        "forbidden_leaves": [],
+        "discrepancies": [],
+        "missing_premises": [
+          {
+            "reason": "POST response does not prove durable creation",
+            "relation": "row_committed"
+          }
+        ]
+      }
+    }
+  },
+  "schema_ref": "schema-v1",
+  "context_indices": [
+    "tenant",
+    "run",
+    "event",
+    "request",
+    "attempt"
+  ]
+}

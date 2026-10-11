@@ -1,0 +1,11 @@
+{
+  "rows": [
+    {
+      "run": "run-fixture-1",
+      "run_a": "run-fixture-1a",
+      "run_b": "run-fixture-1b",
+      "side": "php",
+      "stable": "true"
+    }
+  ]
+}

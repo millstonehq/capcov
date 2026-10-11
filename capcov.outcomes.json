@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "scope": "capcov/required-outcome-backpressure",
+  "environment": "Local capcov CLI, real pytest subprocesses, disposable files; browser runner is a test fixture",
+  "limitations": [
+    "Qualifies required-outcome gating, not all capcov behavior or discovery completeness",
+    "The host owns the accepted tests and invocation; this is not isolation from malicious code",
+    "No external browser, application deployment, or autonomous-agent convergence claim"
+  ],
+  "inputs": ["src", "tests", "capcov.toml", "capcov.outcomes.json", "pyproject.toml", "uv.lock"],
+  "outcomes": [
+    {
+      "id": "capcov.outcomes.required-set",
+      "capability": "capcov.outcomes.check",
+      "description": "Acceptance requires all mapped cases and refuses skips and filtered selections",
+      "source_refs": ["cli:capcov outcomes check"],
+      "policy": "required",
+      "tests": [
+        "tests/test_outcomes.py::OutcomeTests::test_check_skip_or_missing_binding_cannot_advance",
+        "tests/test_outcomes.py::OutcomeTests::test_check_rejects_selection_and_detects_environment_filter"
+      ]
+    },
+    {
+      "id": "capcov.browser.required-scenarios",
+      "capability": "capcov.browser.gate",
+      "description": "A passing route cannot hide a failed or missing scenario and duplicate evidence cannot replace failure",
+      "source_refs": ["cli:capcov observe browser", "cli:capcov gate"],
+      "policy": "required",
+      "tests": [
+        "tests/test_browser_probe_projection.py::AssertionFailureOmitsTheBinding::test_pass_on_same_route_cannot_hide_required_failure",
+        "tests/test_browser_probe_projection.py::AssertionFailureOmitsTheBinding::test_missing_scenario_cannot_hide_behind_shared_route",
+        "tests/test_browser_probe_projection.py::AssertionFailureOmitsTheBinding::test_duplicate_scenario_cannot_overwrite_failure"
+      ]
+    },
+    {
+      "id": "capcov.browser.failed-process",
+      "capability": "capcov.browser.observe",
+      "description": "Nonzero runner exit cannot publish a successful observation even with a passing receipt",
+      "source_refs": ["cli:capcov observe browser"],
+      "policy": "required",
+      "tests": [
+        "tests/test_browser_probe_projection.py::ObserveEndToEnd::test_failed_process_cannot_attest_success"
+      ]
+    }
+  ]
+}

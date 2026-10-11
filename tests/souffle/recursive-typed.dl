@@ -1,0 +1,10 @@
+.type Node = symbol
+
+.decl edge(src:Node, dst:Node)
+.input edge(IO=file, filename="edge.facts", delimiter="\t")
+
+.decl reachable(src:Node, dst:Node)
+.output reachable(IO=file, filename="reachable.csv", delimiter="\t")
+
+reachable(src, dst) :- edge(src, dst).
+reachable(src, dst) :- reachable(src, middle), edge(middle, dst).

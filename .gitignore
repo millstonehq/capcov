@@ -1,0 +1,15 @@
+__pycache__/
+*.egg-info/
+build/
+dist/
+.venv/
+.direnv/
+result
+result-*
+
+# capcov's working directory in a target tree
+.capcov/
+
+# A committed Composer fixture. Without this line a parent ignore rule for
+# vendor/ hides it.
+!tests/fixtures/php_app/vendor/
