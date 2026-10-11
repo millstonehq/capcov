@@ -91,9 +91,18 @@ where = ["src"]
 # compiled checker and `capcov experiment claims assumptions` run from an
 # installed wheel with no source tree (tests/claim_semantics/
 # test_replay_pack_package_data.py fails if the two ever drift).
+#
+# capcov.claims.observation carries both of its JSON documents the same way:
+# schema_observation_v1.json (read by ``load_observation_schema``) and the
+# judge's rule pack rules-observation-v1.json (read by ``observation.pack``).
+# There is no experiments/ mirror to compare against, so if they do not travel
+# in the wheel the observation judge does not run outside a source checkout
+# (tests/claim_semantics/test_observation_pack_package_data.py fails if the
+# entry is dropped).
 [tool.setuptools.package-data]
 "capcov.claims.static" = ["*.json"]
 "capcov.claims.replay" = ["*.json"]
+"capcov.claims.observation" = ["*.json"]
 "capcov.faults" = ["*.json"]
 
 # Lint is a floor: syntax errors, undefined names and broken comparisons. It does

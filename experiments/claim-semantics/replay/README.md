@@ -305,44 +305,30 @@ Design points a reviewer should check:
   `repeat_delete_not_found`, which reads the response rows *positively*, stays
   supported: a positive claim may rest on the rows it was given, a negation may
   not.
-* **The model typechecked** (Stage D premise).  `op_qualified_rt` carries the
-  *positive* atom `model_well_formed(M, Checker, Version, Cert)`, joined on the
-  same `M` as `model_describes_run(M, Run)`: the judge qualifies an op against a
-  model only when a typed checker certified that model, and the certificate must
-  be for *this* model, not merely for some model (case 28).  Two things make the
-  premise worth its weight.  First, **producer authority**: `model_well_formed`
-  admits only the class `modelcheck`; the model host (`shen`) may not certify the
-  well-formedness of its own model and the `reviewer` may not wave it through, so
-  a certificate signed by either is refused at ingestion (rejected case 30) -- the
-  premise would be empty if the host could sign it.  Second, **which checker may
-  be believed is the reviewer's word**: the certificate's `(checker,
-  checker_version)` must appear in the reviewer-owned primitive
-  `model_checker_admitted`, so a certificate from an unknown or unadmitted
-  version admits nothing (case 29).  The pair sits **last** in the rule body.  A
-  conjunct's position is nothing semantically, but the why-not walk reports the
-  first unsatisfied premise, and while the checker does not exist that premise
-  would otherwise mask every real gap a receipt has (the same reason
-  `replay.join.PENDING_PREMISES` sits last in `_BLOCKING_ORDER`).  There is **no closure relation** on either:
-  nothing negates well-formedness, the premise is read positively, and a receipt
-  with no certificate is simply unresolved (case 27) rather than qualified by
-  silence.  The exporter reads `model_well_formed.json` (a row for another model
-  is `stale`, not `invalid-input`: the certificate is for another artifact) and
-  the reviewer's `model_checkers.json`.  **No certificate exists until the
-  checker does.**  The Stage D checker has not been built, so a receipt from
-  replaying a real system carries no `model_well_formed.json` and its
-  `model_checkers.json` admits no checker; only the **synthetic**
-  `replay_receipt_min`, from which this corpus is
-  generated, carries the made-up certificate
-  `sha256("pending: checker not yet built")` under checker `stage-d-typecheck`
-  version `0.1-pending`, and that is what keeps case 00's positive control of the
-  premise alive.  A placeholder on a real receipt would have been a fabricated
-  observation satisfying exactly the gate this premise imposes.  Consequently
-  `op_qualified` on a real receipt that clears every other premise is *unresolved with
-  `model_well_formed` as its only missing premise*, which the judge reports as
-  `qualification: "pending model_well_formed"` (exit 5 from
-  `scripts/compiled_checker.py`) rather than as a finding against the port; see
-  `tests/claim_semantics/README.md`.  The shape of the premise, not the strength
-  of any certificate, is what the corpus fixes.
+* **Checker authority is operation scoped.** `model_well_formed(M, Checker,
+  Version, Binary, StructureCert)` certifies global structure. For each op,
+  `model_operation_checked(M, Op, Checker, Version, Binary, OperationCert)`
+  exists only when that operation's write, matrix, atlas and registry checks
+  pass. `model_checker_admitted` joins the same six values as the operation
+  row; a checked operation cannot borrow another operation's certificate.
+  `Binary` is the SHA-256 of the resolved native Shen executable. The stable
+  semantic certificate also binds the Bifrost launcher hash, checker sources,
+  model, and exact judgements while excluding nonce, elapsed time and run
+  envelope hashes.
+* **Reviewer authority is external.** The exporter ignores receipt-local
+  `model_checkers.json`, rejects placeholder reviewer names as non-authority,
+  and admits only an exact operation tuple supplied by the caller. The receipt
+  exporter still validates the model digest, checker identity/version and
+  stable certificate before it projects any authority into IR.
+* **Pending remains distinct from unsupported.** Global structure, per-op
+  checker coverage and reviewer admission are positive premises with no
+  closure relation, and remain last in `op_qualified_rt`. Missing authority
+  therefore cannot mask an earlier system/model finding. A checked and
+  admitted operation can qualify while sibling operations remain pending at
+  `model_operation_checked`; the synthetic corpus case
+  `32-partial-operation-check` demonstrates that split. A receipt from a
+  real system with no admitted checker evidence remains pending until a
+  reviewer supplies an exact admission.
 * **The learn campaign** (v1 learn addendum).  A *learn campaign* is a separate
   producer chain -- a tape generator, the PHP oracle and the model host -- that
   replays generated tapes against the oracle and against the model and reports,
@@ -530,9 +516,10 @@ constant in a case.
 | 20 missing stability closure | `closed.replay_stability = false` (the row stays, and says `true`) | all three unresolved, missing `replay_stability_closed` |
 | 21 missing effect-seq closure | `closed.php_effect_seqs = false` (go and model stay closed) | all three unresolved, missing `php_effect_seqs_closed`: an open sequence cannot license `!effect_order_any` |
 | 08 lying closure | `mutant_killed` m-1 names req-9, not a replayed request; closures asserted | both ops **unresolved** (contradiction gate; missing premise `replay_request` for req-9); `kill_closure_gap` supported with support ∩ forbidden = the `mutant_kills_closed` witness (seeded fault), discrepancy `kill-outside-replayed-requests` |
-| 27 model not well formed | `model_well_formed.json` removed | all three unresolved, missing `model_well_formed`: an un-typechecked model is not qualified by silence (the premise is positive and has no closure) |
-| 28 well-formed, other model | no `model_well_formed.json`; a *claim-time* certificate naming another model digest (the exporter calls such a row inside a receipt `stale`) | all three unresolved, missing `model_well_formed`: the join is on the model `model_describes_run` binds, so a certificate for another model is no evidence at all |
-| 29 checker not admitted | `model_checkers.json` removed (the certificate stays) | all three unresolved, missing `model_checker_admitted`: which checker versions may be believed is the reviewer's word, not the checker's |
+| 27 model not well formed | `model_well_formed.json` removed while operation-local checked rows remain | all three unresolved, missing `model_well_formed`: global structure is a positive premise and an uncertified structure is not qualified by silence |
+| 28 well-formed, other model | no `model_well_formed.json`; a *claim-time* structural certificate naming another model digest (the exporter calls such a row inside a receipt `stale`); operation rows and admissions stay bound to the receipt model | all three unresolved, missing `model_well_formed`: the foreign structural certificate does not join to the model bound by `model_describes_run` |
+| 29 checker not admitted | no caller-supplied reviewer admission (receipt-local `model_checkers.json` is ignored) | all three unresolved, missing `model_checker_admitted`: the reviewer must admit the exact model, operation, checker, version, binary, and semantic-certificate tuple |
+| 32 partial operation check | only `delete-issue` has an operation-local checker row and exact reviewer admission | delete-issue supported; `issues.create` and `issues.close` unresolved, missing `model_operation_checked`; no operation inherits another operation's checker fact |
 | rejected 30 | control with the `model_well_formed` row sourced `shen shen-model-host v1` (the model host certifying its own model) | `load_case` raises; `evidence-producer` ×1; evaluated unvalidated every claim would be supported |
 | rejected 07 | control with `php_post_state` sourced `shen shen-model-host v1` | `load_case` raises; `validate_bundle` lists `evidence-producer` ×3; evaluated unvalidated both ops would be supported |
 | rejected 16 | control with the two `model_scope_exclusion` assumptions sourced `replay …` (the harness excluding on the reviewer's behalf) | `load_case` raises; `evidence-producer` ×2; evaluated unvalidated both ops would be supported |

@@ -796,6 +796,11 @@
         },
         {
           "context": false,
+          "name": "checker_binary",
+          "type": "digest"
+        },
+        {
+          "context": false,
           "name": "certificate",
           "type": "digest"
         }
@@ -809,6 +814,57 @@
       "finite": false,
       "modality": "observation",
       "name": "model_well_formed",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": [
+        "modelcheck"
+      ]
+    },
+    {
+      "binding": "runtime",
+      "columns": [
+        {
+          "context": true,
+          "name": "model",
+          "type": "digest"
+        },
+        {
+          "context": true,
+          "name": "operation",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "checker",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "checker_version",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "checker_binary",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "certificate",
+          "type": "digest"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "model",
+        "operation"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "model_operation_checked",
       "nonempty": false,
       "polarity": "positive",
       "primitive": true,
@@ -929,6 +985,16 @@
       "binding": "runtime",
       "columns": [
         {
+          "context": true,
+          "name": "model",
+          "type": "digest"
+        },
+        {
+          "context": true,
+          "name": "operation",
+          "type": "symbol"
+        },
+        {
           "context": false,
           "name": "checker",
           "type": "symbol"
@@ -937,12 +1003,25 @@
           "context": false,
           "name": "checker_version",
           "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "checker_binary",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "certificate",
+          "type": "digest"
         }
       ],
       "compatibility_context_indices": [],
       "compatibility_targets": [],
       "completes": null,
-      "context_indices": [],
+      "context_indices": [
+        "model",
+        "operation"
+      ],
       "finite": false,
       "modality": "observation",
       "name": "model_checker_admitted",

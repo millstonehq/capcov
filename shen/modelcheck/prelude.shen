@@ -190,18 +190,28 @@
             (mc.union-answers (map (/. W (mc.as-is-tables Op W)) (mc.live-witnesses)))
             (mc.union-answers (map (/. W (mc.intended-tables Op W)) (mc.live-witnesses)))])
 
-\* [Outcome Liveness Verdict Count] for every cell of the admissibility matrix *\
+\* [Outcome Liveness Verdict Count HasPre HasSuccessor] for every cell of the
+   admissibility matrix.  The membership bits prevent a model from satisfying
+   the matrix merely by returning the right number of arbitrary states. *\
 (define mc.cell
   Op Out live -> (mc.cell-of Op Out live (mc.witness f2))
   Op Out nonlive -> (mc.cell-of Op Out nonlive (mc.witness nonlive)))
 
 (define mc.cell-of
-  Op Out L St -> (trap-error (let R (norn.admissible-as-is St (mc.op-term Op) Out)
-                                  [Out L admits (length R)])
-                             (/. E [Out L refuses 0])))
+  Op Out L St -> (trap-error
+                   (let Term (mc.op-term Op)
+                        R (norn.admissible-as-is St Term Out)
+                        U (tt.dedup R)
+                        Succ (mc.try (freeze (norn.successor-as-is St Term)))
+                        [Out L admits (length U) (element? St U) (mc.answer-member Succ U)])
+                   (/. E [Out L refuses 0 false false])))
+
+(define mc.answer-member
+  refused _ -> false
+  X Xs -> (element? X Xs))
 
 (define mc.cell-key
-  [Out L _ _] -> [Out L]
+  [Out L _ _ _ _] -> [Out L]
   _ -> malformed)
 
 (define mc.matrix-row
@@ -260,6 +270,7 @@
 
 (define mc.reify
   Dir -> (let Endpoints (mc.atlas-endpoints)
+              Listed (map (/. Op (output "MC OP ~A~%" Op)) Endpoints)
               Judged (tt.filter (/. Op (mc.judged? Op)) Endpoints)
               Skipped (tt.filter (/. Op (not (mc.judged? Op))) Endpoints)
               Ignored (map (/. Op (output "MC SKIP ~A no as-is target on any live witness~%" Op)) Skipped)

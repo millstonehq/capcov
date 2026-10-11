@@ -819,3 +819,11 @@ Boundary vectors and vector claims (`capcov.vectors`) were written by
 [@pyrex41](https://github.com/pyrex41) in
 [millstonehq/synapse#53](https://github.com/millstonehq/synapse/pull/53) and
 [millstonehq/synapse#54](https://github.com/millstonehq/synapse/pull/54).
+
+The observation judge (`capcov.claims.observation`), the replay judge module
+behind `scripts/compiled_checker.py` with its `--evaluator` and
+`--reviewer-admissions` options, and the operation-scoped checker authority
+they rest on were written by [@pyrex41](https://github.com/pyrex41) on the
+`integration/luna-wave-20260917` branch of
+[pyrex41/synapse-capcov](https://github.com/pyrex41/synapse-capcov) at
+`38d39b12760a9dd5edb81a5753d5eed5faf61e4d`. <!-- a commit id, not a credential. gitleaks:allow -->

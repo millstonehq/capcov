@@ -119,9 +119,10 @@ class ProgramIdentityTests(unittest.TestCase):
         join = replay_join.build(SYNTHETIC_RECEIPT_DIR)
         self.assertIsNotNone(join.bundle, join.contract_findings)
         program = souffle.program_for_pack(join.bundle)
-        self.assertEqual(program.program_digest, "9addbe3961470778edbc44dfb539f207d2de8da7fae9a7fbc76c8c35fc585974")
-        self.assertEqual(len(program.outputs), 115)
-        self.assertEqual(len(program.program.splitlines()), 354)
+        # model_operation_checked (operation-scoped checker authority) is the 116th relation
+        self.assertEqual(program.program_digest, "911483584280a1fa6a8fa175ea7556152971ea24115f1b7e0616d0e089cf1c60")
+        self.assertEqual(len(program.outputs), 116)
+        self.assertEqual(len(program.program.splitlines()), 357)
         # the exported schema declares the pack's primitives in the same order the pack does, so
         # the review cases and the judge's join are one program: one compile serves both
         self.assertEqual(program.program_digest, souffle.program_for_pack(
@@ -156,7 +157,7 @@ class CompileKeyTests(unittest.TestCase):
                                                        compiler_config_sha256="d" * 64))
         expected = hashlib.sha256(canonical_json({
             "schema": "capcov-souffle-compiled-v1", "program_digest": program,
-            "souffle_sha256": souffle_sha, "compile_flags": ["--no-preprocessor", "-j1", "-o"],
+            "souffle_sha256": souffle_sha, "compile_flags": list(compiled.COMPILE_FLAGS),
             "compiler_config_sha256": "",
         }).encode("utf-8")).hexdigest()
         self.assertEqual(base, expected)
@@ -164,18 +165,47 @@ class CompileKeyTests(unittest.TestCase):
 
 
 class _FakeCompiler:
-    """``souffle --no-preprocessor -j1 -o checker program.dl`` that writes a fake binary."""
+    """Two-stage fake: generate canonicalizable C++, then write a fake binary."""
     calls: list[list[str]] = []
-    returncode = 0
+    returncodes = [0, 0]
+    write_native = True
     stderr = "Warning: variable only occurs once\n" * 3
     body = b"#!/bin/sh\nexit 0\n"
+    generated = """
+void Sf_checker::loadAll([[maybe_unused]] std::string inputDirectoryArg){
+try {std::map<std::string, std::string> directiveMap({{R\"_(name)_\",R\"_(left)_\"}});
+} catch (std::exception& e) {std::cerr << e.what();exit(1);}
+}
+
+void Sf_checker::printAll([[maybe_unused]] std::string outputDirectoryArg){
+try {std::map<std::string, std::string> directiveMap({{R\"_(name)_\",R\"_(left)_\"}});
+} catch (std::exception& e) {std::cerr << e.what();exit(1);}
+}
+
+void Sf_checker::dumpInputs(){
+try {std::map<std::string, std::string> rwOperation;
+rwOperation[\"name\"] = \"left\";
+} catch (std::exception& e) {std::cerr << e.what();exit(1);}
+}
+
+void Sf_checker::dumpOutputs(){
+try {std::map<std::string, std::string> rwOperation;
+rwOperation[\"name\"] = \"left\";
+} catch (std::exception& e) {std::cerr << e.what();exit(1);}
+}
+
+void Sf_checker::nextMethod(){
+}
+"""
 
     def __init__(self, argv, *, cwd, stdout, stderr, text):
         del stdout, stderr, text
         type(self).calls.append(list(argv))
         self.cwd = Path(cwd)
-        self.returncode = type(self).returncode
-        if "-o" in argv and self.returncode == 0:
+        self.returncode = type(self).returncodes[0 if "-g" in argv else 1]
+        if "-g" in argv and self.returncode == 0:
+            (self.cwd / argv[argv.index("-g") + 1]).write_text(type(self).generated, encoding="utf-8")
+        elif "-o" in argv and self.returncode == 0 and type(self).write_native:
             (self.cwd / argv[argv.index("-o") + 1]).write_bytes(type(self).body)
 
     def communicate(self, timeout=None):
@@ -221,6 +251,55 @@ class _RecordingPopen:
         return "", "Warning: OpenMP was not enabled\n"
 
 
+class CanonicalGeneratedCppTests(unittest.TestCase):
+    @staticmethod
+    def _source(order: tuple[str, ...]) -> str:
+        methods = []
+        for method in ("loadAll", "printAll", "dumpInputs", "dumpOutputs"):
+            blocks = []
+            for relation in order:
+                if method in ("loadAll", "printAll"):
+                    operation = (
+                        'std::map<std::string, std::string> directiveMap('
+                        f'{{{{R"_(name)_",R"_({relation})_"}}}});')
+                else:
+                    operation = (
+                        'std::map<std::string, std::string> rwOperation;\n'
+                        f'rwOperation["name"] = "{relation}";')
+                blocks.append(
+                    f"try {{{operation}\n}} catch (std::exception& e) "
+                    "{std::cerr << e.what();\nexit(1);\n}\n")
+            methods.append(
+                f"\nvoid Sf_checker::{method}(){{\n{''.join(blocks)}\n}}\n")
+        return "".join(methods) + "\nSymbolTable& Sf_checker::getSymbolTable(){\nreturn symTable;\n}\n"
+
+    def test_relation_io_order_is_canonical_across_all_four_methods(self) -> None:
+        left = compiled._canonicalize_output_blocks(self._source(("zeta", "alpha")))
+        right = compiled._canonicalize_output_blocks(self._source(("alpha", "zeta")))
+        self.assertEqual(left, right)
+
+    def test_relation_io_separator_whitespace_is_canonical(self) -> None:
+        spaced = self._source(("alpha", "zeta"))
+        joined = spaced.replace("}\ntry {", "}try {")
+        self.assertEqual(compiled._canonicalize_output_blocks(spaced),
+                         compiled._canonicalize_output_blocks(joined))
+
+    def test_duplicate_relation_output_fails_closed(self) -> None:
+        with self.assertRaisesRegex(compiled.CompileError, "duplicate relation outputs"):
+            compiled._canonicalize_output_blocks(self._source(("alpha", "alpha")))
+
+    def test_two_name_directives_in_one_block_fail_closed(self) -> None:
+        source = self._source(("alpha",))
+        name = 'R"_(name)_",R"_(alpha)_"'
+        with self.assertRaisesRegex(compiled.CompileError, "exactly one relation name"):
+            compiled._canonicalize_output_blocks(source.replace(name, name + name, 1))
+
+    def test_missing_generated_method_fails_closed(self) -> None:
+        with self.assertRaisesRegex(compiled.CompileError, "has no dumpOutputs method"):
+            compiled._canonicalize_output_blocks(
+                self._source(("alpha",)).replace("dumpOutputs", "notDumpOutputs"))
+
+
 class CompileProgramTests(unittest.TestCase):
     def setUp(self) -> None:
         self.temporary = tempfile.TemporaryDirectory(prefix="capcov-compile-unit-")
@@ -236,7 +315,8 @@ class CompileProgramTests(unittest.TestCase):
         self.bundle = Bundle((left, derived), facts=(Atom("left", (Constant("l"),)),))
         self.program = souffle.program_for_pack(self.bundle)
         _FakeCompiler.calls = []
-        _FakeCompiler.returncode = 0
+        _FakeCompiler.returncodes = [0, 0]
+        _FakeCompiler.write_native = True
 
     def _compile(self, **kwargs):
         with (patch.object(compiled.subprocess, "Popen", _FakeCompiler),
@@ -244,12 +324,26 @@ class CompileProgramTests(unittest.TestCase):
             return compiled.compile_program(self.program, executable=str(self.executable),
                                             cache_dir=self.cache_dir, **kwargs)
 
+    def test_compiler_config_binds_canonicalizer_source_and_recipe(self) -> None:
+        original = compiled._compiler_config_sha256(str(self.executable))
+        with patch.object(compiled.inspect, "getsource", return_value="different canonicalizer"):
+            changed_source = compiled._compiler_config_sha256(str(self.executable))
+        with patch.object(compiled, "COMPILE_FLAGS", (*compiled.COMPILE_FLAGS, "different-recipe")):
+            changed_recipe = compiled._compiler_config_sha256(str(self.executable))
+        with patch.object(compiled, "_IO_BLOCK", compiled.re.compile("different-pattern")):
+            changed_pattern = compiled._compiler_config_sha256(str(self.executable))
+        self.assertNotEqual(original, changed_source)
+        self.assertNotEqual(original, changed_recipe)
+        self.assertNotEqual(original, changed_pattern)
+
     def test_compile_writes_the_contract_provenance_and_the_cache_layout(self) -> None:
         checker = self._compile()
-        self.assertEqual(_FakeCompiler.calls, [[str(self.executable), "--no-preprocessor", "-j1", "-o",
-                                                "checker", "program.dl"]])
+        self.assertEqual(_FakeCompiler.calls, [
+            [str(self.executable), "--no-preprocessor", "-j1", "-g", "checker.cpp", "program.dl"],
+            [str((self.root / "souffle-compile.py").resolve()), "checker.cpp", "-o", "checker"],
+        ])
         souffle_sha = hashlib.sha256(b"fake souffle bytes\n").hexdigest()
-        config_sha = hashlib.sha256(b"compiler = '/fake/clang++'\n").hexdigest()
+        config_sha = compiled._compiler_config_sha256(str(self.executable))
         key = compiled.compile_key(self.program.program_digest, souffle_sha,
                                    compiler_config_sha256=config_sha)
         entry = self.cache_dir / f"compiled-{key}"
@@ -266,9 +360,8 @@ class CompileProgramTests(unittest.TestCase):
         self.assertEqual(provenance["souffle_sha256"], souffle_sha)
         self.assertEqual(provenance["souffle_path"], str(self.executable.resolve()))
         self.assertEqual(provenance["souffle_version"], "fake-2.5")
-        self.assertEqual(provenance["compiler_config_sha256"],
-                         hashlib.sha256(b"compiler = '/fake/clang++'\n").hexdigest())
-        self.assertEqual(provenance["compile_flags"], ["--no-preprocessor", "-j1", "-o"])
+        self.assertEqual(provenance["compiler_config_sha256"], config_sha)
+        self.assertEqual(provenance["compile_flags"], list(compiled.COMPILE_FLAGS))
         self.assertIsInstance(provenance["compile_seconds"], float)
         self.assertNotIn("compiled_at", provenance)
         for name in ("compile_key", "program_digest", "binary_sha256", "souffle_sha256", "compiler_config_sha256"):
@@ -278,7 +371,7 @@ class CompileProgramTests(unittest.TestCase):
     def test_second_compile_reuses_the_cached_binary(self) -> None:
         first = self._compile()
         second = self._compile()
-        self.assertEqual(len(_FakeCompiler.calls), 1)
+        self.assertEqual(len(_FakeCompiler.calls), 2)
         self.assertEqual(first, second)
         self.assertFalse(first.cache_hit)
         self.assertTrue(second.cache_hit)
@@ -288,7 +381,7 @@ class CompileProgramTests(unittest.TestCase):
         binary = Path(checker.binary_path)
         binary.write_bytes(_FakeCompiler.body[:-1] + b"X")
         again = self._compile()
-        self.assertEqual(len(_FakeCompiler.calls), 2)
+        self.assertEqual(len(_FakeCompiler.calls), 4)
         self.assertEqual(again.binary_sha256, hashlib.sha256(_FakeCompiler.body).hexdigest())
         self.assertEqual(hashlib.sha256(binary.read_bytes()).hexdigest(), again.binary_sha256)
 
@@ -299,17 +392,17 @@ class CompileProgramTests(unittest.TestCase):
         payload["souffle_version"] = "someone else's souffle"
         provenance_path.write_text(json.dumps(payload), encoding="utf-8")
         self._compile()
-        self.assertEqual(len(_FakeCompiler.calls), 2)
+        self.assertEqual(len(_FakeCompiler.calls), 4)
         restored = json.loads(provenance_path.read_text(encoding="utf-8"))
         self.assertEqual(restored["souffle_version"], "fake-2.5")
         provenance_path.write_text("{not json", encoding="utf-8")
         self._compile()
-        self.assertEqual(len(_FakeCompiler.calls), 3)
+        self.assertEqual(len(_FakeCompiler.calls), 6)
         payload = json.loads(provenance_path.read_text(encoding="utf-8"))
         payload["extra"] = True
         provenance_path.write_text(json.dumps(payload), encoding="utf-8")
         self._compile()
-        self.assertEqual(len(_FakeCompiler.calls), 4)
+        self.assertEqual(len(_FakeCompiler.calls), 8)
 
     def test_a_different_souffle_executable_is_another_cache_entry_and_prunes_the_old(self) -> None:
         self._compile()
@@ -319,7 +412,7 @@ class CompileProgramTests(unittest.TestCase):
         with (patch.object(compiled.subprocess, "Popen", _FakeCompiler),
               patch.object(compiled.subprocess, "run", _fake_version)):
             checker = compiled.compile_program(self.program, executable=str(other), cache_dir=self.cache_dir)
-        self.assertEqual(len(_FakeCompiler.calls), 2)
+        self.assertEqual(len(_FakeCompiler.calls), 4)
         entries = sorted(p.name for p in self.cache_dir.glob("compiled-*"))
         self.assertEqual(entries, [Path(checker.binary_path).parent.name],
                          "entries built by another souffle are pruned")
@@ -328,7 +421,7 @@ class CompileProgramTests(unittest.TestCase):
             kept = compiled.compile_program(self.program, executable=str(other), cache_dir=self.cache_dir,
                                             prune=False)
             self._compile(prune=False)
-        self.assertEqual(len(_FakeCompiler.calls), 3)
+        self.assertEqual(len(_FakeCompiler.calls), 6)
         # a cached checker is the checker it reproduces: cache_hit records how
         # it was obtained and is deliberately outside equality and provenance
         self.assertEqual(kept, checker)
@@ -338,15 +431,30 @@ class CompileProgramTests(unittest.TestCase):
         self.assertEqual(len(list(self.cache_dir.glob("compiled-*"))), 2)
 
     def test_compiler_failure_is_a_compile_error_with_stderr(self) -> None:
-        _FakeCompiler.returncode = 1
+        _FakeCompiler.returncodes = [1, 0]
         _FakeCompiler.stderr = "Error: cannot find clang++\n"
         try:
             with self.assertRaises(compiled.CompileError) as raised:
                 self._compile()
         finally:
-            _FakeCompiler.returncode = 0
+            _FakeCompiler.returncodes = [0, 0]
             _FakeCompiler.stderr = "Warning: variable only occurs once\n" * 3
         self.assertIn("cannot find clang++", str(raised.exception))
+        self.assertEqual(list(self.cache_dir.glob("compiled-*")), [])
+
+    def test_native_compiler_failure_is_a_compile_error_with_stderr(self) -> None:
+        _FakeCompiler.returncodes = [0, 1]
+        _FakeCompiler.stderr = "Error: native compiler rejected generated C++\n"
+        with self.assertRaisesRegex(compiled.CompileError, "native compiler rejected"):
+            self._compile()
+        self.assertEqual(len(_FakeCompiler.calls), 2)
+        self.assertEqual(list(self.cache_dir.glob("compiled-*")), [])
+
+    def test_native_compiler_missing_output_fails_closed(self) -> None:
+        _FakeCompiler.write_native = False
+        with self.assertRaisesRegex(compiled.CompileError, "wrote no checker binary"):
+            self._compile()
+        self.assertEqual(len(_FakeCompiler.calls), 2)
         self.assertEqual(list(self.cache_dir.glob("compiled-*")), [])
 
     def test_warnings_on_stderr_with_rc_zero_are_not_failures(self) -> None:

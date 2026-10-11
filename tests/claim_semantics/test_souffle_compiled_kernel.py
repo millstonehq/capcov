@@ -1,10 +1,28 @@
 """The compiled Souffle checker as a third kernel over both corpora (live binary).
 
-Like the adversarial suites this never skips: souffle is a precondition, and
-``souffle-compile.py`` plus a C++ toolchain are too.  One compile per pack
-(replay, static) is shared by every case through a class-level cache -- the
-cache directory is ``CAPCOV_SOUFFLE_CACHE_DIR`` when set, so a warm CI cache
-skips the ~50 s compile; otherwise a temp dir compiles once.
+Every assertion in this module is *about* the two Souffle kernels -- that the
+interpreted and the compiled closure are the python closure, relation for
+relation and certificate for certificate -- so the whole module is the
+``SOUFFLE_ONLY`` skip, taken at class level.  It used to assert souffle onto
+PATH from ``setUp`` instead, which made a plain checkout report nine failures
+for a tool the branch declares optional; ``--evaluator`` is what made that
+wrong, because the kernels are now chosen rather than assumed.  A suite that
+cannot run is not a gate, and a suite that fails for an absent optional tool is
+not a gate either.
+
+Skipping loses no coverage of the receipt fixtures: ``test_evaluator_selection``
+judges the same committed receipts with the python kernel alone and holds them
+to ``fixtures/expected_judge_verdicts.json``, the verdicts and certificate
+digests *this* module's three-kernel run recorded.  What is asserted here and
+nowhere else is that the three closures are one closure, which needs the
+interpreter to be here.
+
+``souffle-compile.py`` plus a C++ toolchain are preconditions too, and remain
+failures rather than skips once souffle is present -- a broken toolchain is a
+defect, not an absent option.  One compile per pack (replay, static) is shared
+by every case through a class-level cache -- the cache directory is
+``CAPCOV_SOUFFLE_CACHE_DIR`` when set, so a warm CI cache skips the ~50 s
+compile; otherwise a temp dir compiles once.
 
 Per case the three kernels must agree completely: no operational failure
 anywhere, identical relations, identical claim verdict/status/basis/missing
@@ -41,6 +59,10 @@ HEX64 = r"^[0-9a-f]{64}$"
 CACHE_ENV = "CAPCOV_SOUFFLE_CACHE_DIR"
 REJECTED_STEMS = sorted(
     path.stem for path in replay_adapter.case_paths(replay_adapter.REJECTED_DIR))
+#: Named, so a skipped run says which optional tool it was waiting for.
+SOUFFLE_ONLY = ("this module is about the souffle kernels; souffle is not on PATH here "
+                "(the pinned nix devShell has it)")
+HAVE_SOUFFLE = shutil.which("souffle") is not None
 
 
 def cache_dir() -> Path:
@@ -53,6 +75,7 @@ def cache_dir() -> Path:
     return Path(tempfile.mkdtemp(prefix="capcov-compiled-cache-"))
 
 
+@unittest.skipUnless(HAVE_SOUFFLE, SOUFFLE_ONLY)
 class SouffleCompiledCorpusTests(unittest.TestCase):
     """Every reviewed case of both packs, in python, interpreted and compiled Souffle."""
 
@@ -64,8 +87,6 @@ class SouffleCompiledCorpusTests(unittest.TestCase):
         cls.checkers: dict[str, compiled.CompiledChecker] = {}
         cls.cases: dict[str, dict[str, object]] = {}
         cls.compile_error: str | None = None
-        if shutil.which("souffle") is None:
-            return
         replay_pack = replay_adapter.load_pack()
         static_pack = static_adapter.load_pack()
         cls.cases = {
@@ -90,8 +111,8 @@ class SouffleCompiledCorpusTests(unittest.TestCase):
         shutil.rmtree(cls.replay_root, ignore_errors=True)
 
     def setUp(self) -> None:
-        self.assertIsNotNone(shutil.which("souffle"),
-                             "souffle must be on PATH: run inside the nix devShell")
+        # souffle itself is the class skip; a compile that failed with souffle
+        # present is a defect of the toolchain and stays a failure.
         self.assertIsNone(self.compile_error, self.compile_error)
 
     def test_one_compile_per_pack_serves_every_case_of_that_pack(self) -> None:

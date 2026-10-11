@@ -22,6 +22,10 @@ def relation(name, *columns, **kwargs):
     )
 
 
+SOUFFLE_ONLY = ("this assertion is about the souffle kernel boundary; souffle is not "
+                "on PATH here (the pinned nix devShell has it)")
+
+
 def issue_codes(bundle):
     return {issue.code for issue in validate_bundle(bundle)}
 
@@ -179,10 +183,22 @@ class KernelClosureTests(unittest.TestCase):
                                source="reviewed")),
             claims=(claim,))
 
-    def test_forall_context_alias_is_rejected_by_both_kernel_boundaries(self):
+    def test_forall_context_alias_is_rejected_by_the_python_kernel_boundary(self):
         bundle = self.forall_context_alias_bundle()
         self.assertIn("claim-context", issue_codes(bundle))
         self.assertEqual(run_python(bundle).operational_failure, "invalid-input")
+
+    @unittest.skipUnless(shutil.which("souffle"), SOUFFLE_ONLY)
+    def test_forall_context_alias_is_rejected_by_the_souffle_kernel_boundary(self):
+        """The other half of the same boundary, skipped by name without the tool.
+
+        Asserting it as one test made a plain checkout *fail*: with souffle
+        absent ``run_souffle`` reports ``souffle-unavailable`` -- a kernel that
+        could not start, which is exactly not a rejection of the bundle.  Split,
+        the python boundary is still checked everywhere and only the claim that
+        needs the interpreter waits for it.
+        """
+        bundle = self.forall_context_alias_bundle()
         self.assertEqual(run_souffle(bundle).operational_failure, "invalid-input")
 
     def test_cycle_bound_is_a_named_operational_result(self):

@@ -1,0 +1,20 @@
+{
+ "producer": "reviewer a-reviewer",
+ "reviewed_against": {
+  "check": "role_list",
+  "policy": "3b71206b9b40b2cb9cde0d4f2984627f4977f47ac886f2cee27d3577fcb45742",
+  "scenario_set": "faf56399d3434f4ea60b046790d4c0ed3b38d949ecf7a011d6aabe975f42616a"
+ },
+ "reviewed_at": "2026-09-16",
+ "reviewer": "a-reviewer",
+ "rows": [
+  {
+   "relation": "policy_admitted",
+   "version": "v1"
+  },
+  {
+   "relation": "scenario_set_admitted",
+   "version": "v1"
+  }
+ ]
+}

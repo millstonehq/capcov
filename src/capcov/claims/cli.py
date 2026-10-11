@@ -19,14 +19,21 @@ Stage D's model checker (``claims/modelcheck.py``) is reached the same way::
 
 It typechecks the Shen domain model under ``DIR`` (``DIR/shen/load.shen``) and
 prints the certificate; with ``--out`` it writes ``modelcheck-certificate.json``,
-the transcript and, for a well-formed model only, ``model_well_formed.json``
-(the receipt file the replay exporter reads).  Exit 0 well-formed, 1 ill-formed
-(the failing judgements are in the JSON), 3 for a checker or runtime failure.
+the transcript, ``model_well_formed.json`` for valid global structure, and
+``model_operation_checked.json`` for successful operation-local checks. Exit 0
+when global structure is well formed (operation judgements may still fail), 1
+when global structure is ill formed, and 3 for a checker or runtime failure.
 
 The assumption registry (``claims/assumptions.py``) is reached the same way::
 
     capcov experiment claims assumptions registry   --receipt DIR [--out DIR]
     capcov experiment claims assumptions invalidate --receipt DIR --drop ID [--drop ID]
+
+``--evaluator`` chooses the kernels both commands judge with: ``python``
+(the default, standard library only), ``souffle``, ``souffle-compiled``, a
+comma list of them, or ``all`` for every one whose tool is present.  Naming one
+that is not here is a refusal (exit 2) that names the tool and how to install
+it; the default needs nothing, so a bare invocation judges in any checkout.
 
 ``registry`` judges a replay receipt with the replay join and prints the A2
 registry document; ``invalidate`` additionally withdraws each ``--drop``
@@ -54,6 +61,7 @@ mismatch is printed on stdout only and never written into it.
 from __future__ import annotations
 
 import argparse
+import importlib
 import json
 import os
 import sys
@@ -63,8 +71,17 @@ from pathlib import Path
 
 from .ir import BundleIngestionError, bundle_from_json
 from .validation import ValidationError
-from . import modelcheck, shen
-from .static.certificate import DEFAULT_MAX_DEPTH, DEFAULT_MAX_NODES
+
+#: The producer profiles this namespace can run, and the module each one lives
+#: in.  Every profile is imported inside the branch that names it and nowhere
+#: else, so registering one costs nothing: a checkout without the module, the
+#: key or the runtime it needs still parses and runs every other command, and a
+#: caller who never names the profile never loads it.  ``shen`` is the semantic
+#: workbench and ``modelcheck`` Stage D's typed checker.
+PROFILE_MODULES = {
+    "shen": "capcov.claims.shen",
+    "modelcheck": "capcov.claims.modelcheck",
+}
 
 
 def _emit(document: Any, out: str | None) -> None:
@@ -103,8 +120,10 @@ def _common(parser: argparse.ArgumentParser, *, need_row: bool) -> None:
     if need_row:
         parser.add_argument("--relation", required=True)
         parser.add_argument("--row", required=True, type=_row, help="JSON array of the conclusion row")
-        parser.add_argument("--max-depth", type=int, default=DEFAULT_MAX_DEPTH)
-        parser.add_argument("--max-nodes", type=int, default=DEFAULT_MAX_NODES)
+        # the defaults live in ``static.certificate`` and are read once the shen
+        # profile is imported, so building the parser imports nothing
+        parser.add_argument("--max-depth", type=int, default=None)
+        parser.add_argument("--max-nodes", type=int, default=None)
 
 
 #: Names the receipt directory when ``--receipt`` is not given.
@@ -122,7 +141,8 @@ def _assumptions(args: argparse.Namespace) -> int:
     import tempfile
 
     from .assumptions import InvalidationError
-    from .differential import DifferentialMismatch
+    from . import differential as differential_mod
+    from .differential import DifferentialMismatch, EvaluatorMismatch
     from .replay import join as replay_join
 
     # --out names a DIRECTORY here (the join's artifacts), so every document
@@ -136,19 +156,34 @@ def _assumptions(args: argparse.Namespace) -> int:
     if receipt is None or not _is_receipt_dir(receipt):
         emit({"refusal": "no receipt directory (pass --receipt DIR)"})
         return 2
+    # the evaluators are resolved and checked before the join is reached, so an
+    # absent souffle is named as an absent souffle wherever the command runs
+    try:
+        evaluators = differential_mod.resolve_evaluators(args.evaluator)
+        differential_mod.require_evaluators(evaluators)
+    except (differential_mod.UnknownEvaluator, differential_mod.EvaluatorUnavailable) as exc:
+        emit({"refusal": str(exc)})
+        return 2
     owned = args.replay_root is None
     replay_root = args.replay_root or tempfile.mkdtemp(prefix="capcov-assumptions-")
     # a kernel disagreement is the one outcome whose evidence lives in the
     # replay root, so that is the one case an owned temporary root survives
     keep = False
     try:
+        admissions = ()
+        if args.reviewer_admissions:
+            try:
+                admissions = _load_json(args.reviewer_admissions)
+            except (OSError, json.JSONDecodeError, UnicodeDecodeError):
+                emit({"refusal": "reviewer admissions are not readable JSON"})
+                return 2
         try:
-            join = replay_join.build(receipt)
+            join = replay_join.build(receipt, reviewer_admissions=admissions)
             if join.bundle is None:
                 emit({"refusal": "the exporter refused the receipt",
                       "contract_findings": list(join.contract_findings)})
                 return 2
-            replay_join.evaluate_join(join, replay_root)
+            replay_join.evaluate_join(join, replay_root, evaluators=evaluators)
             if join.mismatch is not None:
                 keep = True
                 emit({"kernel_mismatch": "the kernels disagree on the join",
@@ -158,7 +193,7 @@ def _assumptions(args: argparse.Namespace) -> int:
             if args.command == "invalidate":
                 document["invalidations"] = [replay_join.invalidate(join, drop, replay_root).as_dict()
                                              for drop in args.drop]
-        except DifferentialMismatch as exc:
+        except (DifferentialMismatch, EvaluatorMismatch) as exc:
             keep = True
             emit({"kernel_mismatch": "the kernels disagree on the withdrawn bundle",
                   "replay": str(exc.result.replay_path)})
@@ -183,23 +218,62 @@ def _assumptions(args: argparse.Namespace) -> int:
             shutil.rmtree(replay_root, ignore_errors=True)
 
 
+class _ProfileUnavailable(RuntimeError):
+    """A producer profile's module could not be imported."""
+
+
+def _profile(name: str):
+    """Import the module a producer profile lives in, or say which one is missing.
+
+    A profile that is not part of this checkout is a named refusal, never an
+    ImportError traceback: the namespace is a workbench, and a missing optional
+    profile says nothing about the profiles that are here.
+    """
+    try:
+        return importlib.import_module(PROFILE_MODULES[name])
+    except ImportError as exc:
+        raise _ProfileUnavailable(
+            f"the {name} profile is not available in this checkout "
+            f"({PROFILE_MODULES[name]}: {exc})") from exc
+
+
 def _modelcheck(args) -> int:
     try:
-        result = modelcheck.check(args.model, out_dir=args.out, timeout=args.timeout, keep=args.keep)
-    except modelcheck.ModelcheckUnavailable as exc:
-        _emit({"operational_failure": "modelcheck-unavailable", "error": str(exc)}, None)
+        modelcheck = _profile("modelcheck")
+    except _ProfileUnavailable as exc:
+        _emit({"operational_failure": "profile-unavailable", "error": str(exc)}, None)
         return 3
-    except modelcheck.ModelcheckFailure as exc:
-        _emit({"operational_failure": "modelcheck-failure", "error": str(exc)}, None)
+    if args.keep:
+        # Preserve the explicit scratch-directory debugging mode.  The normal
+        # producer-profile path uses preflight below, which has a stable
+        # never-raises contract for callers that are gating a command.
+        try:
+            result = modelcheck.check(args.model, out_dir=args.out,
+                                      timeout=args.timeout, keep=True)
+        except modelcheck.ModelcheckUnavailable as exc:
+            _emit({"operational_failure": "modelcheck-unavailable", "error": str(exc)}, None)
+            return 3
+        except modelcheck.ModelcheckFailure as exc:
+            _emit({"operational_failure": "modelcheck-failure", "error": str(exc)}, None)
+            return 3
+        report = {"status": result.status, "model": result.model_digest,
+                  "fact": result.fact["rows"][0] if result.fact else None,
+                  "certificate_sha256": result.certificate["certificate_sha256"],
+                  "failures": [{"id": j.id, "message": j.message} for j in result.failures],
+                  "error": None, "workdir_retained": result.workdir is not None}
+    else:
+        report = modelcheck.preflight(args.model, out_dir=args.out, timeout=args.timeout)
+    if report["status"] in {"unavailable", "failed"}:
+        failure = "modelcheck-unavailable" if report["status"] == "unavailable" else "modelcheck-failure"
+        _emit({"operational_failure": failure, "error": report["error"]}, None)
         return 3
-    document = {"verdict": result.status, "model": result.model_digest,
-                "judgements": [{"id": j.id, "verdict": j.verdict, "message": j.message} for j in result.judgements],
-                "skipped": [{"op": op, "reason": reason} for op, reason in result.skipped],
-                "certificate_sha256": result.certificate["certificate_sha256"],
-                "fact": result.fact, "workdir": result.workdir,
-                "elapsed_seconds": round(result.elapsed_seconds, 3)}
+    document = {"verdict": report["status"], "model": report["model"],
+                "failures": list(report["failures"]),
+                "certificate_sha256": report["certificate_sha256"],
+                "fact": report["fact"],
+                "workdir_retained": bool(report.get("workdir_retained", False))}
     _emit(document, None)
-    return 0 if result.status == "well-formed" else 1
+    return 0 if report["status"] == "well-formed" else 1
 
 
 def main(argv: list[str]) -> int:
@@ -220,12 +294,19 @@ def main(argv: list[str]) -> int:
         command.add_argument("--receipt", default=None, help="replay receipt directory (default: $CAPCOV_REPLAY_RECEIPT_DIR)")
         command.add_argument("--out", default=None, help="write the join artifacts to this directory")
         command.add_argument("--replay-root", default=None, help="differential replay directory for a kernel mismatch")
+        command.add_argument(
+            "--reviewer-admissions", default=None,
+            help="JSON array of external exact-certificate reviewer admissions")
+        command.add_argument("--evaluator", default=None, metavar="NAME[,NAME...]",
+                             help="kernels to judge with: python (default, stdlib only), souffle, "
+                                  "souffle-compiled, a comma list, or 'all' for every one present")
         if name == "invalidate":
             command.add_argument("--drop", action="append", default=[], required=True, metavar="ID",
                                  help="an asm: id or the evidence id of an assumption row (repeatable)")
     mc = claims_sub.add_parser("modelcheck", help="Stage D: typed well-formedness of a Shen domain model")
     mc.add_argument("--model", required=True, help="model directory holding shen/load.shen")
-    mc.add_argument("--out", default=None, help="write the certificate, transcript and model_well_formed.json here")
+    mc.add_argument("--out", default=None,
+                    help="write the certificate, transcript, model_well_formed.json and model_operation_checked.json here")
     mc.add_argument("--timeout", type=float, default=None, help="seconds before the runtime is killed")
     mc.add_argument("--keep", action="store_true", help="keep the generated driver and units")
     args = parser.parse_args(argv)
@@ -233,6 +314,12 @@ def main(argv: list[str]) -> int:
         return _assumptions(args)
     if args.tool == "modelcheck":
         return _modelcheck(args)
+
+    try:
+        shen = _profile("shen")
+    except _ProfileUnavailable as exc:
+        _emit({"operational_failure": "profile-unavailable", "error": str(exc)}, None)
+        return 3
 
     try:
         bundle = _load_bundle(args.bundle) if args.bundle else None
@@ -243,14 +330,16 @@ def main(argv: list[str]) -> int:
             report = shen.authority(bundle, rules, frozen=args.frozen, timeout=args.timeout, keep=args.keep)
             _emit(report.as_dict(), args.out)
             return 0 if report.ok else 1
+        max_depth = shen.DEFAULT_MAX_DEPTH if getattr(args, "max_depth", None) is None else args.max_depth
+        max_nodes = shen.DEFAULT_MAX_NODES if getattr(args, "max_nodes", None) is None else args.max_nodes
         if args.command == "evaluate":
             result = shen.evaluate(bundle, rules, args.relation, args.row, frozen=args.frozen,
-                                   max_depth=args.max_depth, max_nodes=args.max_nodes,
+                                   max_depth=max_depth, max_nodes=max_nodes,
                                    timeout=args.timeout, keep=args.keep)
             _emit(result.as_dict(), args.out)
             return 0 if result.outcome == "positive" else 1
         report = shen.why_not(bundle, rules, args.relation, args.row, frozen=args.frozen,
-                              max_depth=args.max_depth, max_nodes=args.max_nodes,
+                              max_depth=max_depth, max_nodes=max_nodes,
                               timeout=args.timeout, keep=args.keep)
         _emit(report, args.out)
         return 0

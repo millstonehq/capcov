@@ -1,14 +1,21 @@
-"""Every adversarial replay case yields its reviewed verdict in both kernels (Phase 4, judge side).
+"""Every adversarial replay case yields its reviewed verdict in every kernel that ran.
 
-Unlike ``test_replay_corpus_evaluation`` this test never skips: Soufflé is a
-precondition (the gate rejects "skipped" output).  Per case it runs the
-fail-closed differential, then checks the Python and the Soufflé claim results
-against ``expected.json`` (verdict, operational status, canonical missing
-premises), the Python kernel's leaves against the reviewed leaf sets, and that
-the certificates re-derived from both closures agree for every claim row.
-The rejected case is evaluated *unvalidated* in the Python engine to show that
-the producer-class check is the only thing standing between it and a
-supported verdict.
+Per case this runs every evaluator whose tool is present -- the stdlib Python
+kernel alone in a plain checkout, Python and Soufflé in the pinned devShell --
+and checks each kernel's claim results against ``expected.json`` (verdict,
+operational status, canonical missing premises), the Python kernel's leaves
+against the reviewed leaf sets, and that the certificates re-derived from every
+closure agree for every claim row.  The rejected case is evaluated *unvalidated*
+in the Python engine to show that the producer-class check is the only thing
+standing between it and a supported verdict.
+
+The reviewed verdicts are a property of the rules and the cases, so they are
+asserted wherever this runs.  What *does* need Soufflé -- that the interpreter
+ran, and that it agreed with Python -- is a named skip rather than a failure:
+an absent optional tool is a fact about the machine, and reporting it as a
+disagreement between kernels would be a lie about the cases.  In the devShell
+nothing here skips, and ``test_souffle_...`` fails if the interpreter is present
+but did not run.
 """
 from __future__ import annotations
 
@@ -17,7 +24,8 @@ import tempfile
 import unittest
 
 from capcov.claims import canonical_json, validate_bundle
-from capcov.claims.differential import DifferentialMismatch, compare
+from capcov.claims.differential import (DifferentialMismatch, EvaluatorMismatch,
+                                        available_evaluators, run_evaluators)
 from capcov.claims.evaluator import ResourceLimits, _Engine, evaluate
 from capcov.claims.static import certificate
 
@@ -33,21 +41,25 @@ def sorted_json(values):
     return sorted(canonical_json(value) for value in values)
 
 
+#: Why a Soufflé assertion is skipped rather than failed here.
+SOUFFLE_ONLY = "this assertion is about the souffle interpreter; it is not on PATH here"
+
+
 class AdversarialReplayCasesInBothEngines(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.pack = load_pack()
         cls.table = read_json(EXPECTED_PATH)["cases"]
         cls.replay_root = tempfile.mkdtemp(prefix="capcov-replay-adversarial-")
+        cls.evaluators = available_evaluators()
         cls.results = {}
         cls.mismatches = {}
-        if shutil.which("souffle") is None:
-            return
         for path in case_paths():
             bundle = load_case(path, cls.pack)
             try:
-                cls.results[path.stem] = (bundle, compare(bundle, replay_root=cls.replay_root))
-            except DifferentialMismatch as exc:
+                cls.results[path.stem] = (bundle, run_evaluators(bundle, cls.evaluators,
+                                                                 replay_root=cls.replay_root))
+            except (DifferentialMismatch, EvaluatorMismatch) as exc:
                 cls.mismatches[path.stem] = exc.result
 
     @classmethod
@@ -55,27 +67,37 @@ class AdversarialReplayCasesInBothEngines(unittest.TestCase):
         if not cls.mismatches:
             shutil.rmtree(cls.replay_root, ignore_errors=True)
 
-    def test_souffle_is_present_not_skipped(self) -> None:
-        self.assertIsNotNone(shutil.which("souffle"), "souffle must be on PATH: run inside the nix devShell")
+    @unittest.skipUnless(shutil.which("souffle"), SOUFFLE_ONLY)
+    def test_souffle_ran_and_was_not_quietly_dropped(self) -> None:
+        """In the devShell the interpreter is present, so it must actually have run."""
+        self.assertIn("souffle", self.evaluators)
+        for stem, (_, result) in sorted(self.results.items()):
+            with self.subTest(case=stem):
+                self.assertIn("souffle", result.evaluators)
+                self.assertEqual(result.differential, "ran")
 
+    @unittest.skipUnless(shutil.which("souffle"), SOUFFLE_ONLY)
     def test_kernels_agree_on_every_case(self) -> None:
-        self.assertIsNotNone(shutil.which("souffle"), "souffle must be on PATH: run inside the nix devShell")
         for stem, result in sorted(self.mismatches.items()):
             with self.subTest(case=stem):
                 self.fail(f"kernels disagree on {stem}; replay bundle: {result.replay_path}; "
                           f"python={result.python.operational_failure!r} "
                           f"souffle={result.souffle.operational_failure!r} {result.souffle.message[:400]}")
-        self.assertEqual(set(self.results), set(self.table))
         for stem, (_, result) in sorted(self.results.items()):
             with self.subTest(case=stem):
                 self.assertTrue(result.matched)
                 self.assertEqual(result.python.canonical_digest, result.souffle.canonical_digest)
 
-    def test_both_kernels_yield_the_reviewed_verdict_status_and_missing_premises(self) -> None:
-        self.assertTrue(self.results, "no differential results; is souffle on PATH?")
+    def test_every_kernel_yields_the_reviewed_verdict_status_and_missing_premises(self) -> None:
+        # completeness first, and here rather than in the souffle-only test it used
+        # to live in: a case that fell into ``mismatches`` would otherwise be
+        # skipped by every loop below and its reviewed verdict silently unchecked
+        self.assertEqual(self.mismatches, {},
+                         "an evaluator failed or disagreed; nothing below judged that case")
+        self.assertEqual(set(self.results), set(self.table))
         for stem, (_, result) in sorted(self.results.items()):
             expected = self.table[stem]["claims"]
-            for report in (result.python, result.souffle):
+            for report in result.reports:
                 self.assertEqual({claim.key for claim in report.claims}, set(expected))
                 for claim in report.claims:
                     table = expected[claim.key]
@@ -86,7 +108,7 @@ class AdversarialReplayCasesInBothEngines(unittest.TestCase):
                         self.assertEqual(claim.basis, "derivational")
 
     def test_python_leaves_match_the_reviewed_leaf_sets(self) -> None:
-        self.assertTrue(self.results, "no differential results; is souffle on PATH?")
+        self.assertTrue(self.results, "no evaluator produced a result")
         for stem, (bundle, _) in sorted(self.results.items()):
             report = evaluate(bundle)
             self.assertEqual(report.status.value, "complete", report.message)
@@ -96,8 +118,8 @@ class AdversarialReplayCasesInBothEngines(unittest.TestCase):
                     self.assertEqual(sorted(entry.result.support), table["support_leaves"])
                     self.assertEqual(sorted(entry.result.refutation), table["refutation_leaves"])
 
-    def test_both_closures_carry_the_same_qualification_rows(self) -> None:
-        self.assertTrue(self.results, "no differential results; is souffle on PATH?")
+    def test_every_closure_carries_the_same_qualification_rows(self) -> None:
+        self.assertTrue(self.results, "no evaluator produced a result")
         qualified = {"00-positive-control": 3, "01-planted-disagreement": 2, "02-planted-undeclared-write": 2,
                      "03-surviving-mutant": 2, "04-missing-model-witness": 0, "05-missing-snapshot-witness": 0,
                      "06-stale-replay": 0, "08-lying-closure": 0, "09-missing-post-state": 2,
@@ -114,14 +136,16 @@ class AdversarialReplayCasesInBothEngines(unittest.TestCase):
                      "27-model-not-well-formed": 0, "28-well-formed-other-model": 0,
                      "29-checker-not-admitted": 0,
                      # the completeness half of the cross-request gate
-                     "31-missing-response-closure": 0}
+                     "31-missing-response-closure": 0,
+                     # checker authority is per operation: only delete-issue is checked and admitted
+                     "32-partial-operation-check": 1}
         # one derived row per shape the new rules are there to catch, in both kernels
         planted = {"17-effect-order-violation": ("effect_order_violation", 1),
                    "18-repeat-delete-with-effects": ("repeat_delete_violation", 1),
                    "19-unstable-oracle": ("oracle_unstable", 1),
                    "26-unstable-on-one-side": ("oracle_unstable", 1)}
         for stem, (_, result) in sorted(self.results.items()):
-            for report in (result.python, result.souffle):
+            for report in result.reports:
                 relations = dict(report.relations)
                 with self.subTest(case=stem, kernel=report.backend):
                     self.assertEqual(len(relations["op_qualified"]), qualified[stem])
@@ -143,25 +167,37 @@ class AdversarialReplayCasesInBothEngines(unittest.TestCase):
                                                    "18-repeat-delete-with-effects", "24-repeat-before-the-commit",
                                                    "25-first-delete-not-committed") else 1, stem)
 
-    def test_certificates_from_both_closures_agree_on_every_derived_claim_row(self) -> None:
-        self.assertTrue(self.results, "no differential results; is souffle on PATH?")
+    def test_certificates_from_every_closure_agree_on_every_derived_claim_row(self) -> None:
+        """Every closure that ran certifies the same rows, identically, and rechecks in all.
+
+        With one evaluator this still says something the reviewed table does not:
+        the rows are exactly the supported claims, the certificates are complete
+        (never truncated), every leaf is a known evidence id, and each
+        certificate rechecks against the closure it came from.
+        """
+        self.assertTrue(self.results, "no evaluator produced a result")
         certified = 0
         for stem, (bundle, result) in sorted(self.results.items()):
             known = {record.id for record in bundle.evidence}
+            closures = [(report.backend, report.relations) for report in result.reports]
             for claim in bundle.claims:
-                rows = certificate.claim_conclusions(bundle, result.python.relations, claim)
-                self.assertEqual(rows, certificate.claim_conclusions(bundle, result.souffle.relations, claim))
+                first = certificate.claim_conclusions(bundle, closures[0][1], claim)
+                for backend, relations in closures[1:]:
+                    self.assertEqual(first, certificate.claim_conclusions(bundle, relations, claim),
+                                     (stem, claim.id, backend))
                 expected = self.table[stem]["claims"][claim.id]["semantic_verdict"]
-                self.assertEqual(bool(rows), expected == "supported", (stem, claim.id))
-                for row in rows:
+                self.assertEqual(bool(first), expected == "supported", (stem, claim.id))
+                for row in first:
                     with self.subTest(case=stem, claim=claim.id, row=canonical_json(row)):
-                        from_python = certificate.certify(bundle, result.python.relations, claim.relation, row)
-                        from_souffle = certificate.certify(bundle, result.souffle.relations, claim.relation, row)
-                        self.assertEqual(from_python, from_souffle)
-                        self.assertFalse(from_python["truncated"])
-                        self.assertTrue(certificate.recheck(bundle, from_python, result.souffle.relations).ok)
-                        self.assertTrue(certificate.recheck(bundle, from_souffle, result.python.relations).ok)
-                        self.assertTrue(set(from_python["leaves"]) <= known)
+                        certificates = [certificate.certify(bundle, relations, claim.relation, row)
+                                        for _, relations in closures]
+                        for backend, other in zip((b for b, _ in closures[1:]), certificates[1:]):
+                            self.assertEqual(certificates[0], other, backend)
+                        for signed in certificates:
+                            self.assertFalse(signed["truncated"])
+                            self.assertTrue(set(signed["leaves"]) <= known)
+                            for backend, relations in closures:
+                                self.assertTrue(certificate.recheck(bundle, signed, relations).ok, backend)
                         certified += 1
         self.assertGreaterEqual(certified, 12)
 

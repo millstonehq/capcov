@@ -1842,7 +1842,7 @@
       "producer_classes": []
     }
   ],
-  "description": "Replay judge rule pack (Phase 4, judge side). `primitives` is a byte-identical copy of claims/replay/schema_replay_v1.json; `supplementary_primitives` is empty (the frozen file declares every primitive the judge reads); `derived` opens with the two rule-less stubs the exporter carries (mutant_killed_in, op_qualified_rt), byte-identical to replay_facts._DERIVED_TARGET_DECLS so combine() accepts both, then the reviewed program; `rules` are in raw IR JSON wire form. op_qualified(index, run, op) is the qualification claim and the only static/runtime join, witnessed by index_describes_replay; repeat_delete_not_found(run, target) is the per-target cross-request claim. The Stage D pair (model_well_formed, model_checker_admitted) sits last in op_qualified_rt's body -- semantically a conjunct's position is nothing, but the why-not walk reports the first unsatisfied premise, and while the typed checker does not exist that premise would otherwise mask every real gap. op_qualified_rt is additionally gated on the model's declared effect order (effect_order_*), on the repeat delete being not-found without effects (repeat_delete_closed / !repeat_delete_any: a second DELETE of a committed target that answers anything but 404 on either side, or writes any row outside the reviewer's scope exclusions, blocks the op it belongs to) and on the PHP oracle's cross-run stability (oracle_stable). A learn receipt, when one is bound to the run, is judged too: learn_consistent(run, op) says the model's predictions matched the oracle's observations for that op under both closures, and op_qualified_rt is downgraded by !learn_unmodeled_any -- an op the learn campaign reported as unmodelled does not qualify.  The downgrade can only take qualification away: a receipt with no learn files carries no learn_run row, derives no learn_unmodeled_any, and qualifies exactly as before.",
+  "description": "Replay judge rule pack (Phase 4, judge side). `primitives` is a byte-identical copy of claims/replay/schema_replay_v1.json; `supplementary_primitives` is empty (the frozen file declares every primitive the judge reads); `derived` opens with the two rule-less stubs the exporter carries (mutant_killed_in, op_qualified_rt), byte-identical to replay_facts._DERIVED_TARGET_DECLS so combine() accepts both, then the reviewed program; `rules` are in raw IR JSON wire form. op_qualified(index, run, op) is the qualification claim and the only static/runtime join, witnessed by index_describes_replay; repeat_delete_not_found(run, target) is the per-target cross-request claim. The checker-authority premises (model_well_formed, model_operation_checked, model_checker_admitted) sit last in op_qualified_rt's body -- the model fact is structural, while the operation fact and reviewer admission join the exact operation-scoped tuple; the why-not walk reports checker authority only after earlier system and model gaps. op_qualified_rt is additionally gated on the model's declared effect order (effect_order_*), on the repeat delete being not-found without effects (repeat_delete_closed / !repeat_delete_any: a second DELETE of a committed target that answers anything but 404 on either side, or writes any row outside the reviewer's scope exclusions, blocks the op it belongs to) and on the PHP oracle's cross-run stability (oracle_stable). A learn receipt, when one is bound to the run, is judged too: learn_consistent(run, op) says the model's predictions matched the oracle's observations for that op under both closures, and op_qualified_rt is downgraded by !learn_unmodeled_any -- an op the learn campaign reported as unmodelled does not qualify.  The downgrade can only take qualification away: a receipt with no learn files carries no learn_run row, derives no learn_unmodeled_any, and qualifies exactly as before. Operation qualification now joins the exact checked-operation tuple (model, operation, checker, semantic version, checker binary digest, semantic certificate digest) to an external reviewer admission; model_well_formed is structural validation only.",
   "id": "rules-replay-v1",
   "primitives": [
     {
@@ -2640,6 +2640,11 @@
         },
         {
           "context": false,
+          "name": "checker_binary",
+          "type": "digest"
+        },
+        {
+          "context": false,
           "name": "certificate",
           "type": "digest"
         }
@@ -2653,6 +2658,57 @@
       "finite": false,
       "modality": "observation",
       "name": "model_well_formed",
+      "nonempty": false,
+      "polarity": "positive",
+      "primitive": true,
+      "producer_classes": [
+        "modelcheck"
+      ]
+    },
+    {
+      "binding": "runtime",
+      "columns": [
+        {
+          "context": true,
+          "name": "model",
+          "type": "digest"
+        },
+        {
+          "context": true,
+          "name": "operation",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "checker",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "checker_version",
+          "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "checker_binary",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "certificate",
+          "type": "digest"
+        }
+      ],
+      "compatibility_context_indices": [],
+      "compatibility_targets": [],
+      "completes": null,
+      "context_indices": [
+        "model",
+        "operation"
+      ],
+      "finite": false,
+      "modality": "observation",
+      "name": "model_operation_checked",
       "nonempty": false,
       "polarity": "positive",
       "primitive": true,
@@ -2773,6 +2829,16 @@
       "binding": "runtime",
       "columns": [
         {
+          "context": true,
+          "name": "model",
+          "type": "digest"
+        },
+        {
+          "context": true,
+          "name": "operation",
+          "type": "symbol"
+        },
+        {
           "context": false,
           "name": "checker",
           "type": "symbol"
@@ -2781,12 +2847,25 @@
           "context": false,
           "name": "checker_version",
           "type": "symbol"
+        },
+        {
+          "context": false,
+          "name": "checker_binary",
+          "type": "digest"
+        },
+        {
+          "context": false,
+          "name": "certificate",
+          "type": "digest"
         }
       ],
       "compatibility_context_indices": [],
       "compatibility_targets": [],
       "completes": null,
-      "context_indices": [],
+      "context_indices": [
+        "model",
+        "operation"
+      ],
       "finite": false,
       "modality": "observation",
       "name": "model_checker_admitted",
@@ -8488,7 +8567,33 @@
               "variable": "Version"
             },
             {
-              "variable": "Cert"
+              "variable": "Binary"
+            },
+            {
+              "variable": "StructureCert"
+            }
+          ]
+        },
+        {
+          "relation": "model_operation_checked",
+          "terms": [
+            {
+              "variable": "M"
+            },
+            {
+              "variable": "Op"
+            },
+            {
+              "variable": "Checker"
+            },
+            {
+              "variable": "Version"
+            },
+            {
+              "variable": "Binary"
+            },
+            {
+              "variable": "OperationCert"
             }
           ]
         },
@@ -8496,10 +8601,22 @@
           "relation": "model_checker_admitted",
           "terms": [
             {
+              "variable": "M"
+            },
+            {
+              "variable": "Op"
+            },
+            {
               "variable": "Checker"
             },
             {
               "variable": "Version"
+            },
+            {
+              "variable": "Binary"
+            },
+            {
+              "variable": "OperationCert"
             }
           ]
         }

@@ -1,13 +1,23 @@
 #!/usr/bin/env python3
-"""Judge a replay receipt with three claim kernels, one of them a compiled Souffle binary.
+"""Judge a replay receipt with the claim kernels asked for, up to three of them.
 
 Three subcommands, stdlib and ``capcov`` only:
 
-``judge``    build the receipt's combined bundle, compile the rule pack's
-             program, run python / interpreted Souffle / compiled Souffle,
-             certify every claim row from every closure, and write
-             ``receipt.json``, the per-row certificates and ``judge.json``.
-             ``judge`` is the default, so a caller may omit it.
+``judge``    build the receipt's combined bundle, run the evaluators
+             ``--evaluator`` names (default ``python``; ``all`` is every one
+             whose tool is present, which in the pinned devShell is python /
+             interpreted Souffle / compiled Souffle), certify every claim row
+             from every closure, and write ``receipt.json``, the per-row
+             certificates and ``judge.json``.  ``judge`` is the default, so a
+             caller may omit it.
+
+             **A producer repo that gates on three kernels must pass
+             ``--evaluator all``** (or the explicit list): the default judges
+             with the standard library alone, so a checkout with no Souffle
+             still judges rather than failing, and ``judge.json`` records which
+             kernels ran (``kernels``) and whether a differential ran at all
+             (``differential``) so a smaller run can never be mistaken for a
+             passed one.
 ``bench``    time the interpreter against the binary on a synthetic receipt
              scaled from a fixture, and write ``bench.json``.
 ``compile``  compile one rule pack's program and print its ``provenance.json``.
@@ -47,14 +57,19 @@ vacuously ``supported``, which no party has asserted.
 The compiled binary is a third independent evaluator with recorded provenance,
 never a replacement for the interpreter or the Python kernel: a compiled-side
 failure is a named failure, never a fallback, and ``judge`` exits non-zero
-unless all three kernels agree.
+unless every requested kernel agrees.
+
+Asking for a kernel whose tool is absent is exit 4 (``the toolchain is
+unavailable``) with the message that names the binary, where it is looked for
+and how to install it.  That is this script's documented code for exactly this
+condition and a producer repo's build gates on it; the ``capcov`` CLI reports the
+same refusal as exit 2, because there it is a command line that does not name a
+runnable judge rather than a judgement about a receipt.
 """
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
-import os
 from pathlib import Path
 import shutil
 import statistics
@@ -68,46 +83,44 @@ for _entry in (PACKAGE_ROOT / "src",):
     if str(_entry) not in sys.path:
         sys.path.insert(0, str(_entry))
 
-from capcov.claims import canonical_json, souffle  # noqa: E402
-from capcov.claims.replay import join as replay_join  # noqa: E402
+from capcov.claims import souffle  # noqa: E402
+from capcov.claims.replay import judge as replay_judge  # noqa: E402
 from capcov.claims.replay import pack as replay_pack  # noqa: E402
 from capcov.claims.replay import replay_facts  # noqa: E402
 from capcov.claims.souffle import compile as compiled  # noqa: E402
 
-JUDGE_SCHEMA = "capcov-compiled-judge-v1"
+# The judge itself -- the document, the verdict, the exit codes -- moved into
+# ``capcov.claims.replay.judge`` so `capcov reconcile --judge claims` and this
+# script judge from one implementation.  What stays here is this script's CLI,
+# its reader-facing printing, and the two subcommands (bench, compile) that are
+# developer tools rather than a judgement.
+JUDGE_SCHEMA = replay_judge.JUDGE_SCHEMA
 BENCH_SCHEMA = "capcov-compiled-bench-v1"
-JUDGE_FILE = "judge.json"
+JUDGE_FILE = replay_judge.JUDGE_FILE
 BENCH_FILE = "bench.json"
-DEFAULT_CACHE_DIR = Path(os.environ.get("CAPCOV_SOUFFLE_CACHE_DIR")
-                         or Path.home() / ".cache" / "capcov" / "souffle-compiled")
+DEFAULT_CACHE_DIR = replay_judge.DEFAULT_CACHE_DIR
 # Receipt relations keyed by ``req``: the rows a synthetic scale-N receipt
 # multiplies.  ``model_writes``, ``mutant`` and the reviewer's scope exclusions
 # describe the model and the review, not the requests, and are never scaled.
 SCALED_RELATIONS = ("replay_request", "php_effect", "go_effect", "php_post_state",
                     "go_post_state", "model_admissible", "model_effect", "mutant_killed")
 
-EXIT_OK = 0
-EXIT_NOT_SUPPORTED = 1
-EXIT_KERNEL = 2
-EXIT_CONTRACT = 3
-EXIT_UNAVAILABLE = 4
-EXIT_PENDING_PREMISE = 5
+EXIT_OK = replay_judge.EXIT_OK
+EXIT_NOT_SUPPORTED = replay_judge.EXIT_NOT_SUPPORTED
+EXIT_KERNEL = replay_judge.EXIT_KERNEL
+EXIT_CONTRACT = replay_judge.EXIT_CONTRACT
+EXIT_UNAVAILABLE = replay_judge.EXIT_UNAVAILABLE
+EXIT_PENDING_PREMISE = replay_judge.EXIT_PENDING_PREMISE
 
-VERDICT_SUPPORTED = "supported"
-VERDICT_NOT_SUPPORTED = "not-supported"
-VERDICT_PENDING_PREMISE = "pending-premise"
-VERDICT_KERNEL_MISMATCH = "kernel-mismatch"
-VERDICT_CONTRACT_FINDING = "contract-finding"
-VERDICT_UNAVAILABLE = "unavailable"
+VERDICT_SUPPORTED = replay_judge.VERDICT_SUPPORTED
+VERDICT_NOT_SUPPORTED = replay_judge.VERDICT_NOT_SUPPORTED
+VERDICT_PENDING_PREMISE = replay_judge.VERDICT_PENDING_PREMISE
+VERDICT_KERNEL_MISMATCH = replay_judge.VERDICT_KERNEL_MISMATCH
+VERDICT_CONTRACT_FINDING = replay_judge.VERDICT_CONTRACT_FINDING
+VERDICT_UNAVAILABLE = replay_judge.VERDICT_UNAVAILABLE
 
-
-def _sha256_json(payload: Any) -> str:
-    return hashlib.sha256(canonical_json(payload).encode("utf-8")).hexdigest()
-
-
-def _write_json(path: Path, document: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(document, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+_sha256_json = replay_judge.sha256_json
+_write_json = replay_judge.write_json
 
 
 def _pack_bundle(pack: str):
@@ -128,211 +141,55 @@ def _pack_bundle(pack: str):
 # judge
 
 
-def _op_entry(join: replay_join.ReplayJoin, summary: dict[str, Any], op: str) -> dict[str, Any]:
-    verdict = join.verdict(join.claim_id("qualified", op)) or {}
-    entry = summary.get(op, {})
-    certificate = join.certificates.get(join.claim_id("qualified", op))
-    qualified = {
-        "semantic": verdict.get("semantic"),
-        "operational": verdict.get("operational"),
-        "missing_premises": entry.get("missing_premise", []),
-    }
-    return {
-        # the per-op answer in one word, so a caller need not re-derive it from
-        # the pair; VERDICT_SUPPORTED only when the op is supported *and* complete
-        "verdict": (VERDICT_SUPPORTED if qualified["semantic"] == "supported"
-                    and qualified["operational"] == "complete" else VERDICT_NOT_SUPPORTED),
-        # "qualified" / "pending <relation>" / "unsupported" (replay.join.qualification):
-        # a pending op passed every premise that is checkable today
-        "qualification": entry.get("qualification", replay_join.QUALIFICATION_UNSUPPORTED),
-        "op_qualified": qualified,
-        "corpus_constrains": bool(entry.get("corpus_constrains")),
-        # the cross-request gate op_qualified_rt is now bound by: the repeats of this op's
-        # requests, the violations found among them, and the targets judged not-found
-        "repeat_delete": entry.get("repeat_delete", {"repeats": [], "violations": [], "not_found": []}),
-        # the learn campaign, when one is bound to the run: whether the model's predictions
-        # matched the oracle for this op, and whether the campaign says the op is unmodelled
-        "learn_consistent": entry.get("learn_consistent"),
-        "learn_unmodeled": bool(entry.get("learn_unmodeled")),
-        "exclusions_applied": list(entry.get("exclusions_applied", [])),
-        "blocking_premise": entry.get("blocking_premise"),
-        "certificate_sha256": _sha256_json(certificate) if certificate is not None else None,
-    }
+# The document builder, the verdict rules and the exit-code mapping now live in
+# ``capcov.claims.replay.judge``; these aliases keep this script's own names.
+_op_entry = replay_judge.op_entry
+_judge_document = replay_judge.judge_document
+_op_is_supported = replay_judge.op_is_supported
+_all_pending = replay_judge.all_pending
+_unmet_ops = replay_judge.unmet_ops
+_read_join = replay_judge.read_join
 
 
-def _judge_document(join: replay_join.ReplayJoin, required: list[str], *,
-                    verdict: str, exit_code: int, program_digest: str | None,
-                    findings: list[str]) -> dict[str, Any]:
-    receipt = join.receipt
-    document: dict[str, Any] = {
-        "schema": JUDGE_SCHEMA,
-        "receipt": {"run": join.run, "model": receipt.get("model"), "nonce": receipt.get("nonce"),
-                    "snapshot": receipt.get("snapshot"), "php_commit": receipt.get("php_commit"),
-                    "go_commit": receipt.get("go_commit")},
-        "pack": {"id": replay_pack.PACK_ID, "program_digest": program_digest,
-                 "relation_count": len(join.bundle.relations) if join.bundle is not None else 0,
-                 "rule_count": len(join.bundle.rules) if join.bundle is not None else 0},
-        "compiled": join.checker.provenance() if join.checker is not None else None,
-        "kernels": None,
-        "ops": {},
-        "required_ops": list(required),
-        "learn": {"present": False},
-        "contract_findings": list(findings),
-        "verdict": verdict,
-        "exit_code": exit_code,
-    }
-    outcome = join.result if join.result is not None else join.mismatch
-    if outcome is not None:
-        timings = dict(getattr(outcome, "timings", ()))
-        document["kernels"] = {
-            "matched": join.result is not None and join.result.matched,
-            "python_digest": outcome.python.canonical_digest,
-            "souffle_digest": outcome.souffle.canonical_digest,
-            "compiled_digest": getattr(outcome, "compiled", None) and outcome.compiled.canonical_digest,
-            "closure_digest_equal": getattr(outcome, "closure_digest_equal", False),
-            "interpreter_seconds": round(timings.get("souffle", 0.0), 3),
-            "compiled_seconds": round(timings.get("souffle-compiled", 0.0), 3),
-            "python_seconds": round(timings.get("python", 0.0), 3),
-            "failures": {report.backend: report.operational_failure
-                         for report in (outcome.python, outcome.souffle,
-                                        getattr(outcome, "compiled", None))
-                         if report is not None and report.operational_failure},
-        }
-    if join.result is not None:
-        summary = replay_join.summary(join)
-        document["ops"] = {op: _op_entry(join, summary, op) for op in join.ops}
-        document["learn"] = summary.get("learn", {"present": False})
+def _read_reviewer_admissions(path: str | None) -> list[dict[str, Any]]:
+    if path is None:
+        return []
+    try:
+        document = json.loads(Path(path).read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise replay_facts.ExportInputError(
+            "reviewer admissions could not be read as JSON") from exc
+    if not isinstance(document, list):
+        raise replay_facts.ExportInputError("reviewer admissions must be a JSON array")
     return document
 
 
-def _op_is_supported(entry: dict[str, Any]) -> bool:
-    return entry["verdict"] == VERDICT_SUPPORTED
-
-
-def _all_pending(replayed: dict[str, Any], unmet: list[str]) -> bool:
-    """Every unmet op is blocked only by a premise nothing can satisfy yet.
-
-    A required op that was never replayed has no entry and is never pending: it
-    is an unmet requirement about this receipt, which exit 1 is for.
-    """
-    return bool(unmet) and all(
-        str(replayed.get(op, {}).get("qualification", "")).startswith("pending ") for op in unmet)
-
-
-def _unmet_ops(replayed: dict[str, Any], required: list[str]) -> list[str]:
-    """The ops the verdict turns on that are not op_qualified supported/complete.
-
-    With ``--require-op`` those are exactly the required ops (an op that was
-    never replayed is unmet).  With none, the verdict is derived from every
-    replayed op instead of from an empty requirement: ``supported`` over zero
-    requirements is a vacuous truth no party has asserted, and a caller that
-    reads ``.verdict`` would take it for a positive judgement of the receipt.
-    """
-    if required:
-        return [op for op in required if op not in replayed or not _op_is_supported(replayed[op])]
-    return [op for op in sorted(replayed) if not _op_is_supported(replayed[op])]
-
-
-def _read_join(receipt_dir: Path) -> replay_join.ReplayJoin:
-    """Build the join; the receipt's own I/O errors are the receipt's contract.
-
-    Only a read of the receipt directory maps OSError to a contract finding.
-    The judge's own I/O (its cache, its output directory) stays an environment
-    failure, so an unwritable disk is never reported as a finding against the
-    receipt.
-    """
-    try:
-        return replay_join.build(receipt_dir)
-    except OSError as exc:
-        raise replay_facts.ExportInputError(
-            f"receipt directory could not be read: {receipt_dir}: {exc}") from exc
-
-
 def judge(args: argparse.Namespace) -> int:
-    receipt_dir = Path(args.receipt)
-    out_dir = Path(args.out)
-    required = list(dict.fromkeys(args.require_supported))
-    join = _read_join(receipt_dir)
-    if join.bundle is None:
-        document = _judge_document(join, required, verdict=VERDICT_CONTRACT_FINDING,
-                                   exit_code=EXIT_CONTRACT, program_digest=None,
-                                   findings=join.contract_findings)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        _write_json(out_dir / JUDGE_FILE, document)
-        for finding in join.contract_findings:
-            print(f"contract finding: {finding}", file=sys.stderr)
-        return EXIT_CONTRACT
-    program_digest = souffle.program_for_pack(join.bundle).program_digest
+    """Judge with the requested kernels and print the script's reader-facing report.
+
+    The judgement is ``replay_judge.judge_receipt``; what is left here is where
+    each line goes.  The op lines and the verdict line are printed only once the
+    receipt was actually judged -- a contract finding, an unavailable toolchain
+    or a kernel disagreement has no ops to report and says so on stderr alone.
+    """
     try:
-        join = replay_join.evaluate_join(join, str(out_dir / "differential"), kernels="three",
-                                         cache_dir=args.cache_dir, executable=args.souffle)
-    except souffle.SouffleUnavailable as exc:
-        document = _judge_document(join, required, verdict=VERDICT_UNAVAILABLE,
-                                   exit_code=EXIT_UNAVAILABLE, program_digest=program_digest,
-                                   findings=join.contract_findings)
-        document["message"] = str(exc)
-        _write_json(out_dir / JUDGE_FILE, document)
-        print(f"toolchain unavailable: {exc}", file=sys.stderr)
-        return EXIT_UNAVAILABLE
-    except compiled.CompileError as exc:
-        document = _judge_document(join, required, verdict=VERDICT_KERNEL_MISMATCH,
-                                   exit_code=EXIT_KERNEL, program_digest=program_digest,
-                                   findings=join.contract_findings)
-        document["message"] = str(exc)[-4000:]
-        _write_json(out_dir / JUDGE_FILE, document)
-        print(f"compile failed: {str(exc)[-400:]}", file=sys.stderr)
-        return EXIT_KERNEL
-    except AssertionError as exc:
-        # the kernels agreed on the closure but not on a claim row, a
-        # certificate or a recheck: still a kernel disagreement, never a verdict
-        document = _judge_document(join, required, verdict=VERDICT_KERNEL_MISMATCH,
-                                   exit_code=EXIT_KERNEL, program_digest=program_digest,
-                                   findings=join.contract_findings)
-        document["message"] = str(exc)[-4000:]
-        _write_json(out_dir / JUDGE_FILE, document)
-        print(f"kernels disagree on a certified claim row: {exc}", file=sys.stderr)
-        return EXIT_KERNEL
-    if join.mismatch is not None:
-        document = _judge_document(join, required, verdict=VERDICT_KERNEL_MISMATCH,
-                                   exit_code=EXIT_KERNEL, program_digest=program_digest,
-                                   findings=join.contract_findings)
-        _write_json(out_dir / JUDGE_FILE, document)
-        print("claim kernels disagree; the receipt is not judged", file=sys.stderr)
-        return EXIT_KERNEL
-    replay_join.write_artifacts(join, out_dir)
-    document = _judge_document(join, required, verdict=VERDICT_SUPPORTED, exit_code=EXIT_OK,
-                               program_digest=program_digest, findings=join.contract_findings)
-    unmet = _unmet_ops(document["ops"], required)
-    judged = required or sorted(document["ops"])
-    if unmet or not judged:
-        document["verdict"] = VERDICT_NOT_SUPPORTED
-        document["exit_code"] = EXIT_NOT_SUPPORTED
-        document["unmet_ops"] = unmet
-        if not judged:
-            document["message"] = "no op was replayed and none was required; nothing is supported"
-        elif _all_pending(document["ops"], unmet):
-            # every unmet op is blocked only by a premise nothing can satisfy yet
-            document["verdict"] = VERDICT_PENDING_PREMISE
-            document["exit_code"] = EXIT_PENDING_PREMISE
-            document["pending_ops"] = list(unmet)
-            document["message"] = ("pending, not unsupported: " + ", ".join(
-                f"{op} is {document['ops'][op]['qualification']}" for op in unmet))
-    _write_json(out_dir / JUDGE_FILE, document)
-    for op, entry in sorted(document["ops"].items()):
-        print(f"{op}: {entry['qualification']} op_qualified={entry['op_qualified']['semantic']}"
-              f"/{entry['op_qualified']['operational']}"
-              f" missing={entry['op_qualified']['missing_premises']}"
-              f" exclusions={entry['exclusions_applied']}")
-    binary = document["compiled"]["binary_sha256"] if document["compiled"] else "-"
-    print(f"verdict={document['verdict']} kernels_matched={document['kernels']['matched']}"
-          f" binary={binary[:12]}")
-    if unmet and document["verdict"] == VERDICT_PENDING_PREMISE:
-        print(document["message"], file=sys.stderr)
-    elif unmet:
-        label = "required" if required else "replayed"
-        print(f"{label} ops not supported: {', '.join(unmet)}", file=sys.stderr)
-    elif not judged:
-        print(document["message"], file=sys.stderr)
+        evaluators = replay_judge.differential.resolve_evaluators(args.evaluator,
+                                                                 executable=args.souffle)
+    except replay_judge.differential.UnknownEvaluator as exc:
+        # argparse's code for a command line that does not name a run; the
+        # judge's own codes are about the receipt, and this says nothing about it
+        print(f"--evaluator: {exc}", file=sys.stderr)
+        return 2
+    admissions = _read_reviewer_admissions(args.reviewer_admissions)
+    document, diagnostics = replay_judge.judge_receipt(
+        Path(args.receipt), Path(args.out), list(dict.fromkeys(args.require_supported)),
+        evaluators=evaluators, cache_dir=args.cache_dir, executable=args.souffle,
+        reviewer_admissions=admissions)
+    if document["verdict"] in replay_judge.JUDGED_VERDICTS:
+        for line in replay_judge.summary_lines(document):
+            print(line)
+    for line in diagnostics:
+        print(line, file=sys.stderr)
     return int(document["exit_code"])
 
 
@@ -461,7 +318,15 @@ def build_parser() -> argparse.ArgumentParser:
     judge_parser.add_argument("--out", required=True, help="where judge.json and the certificates land")
     judge_parser.add_argument("--cache-dir", default=str(DEFAULT_CACHE_DIR),
                               help="compiled-checker cache directory")
-    judge_parser.add_argument("--souffle", default="souffle", help="the souffle executable")
+    judge_parser.add_argument("--souffle", default=None,
+                              help="the souffle executable (default: $SOUFFLE, then 'souffle')")
+    judge_parser.add_argument("--evaluator", default=None, metavar="NAME[,NAME...]",
+                              help="which kernels judge: python (default, stdlib only), souffle, "
+                                   "souffle-compiled, a comma list, or 'all' for every one "
+                                   "present. Two or more run the fail-closed differential")
+    judge_parser.add_argument(
+        "--reviewer-admissions", default=None,
+        help="JSON array of external exact-certificate reviewer admissions")
     judge_parser.add_argument("--require-supported", "--require-op", action="append", default=[],
                               metavar="OP", dest="require_supported",
                               help="an op that must be op_qualified supported/complete "

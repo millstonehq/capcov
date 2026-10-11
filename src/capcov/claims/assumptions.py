@@ -75,7 +75,7 @@ from dataclasses import dataclass, field, replace
 from typing import Any, Callable, Iterable, Mapping, Sequence
 
 from .ir import Bundle, Evidence, canonical_json
-from .differential import compare
+from .differential import DEFAULT_EVALUATORS, run_evaluators
 from .replay.replay_facts import bundle_digest, row_digest
 from .static.certificate import (DEFAULT_MAX_DEPTH, DEFAULT_MAX_NODES, certify,
                                  claim_conclusions, recheck)
@@ -255,18 +255,23 @@ def certify_claims(bundle: Bundle, result: Any, *,
 def _closures(result: Any) -> list[tuple[Any, str]]:
     """Every selected or agreeing kernel's relations and backend name.
 
-    A three-way result carries ``compiled``; a two-way one does not, and a
-    hand-built stand-in need not name its backends.
+    An ``EvaluationResult`` carries exactly the evaluators that were asked for
+    under ``reports``; the older shapes carry ``python``/``souffle`` (and
+    ``compiled`` for a three-way result), and a hand-built stand-in need not
+    name its backends.  Certification therefore holds every closure that ran to
+    the same agreement -- one of them included, which is agreement with nothing
+    and is why a single evaluator is recorded as a differential that did not run
+    rather than as one that passed.  A single selected ``KernelReport`` is
+    its own closure.
     """
     if hasattr(result, "relations") and hasattr(result, "backend"):
         return [(result.relations, result.backend)]
-    reports = [result.python, result.souffle]
-    compiled = getattr(result, "compiled", None)
-    if compiled is not None:
-        reports.append(compiled)
+    reports = getattr(result, "reports", None)
+    if reports is None:
+        reports = [result.python, result.souffle, getattr(result, "compiled", None)]
     names = ("python", "souffle", "souffle-compiled")
     return [(report.relations, getattr(report, "backend", None) or names[position])
-            for position, report in enumerate(reports)]
+            for position, report in enumerate(reports) if report is not None]
 
 
 def shared_across(bundle: Bundle, certificates: Sequence[Mapping[str, Any]]) -> list[str]:
@@ -508,9 +513,42 @@ def missing_relations(missing_premises: Iterable[str]) -> list[str]:
     return sorted(set(out))
 
 
+#: How each evaluator's canonical digest is named in an A3 document.  The
+#: compiled kernel's key is ``compiled_digest`` rather than the mechanical
+#: ``souffle_compiled_digest`` because that is the name every other artifact of
+#: a run already uses for it.
+_DIGEST_KEYS = {"python": "python_digest", "souffle": "souffle_digest",
+                "souffle-compiled": "compiled_digest"}
+
+
+def _digest_key(backend: Any) -> str:
+    """The A3 key for ``backend``; a stand-in that names no backend still gets one."""
+    return _DIGEST_KEYS.get(backend) or f"{str(backend or 'kernel').replace('-', '_')}_digest"
+
+
+def _kernel_reports(result: Any) -> list[Any]:
+    """Every kernel report ``result`` carries, whatever shape it is."""
+    reports = getattr(result, "reports", None)
+    if reports is None:
+        reports = [result.python, result.souffle, getattr(result, "compiled", None)]
+    return [report for report in reports if report is not None]
+
+
+def _primary(result: Any) -> Any:
+    """The closure an A3 document reads: the first evaluator that ran.
+
+    Every evaluator held to the same rows and certificates, so which one is read
+    is arbitrary -- but with a python-only ask ``.souffle`` does not exist, and a
+    document must not name a kernel that did not run.
+    """
+    reports = getattr(result, "reports", None)
+    return reports[0] if reports else result.python
+
+
 def invalidate(bundle: Bundle, ids: str | Iterable[str], *, replay_root: str,
                baseline_result: Any, baseline_row_certificates: Mapping[str, Sequence[Mapping[str, Any]]],
                explain: Callable[[str, Any], Mapping[str, Any]] | None = None,
+               evaluators: Sequence[str] = DEFAULT_EVALUATORS, executable: str | None = None,
                max_depth: int = DEFAULT_MAX_DEPTH,
                max_nodes: int = DEFAULT_MAX_NODES) -> Invalidation:
     """Contract A3: withdraw one assumption and report what every claim did.
@@ -546,12 +584,17 @@ def invalidate(bundle: Bundle, ids: str | Iterable[str], *, replay_root: str,
     withdrawn = sorted(closed_revocation(bundle, evidence_ids))
 
     reduced = withdraw(bundle, evidence_ids)
-    result = compare(reduced, replay_root=replay_root)
+    # the withdrawn bundle is re-evaluated with the same evaluators the baseline
+    # used: an A3 document that compared two different kernel sets would be
+    # reporting the evaluator change as an effect of the withdrawal
+    result = run_evaluators(reduced, evaluators, replay_root=replay_root, executable=executable)
     certificates, row_certificates = certify_claims(reduced, result, max_depth=max_depth, max_nodes=max_nodes)
 
-    before = _verdicts(baseline_result.python)
-    after = _verdicts(result.python)
-    relations_after = result.python.relations
+    baseline_report = _primary(baseline_result)
+    report = _primary(result)
+    before = _verdicts(baseline_report)
+    after = _verdicts(report)
+    relations_after = report.relations
     claims: dict[str, dict[str, Any]] = {}
     lost: list[str] = []
     gained: list[str] = []
@@ -587,14 +630,20 @@ def invalidate(bundle: Bundle, ids: str | Iterable[str], *, replay_root: str,
         claims[claim_id] = entry
 
     conclusions, owners = _conclusions(baseline_row_certificates)
-    predicted = impact(bundle, baseline_result.python.relations, evidence_ids, conclusions,
+    predicted = impact(bundle, baseline_report.relations, evidence_ids, conclusions,
                        max_depth=max_depth, max_nodes=max_nodes)
     predicted_fallen = sorted(_claims_of(predicted["fallen"], owners))
     return Invalidation(
         assumption_id=target, withdrawn=withdrawn,
         baseline_bundle_digest=bundle_digest(bundle), withdrawn_bundle_digest=bundle_digest(reduced),
-        kernels={"matched": bool(result.matched), "python_digest": result.python.canonical_digest,
-                 "souffle_digest": result.souffle.canonical_digest},
+        # one digest per evaluator that ran, keyed by the kernel that produced
+        # the bytes; an evaluator nobody asked for contributes no key rather
+        # than a null, and "differential" says whether anything was compared
+        kernels={"matched": bool(result.matched),
+                 "differential": getattr(result, "differential", None),
+                 "evaluators": list(getattr(result, "evaluators", ())),
+                 **{_digest_key(getattr(kernel, "backend", None)): kernel.canonical_digest
+                    for kernel in _kernel_reports(result)}},
         claims=claims, flipped=lost, gained=gained, predicted_fallen=predicted_fallen,
         prediction_agrees=set(predicted_fallen) == set(lost),
         bundle=reduced, relations=relations_after,
