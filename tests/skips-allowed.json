@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "accepted": [
+    {
+      "reason": "Checks a model checkout that is not part of this repository. The test runs only where CAPCOV_MODEL_DIR names one.",
+      "tests": [
+        "tests.claim_semantics.test_modelcheck.LiveModelTest.test_the_named_model_is_well_formed_at_its_recorded_digest"
+      ]
+    }
+  ]
+}

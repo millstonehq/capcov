@@ -1,0 +1,62 @@
+{
+  "constraints": [
+    {
+      "a": "passkey",
+      "b": "sms",
+      "type": "excludes"
+    }
+  ],
+  "features": [
+    {
+      "decomposition": null,
+      "group": null,
+      "id": "auth",
+      "name": "Authentication",
+      "parent": null
+    },
+    {
+      "decomposition": "mandatory",
+      "group": null,
+      "id": "password",
+      "name": "Password",
+      "parent": "auth"
+    },
+    {
+      "decomposition": "optional",
+      "group": null,
+      "id": "mfa",
+      "name": "Multi-Factor Authentication",
+      "parent": "auth"
+    },
+    {
+      "decomposition": "optional",
+      "group": "alternative",
+      "id": "secondFactor",
+      "name": "Second Factor",
+      "parent": "password"
+    },
+    {
+      "decomposition": null,
+      "group": null,
+      "id": "sms",
+      "name": "SMS Code",
+      "parent": "secondFactor"
+    },
+    {
+      "decomposition": null,
+      "group": null,
+      "id": "authenticatorApp",
+      "name": "Authenticator App",
+      "parent": "secondFactor"
+    },
+    {
+      "decomposition": null,
+      "group": null,
+      "id": "passkey",
+      "name": "Passkey",
+      "parent": "secondFactor"
+    }
+  ],
+  "root": "auth",
+  "version": 1
+}

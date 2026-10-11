@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Run a command with every installed tool family on PATH and its variables set.
+for profile in /nix/var/nix/profiles/capcov-*; do
+    case "$profile" in *-link) continue ;; esac
+    PATH="$profile/bin:$PATH"
+    if [ -f "$profile/etc/capcov-env.sh" ]; then
+        . "$profile/etc/capcov-env.sh"
+    fi
+done
+export PATH
+exec "$@"

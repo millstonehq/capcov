@@ -1,0 +1,62 @@
+{
+  "metadata": {
+    "tool_info": {"name": "scip-python", "version": "0.6.6"}
+  },
+  "documents": [
+    {
+      "relative_path": "app/models/job.py",
+      "language": "python",
+      "symbols": [
+        {"symbol": "scip-python python spike 0.0.1 app/models/Job#", "display_name": "Job"},
+        {"symbol": "scip-python python spike 0.0.1 app/models/Job#save().", "display_name": "save"},
+        {"symbol": "scip-python python spike 0.0.1 app/models/Job#status.", "display_name": "status"}
+      ],
+      "occurrences": [
+        {
+          "symbol": "scip-python python spike 0.0.1 app/models/Job#",
+          "range": [10, 6, 9],
+          "symbol_roles": 1,
+          "enclosing_range": [10, 0, 40, 0]
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 app/models/Job#",
+          "range": [55, 4, 55, 7],
+          "symbol_roles": 0
+        },
+        {
+          "symbol": "scip-python python spike 0.0.1 app/models/Job#save().",
+          "range": [15, 8, 12],
+          "symbol_roles": 1,
+          "enclosing_range": [15, 4, 22, 5]
+        }
+      ]
+    },
+    {
+      "relative_path": "app/server.go",
+      "language": "go",
+      "symbols": [
+        {"symbol": "scip-go gomod github.com/example/app v0.0.0 `app`/Server#", "kind": "Struct", "display_name": "Server"},
+        {"symbol": "scip-go gomod github.com/example/app v0.0.0 `app`/Server#Addr.", "kind": "Field", "display_name": "Addr"},
+        {"symbol": "scip-go gomod github.com/example/app v0.0.0 `app`/Start().", "kind": "Function", "display_name": "Start"}
+      ],
+      "occurrences": [
+        {
+          "symbol": "scip-go gomod github.com/example/app v0.0.0 `app`/Server#",
+          "range": [8, 5, 8, 11],
+          "symbol_roles": 1,
+          "enclosing_range": [8, 0, 12, 1]
+        },
+        {
+          "symbol": "scip-go gomod github.com/example/app v0.0.0 `app`/Start().",
+          "range": [20, 5, 10],
+          "symbol_roles": 1,
+          "enclosing_range": [20, 0, 30, 1]
+        },
+        {
+          "symbol": "scip-go gomod github.com/example/app v0.0.0 `app`/Server#",
+          "range": [25, 10, 25, 16]
+        }
+      ]
+    }
+  ]
+}

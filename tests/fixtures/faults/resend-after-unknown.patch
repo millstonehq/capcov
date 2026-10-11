@@ -1,0 +1,11 @@
+--- a/notes_app.py
++++ b/notes_app.py
+@@ -143,7 +143,7 @@
+         if intent["store"] == OBJECTS:
+             self._put_snapshot(intent)
+             return True
+-        own = self._own_entry(intent)
++        own = None
+         if own is None:
+             try:
+                 self._send(intent)

@@ -1,0 +1,20 @@
+# Deep capcov config for the PHP / Laravel fixture: the treesitter-routes adapter
+# with a deep block, resolved by scip-php. Globs are scoped to app+routes (NOT
+# vendor) -- the composer autoloader is third-party and only present so scip-php
+# can run; indexing it would add function-universe nodes with no in-project SCIP
+# definition. The blind-spot enumerator still walks the whole tree by design.
+[capcov]
+source = "."
+
+[[adapters]]
+name = "treesitter-routes"
+language = "php"
+scip_language = "php"
+globs = ["app/**/*.php", "routes/*.php"]
+query = '(scoped_call_expression scope: (name) @_scope name: (name) @method arguments: (arguments (argument (string (string_content) @path)) (argument (array_creation_expression (array_element_initializer (string (string_content) @handler)))))) (#eq? @_scope "Route")'
+
+[adapters.deep]
+recognizer = "php_eloquent"
+function_query = '(method_declaration name: (name) @name) @function'
+entity_query = '(class_declaration name: (name) @class (base_clause (name) @base)) @entity (property_declaration (property_element (variable_name (name) @table_prop) (string (string_content) @table_name)))'
+op_query = '(scoped_call_expression scope: (name) @target name: (name) @verb) @op'

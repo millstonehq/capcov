@@ -1,0 +1,11 @@
+--- a/scenario.py
++++ b/scenario.py
+@@ -85,7 +85,7 @@
+         return world
+ 
+     return Scenario(setup, notes_app.publish_steps(NOTE, BODY),
+-                    settle=lambda world: world.index.heal(), new_history=new_history)
++                    settle=None, new_history=new_history)
+ 
+ 
+ class NotesMachine(FaultMachine):

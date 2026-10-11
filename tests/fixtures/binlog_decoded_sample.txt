@@ -1,0 +1,63 @@
+/*!50530 SET @@SESSION.PSEUDO_SLAVE_MODE=1*/;
+/*!40019 SET @@session.max_delayed_threads=0*/;
+DELIMITER /*!*/;
+# at 326
+#260918  0:00:20 server id 1  end_log_pos 368 CRC32 0x6f6bd2a3 	Gtid list [0-1-2]
+# at 368
+#260918  0:00:20 server id 1  end_log_pos 461 CRC32 0x38fa7b13 	GTID 0-1-3 trans
+START TRANSACTION
+/*!*/;
+# at 461
+#260918  0:00:20 server id 1  end_log_pos 0 CRC32 0x0b3be727 	Table_map: `app`.`orders` mapped to number 18
+# at 1604
+#260918  0:00:20 server id 1  end_log_pos 0 CRC32 0x535c0c67 	Table_map: `app`.`notes` mapped to number 19
+# at 1760
+#260918  0:00:20 server id 1  end_log_pos 2356 CRC32 0x9d1e3d0a 	Annotate_rows:
+#Q> UPDATE orders SET state=-1, modified_by=6 WHERE id=4122
+# at 2356
+#260918  0:00:20 server id 1  end_log_pos 2900 CRC32 0xc2d7f372 	Update_rows: table id 18 flags: STMT_END_F
+### UPDATE `app`.`orders`
+### WHERE
+###   @1=4122 /* INT meta=0 nullable=0 is_null=0 */
+###   @2='b49ba4d6-edcb-4635-b4c0-de3a75cf33fc' /* STRING(108) meta=65132 nullable=1 is_null=0 */
+###   @3='SV-3-019' /* VARSTRING(381) meta=381 nullable=1 is_null=0 */
+###   @4=1 /* TINYINT meta=0 nullable=0 is_null=0 */
+###   @5=NULL /* INT meta=0 nullable=1 is_null=1 */
+###   @6='2026-08-27 04:31:26' /* DATETIME(0) meta=0 nullable=1 is_null=0 */
+### SET
+###   @1=4122 /* INT meta=0 nullable=0 is_null=0 */
+###   @2='b49ba4d6-edcb-4635-b4c0-de3a75cf33fc' /* STRING(108) meta=65132 nullable=1 is_null=0 */
+###   @3='SV-3-019' /* VARSTRING(381) meta=381 nullable=1 is_null=0 */
+###   @4=-1 /* TINYINT meta=0 nullable=0 is_null=0 */
+###   @5=6 /* INT meta=0 nullable=1 is_null=0 */
+###   @6='2026-08-27 04:31:26' /* DATETIME(0) meta=0 nullable=1 is_null=0 */
+# at 2900
+#260918  0:00:20 server id 1  end_log_pos 2980 CRC32 0x11111111 	Write_rows: table id 19 flags: STMT_END_F
+### INSERT INTO `app`.`notes`
+### SET
+###   @1=9001 /* INT meta=0 nullable=0 is_null=0 */
+###   @2=4122 /* INT meta=0 nullable=0 is_null=0 */
+###   @3='it''s a probe' /* VARSTRING(3069) meta=3069 nullable=1 is_null=0 */
+###   @4=6 /* INT meta=0 nullable=1 is_null=0 */
+###   @5=12.5 /* DECIMAL(5,2) meta=1282 nullable=1 is_null=0 */
+# at 2980
+#260918  0:00:20 server id 1  end_log_pos 3040 CRC32 0x22222222 	Delete_rows: table id 19 flags: STMT_END_F
+### DELETE FROM `app`.`notes`
+### WHERE
+###   @1=9001 /* INT meta=0 nullable=0 is_null=0 */
+###   @2=4122 /* INT meta=0 nullable=0 is_null=0 */
+###   @3='it''s a probe' /* VARSTRING(3069) meta=3069 nullable=1 is_null=0 */
+###   @4=6 /* INT meta=0 nullable=1 is_null=0 */
+###   @5=12.5 /* DECIMAL(5,2) meta=1282 nullable=1 is_null=0 */
+# at 3040
+#260918  0:00:20 server id 1  end_log_pos 0 CRC32 0x33333333 	Table_map: `app`.`shadow` mapped to number 20
+# at 3050
+#260918  0:00:20 server id 1  end_log_pos 3055 CRC32 0x44444444 	Write_rows: table id 20 flags: STMT_END_F
+### INSERT INTO `app`.`shadow`
+### SET
+###   @1=1 /* INT meta=0 nullable=0 is_null=0 */
+# at 3055
+#260918  0:00:20 server id 1  end_log_pos 3059 CRC32 0x55555555 	Xid = 77
+COMMIT/*!*/;
+DELIMITER ;
+# End of log file

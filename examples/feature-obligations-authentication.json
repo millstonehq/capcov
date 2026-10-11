@@ -1,0 +1,9 @@
+{
+  "auth": { "covered": 1, "total": 1 },
+  "password": { "covered": 2, "total": 2 },
+  "secondFactor": { "covered": 1, "total": 1 },
+  "sms": { "covered": 0, "total": 2 },
+  "authenticatorApp": { "covered": 1, "total": 2 },
+  "passkey": { "covered": 3, "total": 3 },
+  "mfa": { "covered": 1, "total": 4 }
+}

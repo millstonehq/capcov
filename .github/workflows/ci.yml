@@ -1,0 +1,200 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Every job has the same twelve-minute limit. The suite runs once, split by tool
+# family: tests/tool-families.json says which test classes need souffle, the Shen
+# runtime or the SCIP indexers, and each shard job enters the dev shell of its
+# family, which has that family's tools and no other. The gate job judges the
+# union. Each family keeps its own Nix store cache.
+jobs:
+  flake:
+    name: Flake checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Install pinned Determinate Nix
+        uses: DeterminateSystems/determinate-nix-action@c70cb8ae92d68c66953db28a26a63db1665bc837 # v3.21.5
+
+      - name: Restore and save Nix store
+        uses: nix-community/cache-nix-action@135667ec418502fa5a3598af6fb9eb733888ce6a # v6.1.3
+        with:
+          primary-key: nix-${{ runner.os }}-${{ runner.arch }}-all-${{ hashFiles('flake.lock', '**/*.nix', 'tests/souffle/**') }}
+          restore-prefixes-first-match: nix-${{ runner.os }}-${{ runner.arch }}-all-
+          gc-max-store-size-linux: 2G
+
+      # Builds the package and every pinned tool, and runs the Shen and Souffle smokes
+      # and the scip-go index golden.
+      - name: Flake checks
+        run: nix flake check --no-update-lock-file
+
+  shard:
+    name: Unit suite, ${{ matrix.family }} ${{ matrix.shard }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { family: base, shard: 1/1 }
+          - { family: souffle, shard: 1/3 }
+          - { family: souffle, shard: 2/3 }
+          - { family: souffle, shard: 3/3 }
+          - { family: shen, shard: 1/2 }
+          - { family: shen, shard: 2/2 }
+          - { family: indexers, shard: 1/1 }
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Install pinned Determinate Nix
+        uses: DeterminateSystems/determinate-nix-action@c70cb8ae92d68c66953db28a26a63db1665bc837 # v3.21.5
+
+      - name: Restore and save Nix store
+        uses: nix-community/cache-nix-action@135667ec418502fa5a3598af6fb9eb733888ce6a # v6.1.3
+        with:
+          primary-key: nix-${{ runner.os }}-${{ runner.arch }}-${{ matrix.family }}-${{ hashFiles('flake.lock', '**/*.nix', 'tests/souffle/**') }}
+          restore-prefixes-first-match: nix-${{ runner.os }}-${{ runner.arch }}-${{ matrix.family }}-
+          gc-max-store-size-linux: 2G
+
+      # One part of one family's test classes, in that family's dev shell with the
+      # optional extras. A failing test fails this job. The skips are recorded here
+      # and judged in the gate job.
+      - name: Run the shard
+        id: run
+        run: |
+          result="shard-${{ matrix.family }}-$(echo '${{ matrix.shard }}' | tr / -).json"
+          echo "result=${result}" >> "$GITHUB_OUTPUT"
+          nix develop --no-update-lock-file '.#${{ matrix.family }}' --command bash -lc \
+            "PYTHONPATH=src uv run --frozen --extra probe-python --extra treesitter --extra faults-property --group packaging python scripts/check-skips.py --family ${{ matrix.family }} --shard ${{ matrix.shard }} --result ${result}"
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: capcov-${{ steps.run.outputs.result }}
+          path: ${{ steps.run.outputs.result }}
+          if-no-files-found: error
+
+  gate:
+    name: Every test ran once, skips checked against the allowlist
+    needs: shard
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Install pinned Determinate Nix
+        uses: DeterminateSystems/determinate-nix-action@c70cb8ae92d68c66953db28a26a63db1665bc837 # v3.21.5
+
+      - name: Restore and save Nix store
+        uses: nix-community/cache-nix-action@135667ec418502fa5a3598af6fb9eb733888ce6a # v6.1.3
+        with:
+          primary-key: nix-${{ runner.os }}-${{ runner.arch }}-base-${{ hashFiles('flake.lock', '**/*.nix', 'tests/souffle/**') }}
+          restore-prefixes-first-match: nix-${{ runner.os }}-${{ runner.arch }}-base-
+          gc-max-store-size-linux: 2G
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: capcov-shard-*
+          path: shards
+          merge-multiple: true
+
+      # unittest exits 0 when a test skips. This discovers the suite again and fails unless
+      # the shards of every family ran every discovered test exactly once, and unless the
+      # tests that skipped are exactly the ones tests/skips-allowed.json accepts.
+      - name: Judge the union of the shards
+        run: |
+          nix develop --no-update-lock-file .#base --command bash -lc \
+            'PYTHONPATH=src uv run --frozen --extra probe-python --extra treesitter --extra faults-property --group packaging python scripts/check-skips.py --merge shards/shard-*.json'
+
+  test:
+    name: Check scripts, lint and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Install pinned Determinate Nix
+        uses: DeterminateSystems/determinate-nix-action@c70cb8ae92d68c66953db28a26a63db1665bc837 # v3.21.5
+
+      - name: Restore and save Nix store
+        uses: nix-community/cache-nix-action@135667ec418502fa5a3598af6fb9eb733888ce6a # v6.1.3
+        with:
+          primary-key: nix-${{ runner.os }}-${{ runner.arch }}-indexers-${{ hashFiles('flake.lock', '**/*.nix', 'tests/souffle/**') }}
+          restore-prefixes-first-match: nix-${{ runner.os }}-${{ runner.arch }}-indexers-
+          gc-max-store-size-linux: 2G
+
+      - name: capcov blocks false advancement
+        timeout-minutes: 8
+        run: |
+          nix develop --no-update-lock-file .#indexers --command bash -lc \
+            'uv run --frozen --with pytest sh scripts/check-backpressure.sh'
+
+      - name: Real Go flow gates and its fault control is rejected
+        timeout-minutes: 10
+        run: |
+          nix develop --no-update-lock-file .#indexers --command bash -lc \
+            'uv run --frozen --extra treesitter sh scripts/check-real-go-flow.sh'
+
+      - name: Fault harness passes its example and rejects both patched copies
+        timeout-minutes: 8
+        run: |
+          nix develop --no-update-lock-file .#indexers --command bash -lc \
+            'uv run --frozen --extra faults-property sh scripts/check-fault-harness.sh'
+
+      - name: Lint
+        run: nix develop --no-update-lock-file .#indexers --command bash -lc 'uv run --frozen --group lint ruff check .'
+
+      - name: Build distributions
+        run: nix develop --no-update-lock-file .#indexers --command bash -lc 'uv build'
+
+      - name: Verify wheel, entry points and release version
+        env:
+          RELEASE_REF: ${{ github.ref }}
+        run: nix develop --no-update-lock-file .#indexers --command bash -lc 'sh scripts/check-wheel.sh dist'
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: capcov-distributions
+          path: dist/*
+          if-no-files-found: error
+
+      - name: Where this commit came from
+        if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          if git log -1 --format=%B | grep -q "GitOrigin-RevId:"; then
+            echo "This commit came from the maintainers' export (GitOrigin-RevId present)."
+          else
+            echo "This commit was made in this repository and has not been imported upstream."
+            echo "A maintainer imports it with:"
+            echo "    gh workflow run copybara-import-capcov.yml --ref main --repo millstonehq/mill"
+          fi
+
+  release:
+    name: Release
+    needs: [test, gate, flake]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: capcov-distributions
+          path: dist
+      - name: Publish the tested distributions
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
+        with:
+          files: dist/*
+          fail_on_unmatched_files: true
+          generate_release_notes: true

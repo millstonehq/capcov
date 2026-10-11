@@ -1,0 +1,52 @@
+name: capcov
+description: Install the capcov command from this tag's source and put it on PATH
+branding:
+  icon: check-square
+  color: gray-dark
+
+inputs:
+  extras:
+    description: >-
+      Comma-separated optional extras to install with the tool, for example
+      "treesitter" or "treesitter,probe-python". Empty installs the core, which
+      has no dependencies.
+    required: false
+    default: ""
+  python-version:
+    description: Python version uv installs the tool with. capcov needs 3.12 or newer.
+    required: false
+    default: "3.14"
+
+outputs:
+  version:
+    description: The capcov version that was installed
+    value: ${{ steps.install.outputs.version }}
+
+runs:
+  using: composite
+  steps:
+    - name: Install uv
+      uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+      with:
+        enable-cache: false
+
+    # The tool is built from the action's own checkout, so the ref a workflow pins
+    # in `uses: millstonehq/capcov@<ref>` is also the version of capcov it runs.
+    - name: Install capcov
+      id: install
+      shell: bash
+      env:
+        CAPCOV_EXTRAS: ${{ inputs.extras }}
+        CAPCOV_PYTHON_VERSION: ${{ inputs.python-version }}
+      run: |
+        set -euo pipefail
+        spec="$GITHUB_ACTION_PATH"
+        if [ -n "$CAPCOV_EXTRAS" ]; then
+          spec="capcov[${CAPCOV_EXTRAS}] @ ${GITHUB_ACTION_PATH}"
+        fi
+        uv tool install --python "$CAPCOV_PYTHON_VERSION" --force "$spec"
+        uv tool dir --bin >> "$GITHUB_PATH"
+        "$(uv tool dir --bin)/capcov" --help >/dev/null
+        version=$(uv tool list | sed -n 's/^capcov v//p')
+        echo "version=${version}" >> "$GITHUB_OUTPUT"
+        echo "capcov ${version} installed"
