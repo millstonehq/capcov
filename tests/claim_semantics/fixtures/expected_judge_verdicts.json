@@ -1,0 +1,91 @@
+{
+ "receipts": {
+  "synthetic": {
+   "contract_findings": [],
+   "exit_code": 0,
+   "learn": {
+    "present": false
+   },
+   "ops": {
+    "delete-issue": {
+     "blocking_premise": null,
+     "certificate_sha256": "9c329c6af1850d3c5294bd0223bb0dc83bef88b0c9308ffbb6433163b3b75267",
+     "corpus_constrains": true,
+     "exclusions_applied": [],
+     "learn_consistent": null,
+     "learn_unmodeled": false,
+     "op_qualified": {
+      "missing_premises": [],
+      "operational": "complete",
+      "semantic": "supported"
+     },
+     "qualification": "qualified",
+     "repeat_delete": {
+      "not_found": [
+       "DELETE /api/issues/1"
+      ],
+      "repeats": [
+       [
+        "req-5",
+        "DELETE /api/issues/1"
+       ]
+      ],
+      "violations": []
+     },
+     "verdict": "supported"
+    },
+    "issues.close": {
+     "blocking_premise": null,
+     "certificate_sha256": "26b7f78cf6bb9eb2cca3b23eb64a23dde9c13f37dc3e7dd9845f84353f044b2f",
+     "corpus_constrains": true,
+     "exclusions_applied": [],
+     "learn_consistent": null,
+     "learn_unmodeled": false,
+     "op_qualified": {
+      "missing_premises": [],
+      "operational": "complete",
+      "semantic": "supported"
+     },
+     "qualification": "qualified",
+     "repeat_delete": {
+      "not_found": [
+       "DELETE /api/issues/1"
+      ],
+      "repeats": [],
+      "violations": []
+     },
+     "verdict": "supported"
+    },
+    "issues.create": {
+     "blocking_premise": null,
+     "certificate_sha256": "74174310e3359bd2b090c96ed918ade7d1d8b19dc6f93fbc3cb1cf94f47d25fd",
+     "corpus_constrains": true,
+     "exclusions_applied": [],
+     "learn_consistent": null,
+     "learn_unmodeled": false,
+     "op_qualified": {
+      "missing_premises": [],
+      "operational": "complete",
+      "semantic": "supported"
+     },
+     "qualification": "qualified",
+     "repeat_delete": {
+      "not_found": [
+       "DELETE /api/issues/1"
+      ],
+      "repeats": [],
+      "violations": []
+     },
+     "verdict": "supported"
+    }
+   },
+   "required_ops": [],
+   "verdict": "supported"
+  }
+ },
+ "recorded_with": [
+  "python",
+  "souffle",
+  "souffle-compiled"
+ ]
+}

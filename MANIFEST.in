@@ -3,4 +3,5 @@ recursive-include scripts *.sh
 recursive-include tests *.py *.patch
 recursive-include src/capcov/claims/static *.json
 recursive-include src/capcov/claims/replay *.json
+recursive-include src/capcov/claims/observation *.json
 recursive-include src/capcov/faults *.json

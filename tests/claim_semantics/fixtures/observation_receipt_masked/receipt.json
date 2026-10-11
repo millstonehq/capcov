@@ -1,0 +1,918 @@
+{
+ "agreement": {
+  "agree": 12,
+  "compared": 12,
+  "complete": true,
+  "degenerate": 0,
+  "differ": 0,
+  "not_observed": 0
+ },
+ "check": {
+  "id": "role_list",
+  "limitations": [
+   "read-only: no store is inspected, so no persisted effect is compared",
+   "no model: neither side is checked against a description of intended behaviour",
+   "the 12 requests are the whole claim; nothing argues they are representative"
+  ],
+  "scope": "one read-only capability, twelve pre-registered requests, one disposable fixture tenant",
+  "script_path": "checks/role_list.py",
+  "script_sha256": "219f11fea525e419af428e620f2b6413b87f9a81c7816e0284496dd41f913b0d",
+  "title": "role list: incumbent and candidate answer the same 12 requests"
+ },
+ "completeness": {
+  "by_side": {
+   "candidate": {
+    "bodies": {
+     "closed": true,
+     "reason": ""
+    },
+    "classes": {
+     "closed": true,
+     "reason": ""
+    },
+    "effect_rows": {
+     "closed": false,
+     "reason": "this capability performs no writes; no store was inspected"
+    },
+    "effects": {
+     "closed": false,
+     "reason": "this capability performs no writes; no store was inspected"
+    },
+    "observed": {
+     "closed": true,
+     "reason": ""
+    },
+    "statuses": {
+     "closed": true,
+     "reason": ""
+    }
+   },
+   "incumbent": {
+    "bodies": {
+     "closed": true,
+     "reason": ""
+    },
+    "classes": {
+     "closed": true,
+     "reason": ""
+    },
+    "effect_rows": {
+     "closed": false,
+     "reason": "this capability performs no writes; no store was inspected"
+    },
+    "effects": {
+     "closed": false,
+     "reason": "this capability performs no writes; no store was inspected"
+    },
+    "observed": {
+     "closed": true,
+     "reason": ""
+    },
+    "statuses": {
+     "closed": true,
+     "reason": ""
+    }
+   }
+  },
+  "failures": {
+   "closed": true,
+   "reason": ""
+  },
+  "masked_differences": {
+   "closed": true,
+   "reason": ""
+  },
+  "normalizations": {
+   "closed": true,
+   "reason": ""
+  },
+  "policy": {
+   "closed": true,
+   "reason": ""
+  },
+  "scenarios": {
+   "closed": true,
+   "reason": ""
+  },
+  "stability": {
+   "closed": true,
+   "reason": ""
+  },
+  "unassessed": {
+   "closed": true,
+   "reason": ""
+  },
+  "unobserved": {
+   "closed": true,
+   "reason": ""
+  }
+ },
+ "configuration": {
+  "command_candidate": [
+   "./bin/candidate",
+   "--listen",
+   "$CANDIDATE_LISTEN"
+  ],
+  "command_incumbent": [
+   "php",
+   "-S",
+   "$INCUMBENT_LISTEN",
+   "app/router.php"
+  ],
+  "config_digest": "dfb3de3c6ab66a078767d5b2307013eac15078b8812688d407a069da9a941413",
+  "env_names": [
+   "INCUMBENT_LISTEN",
+   "CANDIDATE_LISTEN",
+   "FIXTURE_TENANT",
+   "OBSERVATION_DEADLINE_SECONDS"
+  ],
+  "side_identity": {
+   "candidate": {
+    "binary_sha256": "0d2287c4d2b8b79b80a7f6dfc9f0c2d51bef5f577bcbff08e19adb6cb11d515e",
+    "kind": "go-binary",
+    "listen": "loopback:18082"
+   },
+   "incumbent": {
+    "kind": "php-builtin-server",
+    "listen": "loopback:18081",
+    "runtime_sha256": "0c2f9a93f18dc656f3f2778a9dcc232faa5e373212f8c3f330489516934b57c8"
+   }
+  },
+  "sides_distinct": true
+ },
+ "contract": "observation-receipt/v1",
+ "failures": [],
+ "fixture": {
+  "digest": "251a23eb6d0c651416196bea6c9094d29b4d46a14c88129334fb03e41045dda2",
+  "name": "standard",
+  "recipe_sha256": "3c3fa8632c75811ed4ce78c51a05e2f417ca98096df5edc3383958b737a69f9c",
+  "schema_sha256": "5df63ac47e5466517cf656f7b10dc752d2f99cf1e9c47521faeec7dfbfcf0eed",
+  "seed_identities": [
+   "other-tenant-member",
+   "pending-member",
+   "project-member",
+   "support-staff",
+   "tenant-guest",
+   "tenant-member"
+  ],
+  "seed_sha256": "ed01c258207e4e3902fb0ff767aeb76bba9159084e6e3603ad0e655caa20895a",
+  "stores": [
+   {
+    "kind": "mysql",
+    "reset": true
+   },
+   {
+    "kind": "redis",
+    "reset": true
+   },
+   {
+    "kind": "mongo",
+    "reset": true
+   },
+   {
+    "kind": "smtp",
+    "reset": true
+   }
+  ],
+  "tenant": "oracle"
+ },
+ "log": {
+  "bytes": 410,
+  "path": ".work/observation/role_list/log.txt",
+  "redaction": {
+   "hits": 0,
+   "markers_checked": [
+    "Bearer ",
+    "X-AUTH-",
+    "password",
+    "secret",
+    "token="
+   ]
+  },
+  "sha256": "2f8eea6fa63a91f53a9f654e069b95f8a05202692e7a6a95d7def18811ff72e7"
+ },
+ "masked_differences": [
+  {
+   "candidate_before_digest": "bdd454672de89ce331f9f5b5384cedd03948458409007ca50c6bf66f87af719b",
+   "facet": "body",
+   "field_path": "body:/roles",
+   "incumbent_before_digest": "27a41920fb74648b055d8421d3c16eb66f5a46352ff1f076144d75432d22c553",
+   "normalization": "sort-roles",
+   "scenario": "tenant-own"
+  }
+ ],
+ "normalization_firings": [
+  {
+   "after_digest": "8ff92c24944557fbb9f2dbc466aa5550610568659c2b5a5754545e5a19416c84",
+   "before_digest": "27a41920fb74648b055d8421d3c16eb66f5a46352ff1f076144d75432d22c553",
+   "facet": "body",
+   "normalization": "sort-roles",
+   "scenario": "tenant-own",
+   "side": "incumbent"
+  },
+  {
+   "after_digest": "8ff92c24944557fbb9f2dbc466aa5550610568659c2b5a5754545e5a19416c84",
+   "before_digest": "bdd454672de89ce331f9f5b5384cedd03948458409007ca50c6bf66f87af719b",
+   "facet": "body",
+   "normalization": "sort-roles",
+   "scenario": "tenant-own",
+   "side": "candidate"
+  }
+ ],
+ "observations": [
+  {
+   "body_digest": "8c01d31ae0874b678285502f6a752a39e5aebabb93fe3294518acaee5f36eef6",
+   "class": "4xx",
+   "duration_ms": 11,
+   "effects": [],
+   "effects_observed": false,
+   "failure": null,
+   "normalizations_applied": [],
+   "outcome": "observed",
+   "raw_digest": "8c01d31ae0874b678285502f6a752a39e5aebabb93fe3294518acaee5f36eef6",
+   "scenario": "anonymous-global",
+   "side": "incumbent",
+   "status": 401
+  },
+  {
+   "body_digest": "8c01d31ae0874b678285502f6a752a39e5aebabb93fe3294518acaee5f36eef6",
+   "class": "4xx",
+   "duration_ms": 14,
+   "effects": [],
+   "effects_observed": false,
+   "failure": null,
+   "normalizations_applied": [],
+   "outcome": "observed",
+   "raw_digest": "8c01d31ae0874b678285502f6a752a39e5aebabb93fe3294518acaee5f36eef6",
+   "scenario": "anonymous-global",
+   "side": "candidate",
+   "status": 401
+  },
+  {
+   "body_digest": "84a630cf03a1796cf47a4d8aa5abae420472f4c1524de529ff0a2e5e90d83404",
+   "class": "2xx",
+   "duration_ms": 12,
+   "effects": [],
+   "effects_observed": false,
+   "failure": null,
+   "normalizations_applied": [],
+   "outcome": "observed",
+   "raw_digest": "84a630cf03a1796cf47a4d8aa5abae420472f4c1524de529ff0a2e5e90d83404",
+   "scenario": "support-global",
+   "side": "incumbent",
+   "status": 200
+  },
+  {
+   "body_digest": "84a630cf03a1796cf47a4d8aa5abae420472f4c1524de529ff0a2e5e90d83404",
+   "class": "2xx",
+   "duration_ms": 15,
+   "effects": [],
+   "effects_observed": false,
+   "failure": null,
+   "normalizations_applied": [],
+   "outcome": "observed",
+   "raw_digest": "84a630cf03a1796cf47a4d8aa5abae420472f4c1524de529ff0a2e5e90d83404",
+   "scenario": "support-global",
+   "side": "candidate",
+   "status": 200
+  },
+  {
+   "body_digest": "e24bfb7c5e6196851625b2a7fe32e41954dc4fc4409ae3b17a32a2b7e72d04d4",
+   "class": "4xx",
+   "duration_ms": 13,
+   "effects": [],
+   "effects_observed": false,
+   "failure": null,
+   "normalizations_applied": [],
+   "outcome": "observed",
+   "raw_digest": "e24bfb7c5e6196851625b2a7fe32e41954dc4fc4409ae3b17a32a2b7e72d04d4",
+   "scenario": "member-global",
+   "side": "incumbent",
+   "status": 403
+  },
+  {
+   "body_digest": "e24bfb7c5e6196851625b2a7fe32e41954dc4fc4409ae3b17a32a2b7e72d04d4",
+   "class": "4xx",
+   "duration_ms": 16,
+   "effects": [],
+   "effects_observed": false,
+   "failure": null,
+   "normalizations_applied": [],
+   "outcome": "observed",
+   "raw_digest": "e24bfb7c5e6196851625b2a7fe32e41954dc4fc4409ae3b17a32a2b7e72d04d4",
+   "scenario": "member-global",
+   "side": "candidate",
+   "status": 403
+  },
+  {
+   "body_digest": "8ff92c24944557fbb9f2dbc466aa5550610568659c2b5a5754545e5a19416c84",
+   "class": "2xx",
+   "duration_ms": 14,
+   "effects": [],
+   "effects_observed": false,
+   "failure": null,
+   "normalizations_applied": [
+    "sort-roles"
+   ],
+   "outcome": "observed",
+   "raw_digest": "27a41920fb74648b055d8421d3c16eb66f5a46352ff1f076144d75432d22c553",
+   "scenario": "tenant-own",
+   "side": "incumbent",
+   "status": 200
+  },
+  {
+   "body_digest": "8ff92c24944557fbb9f2dbc466aa5550610568659c2b5a5754545e5a19416c84",
+   "class": "2xx",
+   "duration_ms": 17,
+   "effects": [],
+   "effects_observed": false,
+   "failure": null,
+   "normalizations_applied": [
+    "sort-roles"
+   ],
+   "outcome": "observed",
+   "raw_digest": "bdd454672de89ce331f9f5b5384cedd03948458409007ca50c6bf66f87af719b",
+   "scenario": "tenant-own",
+   "side": "candidate",
+   "status": 200
+  },
+  {
+   "body_digest": "957fc71ccd3e4b3b14773ccaeee0f8b214ac3e7228ae96acbe5032f58cbc73c6",
+   "class": "2xx",
+   "duration_ms": 15,
+   "effects": [],
+   "effects_observed": false,
+   "failure": null,
+   "normalizations_applied": [],
+   "outcome": "observed",
+   "raw_digest": "957fc71ccd3e4b3b14773ccaeee0f8b214ac3e7228ae96acbe5032f58cbc73c6",
+   "scenario": "tenant-guest",
+   "side": "incumbent",
+   "status": 200
+  },
+  {
+   "body_digest": "957fc71ccd3e4b3b14773ccaeee0f8b214ac3e7228ae96acbe5032f58cbc73c6",
+   "class": "2xx",
+   "duration_ms": 18,
+   "effects": [],
+   "effects_observed": false,
+   "failure": null,
+   "normalizations_applied": [],
+   "outcome": "observed",
+   "raw_digest": "957fc71ccd3e4b3b14773ccaeee0f8b214ac3e7228ae96acbe5032f58cbc73c6",
+   "scenario": "tenant-guest",
+   "side": "candidate",
+   "status": 200
+  },
+  {
+   "body_digest": "fd5e956648576c4360049101771df77ff98e0e3bd7f65630fe0cae79d543bc6d",
+   "class": "4xx",
+   "duration_ms": 16,
+   "effects": [],
+   "effects_observed": false,
+   "failure": null,
+   "normalizations_applied": [],
+   "outcome": "observed",
+   "raw_digest": "fd5e956648576c4360049101771df77ff98e0e3bd7f65630fe0cae79d543bc6d",
+   "scenario": "tenant-foreign",
+   "side": "incumbent",
+   "status": 403
+  },
+  {
+   "body_digest": "fd5e956648576c4360049101771df77ff98e0e3bd7f65630fe0cae79d543bc6d",
+   "class": "4xx",
+   "duration_ms": 19,
+   "effects": [],
+   "effects_observed": false,
+   "failure": null,
+   "normalizations_applied": [],
+   "outcome": "observed",
+   "raw_digest": "fd5e956648576c4360049101771df77ff98e0e3bd7f65630fe0cae79d543bc6d",
+   "scenario": "tenant-foreign",
+   "side": "candidate",
+   "status": 403
+  },
+  {
+   "body_digest": "aa62b720e91f5849cab5a2385ac8113657453e47eb4cba958ba6c33f41819227",
+   "class": "4xx",
+   "duration_ms": 17,
+   "effects": [],
+   "effects_observed": false,
+   "failure": null,
+   "normalizations_applied": [],
+   "outcome": "observed",
+   "raw_digest": "aa62b720e91f5849cab5a2385ac8113657453e47eb4cba958ba6c33f41819227",
+   "scenario": "tenant-pending",
+   "side": "incumbent",
+   "status": 403
+  },
+  {
+   "body_digest": "aa62b720e91f5849cab5a2385ac8113657453e47eb4cba958ba6c33f41819227",
+   "class": "4xx",
+   "duration_ms": 20,
+   "effects": [],
+   "effects_observed": false,
+   "failure": null,
+   "normalizations_applied": [],
+   "outcome": "observed",
+   "raw_digest": "aa62b720e91f5849cab5a2385ac8113657453e47eb4cba958ba6c33f41819227",
+   "scenario": "tenant-pending",
+   "side": "candidate",
+   "status": 403
+  },
+  {
+   "body_digest": "d6ff58a952d2fbbb5c1667501fad0a56ac4e6cf42093ab2f2718797ed292d630",
+   "class": "4xx",
+   "duration_ms": 11,
+   "effects": [],
+   "effects_observed": false,
+   "failure": null,
+   "normalizations_applied": [],
+   "outcome": "observed",
+   "raw_digest": "d6ff58a952d2fbbb5c1667501fad0a56ac4e6cf42093ab2f2718797ed292d630",
+   "scenario": "tenant-malformed",
+   "side": "incumbent",
+   "status": 400
+  },
+  {
+   "body_digest": "d6ff58a952d2fbbb5c1667501fad0a56ac4e6cf42093ab2f2718797ed292d630",
+   "class": "4xx",
+   "duration_ms": 14,
+   "effects": [],
+   "effects_observed": false,
+   "failure": null,
+   "normalizations_applied": [],
+   "outcome": "observed",
+   "raw_digest": "d6ff58a952d2fbbb5c1667501fad0a56ac4e6cf42093ab2f2718797ed292d630",
+   "scenario": "tenant-malformed",
+   "side": "candidate",
+   "status": 400
+  },
+  {
+   "body_digest": "58bb79e9edb70f1ae2e23050b022cece7bc5e3bb167a17256134e2e989a48c5e",
+   "class": "2xx",
+   "duration_ms": 12,
+   "effects": [],
+   "effects_observed": false,
+   "failure": null,
+   "normalizations_applied": [],
+   "outcome": "observed",
+   "raw_digest": "58bb79e9edb70f1ae2e23050b022cece7bc5e3bb167a17256134e2e989a48c5e",
+   "scenario": "project-own",
+   "side": "incumbent",
+   "status": 200
+  },
+  {
+   "body_digest": "58bb79e9edb70f1ae2e23050b022cece7bc5e3bb167a17256134e2e989a48c5e",
+   "class": "2xx",
+   "duration_ms": 15,
+   "effects": [],
+   "effects_observed": false,
+   "failure": null,
+   "normalizations_applied": [],
+   "outcome": "observed",
+   "raw_digest": "58bb79e9edb70f1ae2e23050b022cece7bc5e3bb167a17256134e2e989a48c5e",
+   "scenario": "project-own",
+   "side": "candidate",
+   "status": 200
+  },
+  {
+   "body_digest": "c1698955a6168a02242ce951e787b8dea72f2e15e906f379698d4882c91bac43",
+   "class": "4xx",
+   "duration_ms": 13,
+   "effects": [],
+   "effects_observed": false,
+   "failure": null,
+   "normalizations_applied": [],
+   "outcome": "observed",
+   "raw_digest": "c1698955a6168a02242ce951e787b8dea72f2e15e906f379698d4882c91bac43",
+   "scenario": "project-foreign",
+   "side": "incumbent",
+   "status": 403
+  },
+  {
+   "body_digest": "c1698955a6168a02242ce951e787b8dea72f2e15e906f379698d4882c91bac43",
+   "class": "4xx",
+   "duration_ms": 16,
+   "effects": [],
+   "effects_observed": false,
+   "failure": null,
+   "normalizations_applied": [],
+   "outcome": "observed",
+   "raw_digest": "c1698955a6168a02242ce951e787b8dea72f2e15e906f379698d4882c91bac43",
+   "scenario": "project-foreign",
+   "side": "candidate",
+   "status": 403
+  },
+  {
+   "body_digest": "b09335b5f97c862a994a733544b08c02829892c5964296f1621a3bbd394f8096",
+   "class": "4xx",
+   "duration_ms": 14,
+   "effects": [],
+   "effects_observed": false,
+   "failure": null,
+   "normalizations_applied": [],
+   "outcome": "observed",
+   "raw_digest": "b09335b5f97c862a994a733544b08c02829892c5964296f1621a3bbd394f8096",
+   "scenario": "project-archived",
+   "side": "incumbent",
+   "status": 403
+  },
+  {
+   "body_digest": "b09335b5f97c862a994a733544b08c02829892c5964296f1621a3bbd394f8096",
+   "class": "4xx",
+   "duration_ms": 17,
+   "effects": [],
+   "effects_observed": false,
+   "failure": null,
+   "normalizations_applied": [],
+   "outcome": "observed",
+   "raw_digest": "b09335b5f97c862a994a733544b08c02829892c5964296f1621a3bbd394f8096",
+   "scenario": "project-archived",
+   "side": "candidate",
+   "status": 403
+  },
+  {
+   "body_digest": "23feff50e0e3955eab0700cee26270af8fd813393c019e29dd41bb2e12f7ca55",
+   "class": "4xx",
+   "duration_ms": 15,
+   "effects": [],
+   "effects_observed": false,
+   "failure": null,
+   "normalizations_applied": [],
+   "outcome": "observed",
+   "raw_digest": "23feff50e0e3955eab0700cee26270af8fd813393c019e29dd41bb2e12f7ca55",
+   "scenario": "project-malformed",
+   "side": "incumbent",
+   "status": 400
+  },
+  {
+   "body_digest": "23feff50e0e3955eab0700cee26270af8fd813393c019e29dd41bb2e12f7ca55",
+   "class": "4xx",
+   "duration_ms": 18,
+   "effects": [],
+   "effects_observed": false,
+   "failure": null,
+   "normalizations_applied": [],
+   "outcome": "observed",
+   "raw_digest": "23feff50e0e3955eab0700cee26270af8fd813393c019e29dd41bb2e12f7ca55",
+   "scenario": "project-malformed",
+   "side": "candidate",
+   "status": 400
+  }
+ ],
+ "policy": {
+  "comparator": "exact deep-equal after the listed normalizations",
+  "digest": "3b71206b9b40b2cb9cde0d4f2984627f4977f47ac886f2cee27d3577fcb45742",
+  "exclusions": [],
+  "facets": [
+   "status",
+   "body"
+  ],
+  "normalizations": [
+   {
+    "facet": "body",
+    "id": "sort-roles",
+    "kind": "sort",
+    "preserves": "identity",
+    "reason": "array order is not part of the contract",
+    "source_sha256": "dd40ce0a492a744c8837abe220c5d69752cf33b98c8b60ca7d8b1139a9fc6f34",
+    "target": "body:/roles"
+   }
+  ],
+  "status_normalized": false
+ },
+ "receipt_digest": "beb2f977e540111ab69da5becca35e0c867ce7237bdc89389b2d0a3cb5afd6ac",
+ "repeat": {
+  "compared_scenarios": [
+   "anonymous-global",
+   "support-global",
+   "member-global",
+   "tenant-own",
+   "tenant-guest",
+   "tenant-foreign",
+   "tenant-pending",
+   "tenant-malformed",
+   "project-own",
+   "project-foreign",
+   "project-archived",
+   "project-malformed"
+  ],
+  "run_a": "883a26416132a3f9",
+  "run_b": "2b0dc61ff48d16a5",
+  "side": "incumbent",
+  "stable": true
+ },
+ "reproduce": {
+  "argv": [
+   "python3",
+   "checks/role_list.py",
+   "--receipt",
+   ".work/observation"
+  ],
+  "artifacts": [
+   {
+    "bytes": 410,
+    "path": ".work/observation/role_list/log.txt",
+    "sha256": "2f8eea6fa63a91f53a9f654e069b95f8a05202692e7a6a95d7def18811ff72e7"
+   }
+  ],
+  "container_digests": [
+   "sha256:67c37766974b427d6d6f99b4514dff244424050ba449bfda0088b01492306e30"
+  ],
+  "cwd": ".",
+  "deterministic": true,
+  "env_names": [
+   "INCUMBENT_LISTEN",
+   "CANDIDATE_LISTEN",
+   "FIXTURE_TENANT"
+  ]
+ },
+ "results": [
+  {
+   "difference": null,
+   "outcome": "agree",
+   "scenario": "anonymous-global"
+  },
+  {
+   "difference": null,
+   "outcome": "agree",
+   "scenario": "support-global"
+  },
+  {
+   "difference": null,
+   "outcome": "agree",
+   "scenario": "member-global"
+  },
+  {
+   "difference": null,
+   "outcome": "agree",
+   "scenario": "tenant-own"
+  },
+  {
+   "difference": null,
+   "outcome": "agree",
+   "scenario": "tenant-guest"
+  },
+  {
+   "difference": null,
+   "outcome": "agree",
+   "scenario": "tenant-foreign"
+  },
+  {
+   "difference": null,
+   "outcome": "agree",
+   "scenario": "tenant-pending"
+  },
+  {
+   "difference": null,
+   "outcome": "agree",
+   "scenario": "tenant-malformed"
+  },
+  {
+   "difference": null,
+   "outcome": "agree",
+   "scenario": "project-own"
+  },
+  {
+   "difference": null,
+   "outcome": "agree",
+   "scenario": "project-foreign"
+  },
+  {
+   "difference": null,
+   "outcome": "agree",
+   "scenario": "project-archived"
+  },
+  {
+   "difference": null,
+   "outcome": "agree",
+   "scenario": "project-malformed"
+  }
+ ],
+ "run": {
+  "deadline_seconds": 120,
+  "elapsed_seconds": 38.6,
+  "id": "90086fa0a9423a4c",
+  "nonce": "c1045fe01f74852e284b29bf5ab846f6e82374cf0495d12fb003a1205fd05e8e",
+  "recorded_at": "2026-09-16T09:14:41Z",
+  "started_at": "2026-09-16T09:14:02Z"
+ },
+ "scenario_set": {
+  "count": 12,
+  "declared_at": "pre-observation",
+  "digest": "faf56399d3434f4ea60b046790d4c0ed3b38d949ecf7a011d6aabe975f42616a",
+  "required_kinds": [
+   "success",
+   "denial",
+   "malformed"
+  ],
+  "scenarios": [
+   {
+    "actor": "",
+    "expected_class": "4xx",
+    "id": "anonymous-global",
+    "intent": "an unauthenticated request is refused before any role is read",
+    "kind": "denial",
+    "required": true,
+    "target": "GET /roles"
+   },
+   {
+    "actor": "support-staff",
+    "expected_class": "2xx",
+    "id": "support-global",
+    "intent": "a support actor sees the global role list",
+    "kind": "success",
+    "required": true,
+    "target": "GET /roles"
+   },
+   {
+    "actor": "tenant-member",
+    "expected_class": "4xx",
+    "id": "member-global",
+    "intent": "a member without global access is refused the global role list",
+    "kind": "denial",
+    "required": true,
+    "target": "GET /roles"
+   },
+   {
+    "actor": "tenant-member",
+    "expected_class": "2xx",
+    "id": "tenant-own",
+    "intent": "a member sees the roles of the tenant it belongs to",
+    "kind": "success",
+    "required": true,
+    "target": "GET /tenants/{tenant}/roles"
+   },
+   {
+    "actor": "tenant-guest",
+    "expected_class": "2xx",
+    "id": "tenant-guest",
+    "intent": "a guest sees the reduced role list of its host tenant",
+    "kind": "success",
+    "required": true,
+    "target": "GET /tenants/{tenant}/roles"
+   },
+   {
+    "actor": "other-tenant-member",
+    "expected_class": "4xx",
+    "id": "tenant-foreign",
+    "intent": "a member of another tenant is refused",
+    "kind": "denial",
+    "required": true,
+    "target": "GET /tenants/{tenant}/roles"
+   },
+   {
+    "actor": "pending-member",
+    "expected_class": "4xx",
+    "id": "tenant-pending",
+    "intent": "a membership that was never completed does not grant the list",
+    "kind": "denial",
+    "required": true,
+    "target": "GET /tenants/{tenant}/roles"
+   },
+   {
+    "actor": "tenant-member",
+    "expected_class": "4xx",
+    "id": "tenant-malformed",
+    "intent": "a tenant identifier that is not an identifier is rejected, not coerced",
+    "kind": "malformed",
+    "required": true,
+    "target": "GET /tenants/{tenant}/roles"
+   },
+   {
+    "actor": "project-member",
+    "expected_class": "2xx",
+    "id": "project-own",
+    "intent": "a project member sees the project role list",
+    "kind": "success",
+    "required": true,
+    "target": "GET /projects/{project}/roles"
+   },
+   {
+    "actor": "other-tenant-member",
+    "expected_class": "4xx",
+    "id": "project-foreign",
+    "intent": "a member of another tenant is refused the project role list",
+    "kind": "denial",
+    "required": true,
+    "target": "GET /projects/{project}/roles"
+   },
+   {
+    "actor": "project-member",
+    "expected_class": "4xx",
+    "id": "project-archived",
+    "intent": "an archived project's role list is not readable through this route",
+    "kind": "denial",
+    "required": true,
+    "target": "GET /projects/{project}/roles"
+   },
+   {
+    "actor": "project-member",
+    "expected_class": "4xx",
+    "id": "project-malformed",
+    "intent": "a project identifier that is not an identifier is rejected, not coerced",
+    "kind": "malformed",
+    "required": true,
+    "target": "GET /projects/{project}/roles"
+   }
+  ]
+ },
+ "sources": {
+  "candidate": {
+   "commit": "8e4108407e526c597f7861a3ed515aa87f5c86ad",
+   "dirty": false,
+   "inputs": [
+    {
+     "path": "src/roles.go",
+     "sha256": "8e580365c96d4781852f8ac4d43dd13eaf1a2f1a1b3cee5e579c9de938558c2d"
+    },
+    {
+     "path": "src/roles_rows.go",
+     "sha256": "1b42341019868488127ca0840e195986eeb89ef6c9000a694a82a14e7efaed0f"
+    }
+   ],
+   "repo": "candidate",
+   "tree": "453119359361f29a0aaf855516053132fbe2837f"
+  },
+  "incumbent": {
+   "baseline_contract": {
+    "path": "contracts/baselines.json",
+    "sha256": "ad46a1b4a19ade63588426a946c14b75bac8a467d5953c27d3ec01394a10769e"
+   },
+   "commit": "55e4140a2a7a5481cc9eccda29f43758e70d58c6",
+   "inputs": [
+    {
+     "path": "app/router.php",
+     "sha256": "7a821f406ff9091c6b2a07a846401a24b259d858ad748513480b63293e193c5f"
+    },
+    {
+     "path": "app/roles.php",
+     "sha256": "608228c005be9bd427ce23291accedbf895eed6b59036f66fefba5367e79abf0"
+    }
+   ],
+   "manifest_sha256": "669abf41c1943204f387b81b92b75b7dfb5e88577cab090b00026b81a2863560",
+   "runtime_commit": "b8ed88dcffe72d9655cff5e8484cf1344eb6ce55",
+   "runtime_contract": {
+    "path": "contracts/runtime.json",
+    "sha256": "d364b71e9041fbf1722ed7b9e792f1a91d3c0c22e05ec3d8833c7fd287a8f7b1"
+   },
+   "source_behavior_differences": []
+  },
+  "source_digest": "0b5379eb412155d885a2ecf215e15fdf7858fac8419a57dfd249f543419c2c09",
+  "toolchain": {
+   "go": "go1.24.4",
+   "php": "8.2.20",
+   "python": "3.13.1"
+  }
+ },
+ "terminal": {
+  "blocking_stage": null,
+  "exit_code": 0,
+  "outcome": "compared",
+  "reason": "every declared scenario was put to both sides"
+ },
+ "unassessed": [
+  {
+   "dimension": "model_conformance",
+   "reason": "Not assessed. No executable model of intended behaviour described this run. Nothing here says either implementation is correct; it says only that, on the scenarios listed, they were observed to answer alike. A shared defect present in both is exactly what agreement looks like."
+  },
+  {
+   "dimension": "fault_sensitivity",
+   "reason": "Not assessed. No mutation or fault injection was run against this scenario set, so its power to detect a defect is unmeasured."
+  },
+  {
+   "dimension": "scenario_coverage",
+   "reason": "Not assessed. The claim is bounded by the admitted scenario set whose digest it names. Behaviour outside that set is unobserved, not passing. Nothing argues the set is representative of the capability."
+  },
+  {
+   "dimension": "write_set_declaration",
+   "reason": "Not assessed. Effects, where compared, were compared incumbent-to-candidate. No declared write set was checked, so a table both implementations touch and neither should is invisible here."
+  },
+  {
+   "dimension": "producer_independence",
+   "reason": "Not assessed. The receipt was produced by the same program that performed both observations. The controls here make silence, staleness and after-the-fact edits detectable; they do not make a dishonest or defective producer detectable."
+  },
+  {
+   "dimension": "deployed_parity",
+   "reason": "Not assessed. A disposable local fixture with a synthetic tenant, one process, no gateway, no proxy, no real credentials. Nothing here is a claim about a deployed environment."
+  },
+  {
+   "dimension": "concurrency",
+   "reason": "Not assessed. Scenarios ran sequentially against a freshly seeded fixture."
+  },
+  {
+   "dimension": "performance",
+   "reason": "Not assessed. duration_ms is recorded as evidence and is not compared."
+  },
+  {
+   "dimension": "effect_ordering",
+   "reason": "Not assessed. Effects are compared as an unordered set folded to a digest. Statement order, interleaving, and transient rows written and deleted inside one scenario are not observed."
+  },
+  {
+   "dimension": "persisted_effects",
+   "reason": "Not assessed. Only the stores whose effect closure is true were compared; every store left out is unobserved, with its reason recorded. Where no store was compared, persisted state is entirely unassessed and only wire responses are ranked."
+  }
+ ],
+ "unobserved": []
+}

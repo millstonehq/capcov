@@ -27,50 +27,40 @@ The fixtures are synthetic controls until a real retained execution is added.
 `adapter.py` converts each fixture to strict bundle JSON and invokes the real
 `bundle_from_json(..., validate=True)` parser; it does not evaluate rules.
 
-## Model well-formedness: no certificate until the checker exists
+## Checker authority is operation scoped
 
-`op_qualified_rt` carries the positive premise `model_well_formed(M, Checker,
-Version, Cert)` under the reviewer's `model_checker_admitted(Checker,
-Version)`.  The Stage D typed checker that would emit such a certificate **has
-not been built**, so no *real* receipt carries one:
+The typed checker emits two producer facts. `model_well_formed.json` records
+global model structure. `model_operation_checked.json` records a positive row
+only for each operation whose local write, matrix, atlas, and registry
+judgements all pass. A skipped or failing operation has no row and cannot
+borrow another operation's result. The modelcheck certificate digest includes
+stable semantic inputs and judgements; it excludes nonce, elapsed time, and
+other run-envelope values. Its `checker_binary` is the SHA-256 of the resolved
+native Shen executable. The Bifrost launcher hash remains a separate input to
+the semantic certificate.
 
-* receipts produced by replaying a real system have **no**
-  `model_well_formed.json`, and their `model_checkers.json` admits **no**
-  checker (an empty `rows` list: the reviewer has been asked and admits nothing
-  yet).  A placeholder certificate there would be a fabricated observation
-  satisfying the very gate the premise exists to impose, and the judge would
-  report a qualification that nothing certified.  Such receipts stay with the
-  system that produced them; none is committed here.
-* `replay_receipt_min` is the **synthetic** fixture the adversarial corpus is
-  generated from (`replay_rules/cases.py`; run `run-fixture-1`, commits
-  `php0000…`/`go0000…`).  Every fact in it is made up, including its
-  certificate (`sha256("pending: checker not yet built")` under checker
-  `stage-d-typecheck` version `0.1-pending`) and the reviewer list that admits
-  that pair.  That is honest because the corpus is labelled synthetic
-  throughout, and it is what keeps the *positive* control of the premise
-  (corpus case `00`) exercised: a typed checker, named
-  by class `modelcheck`, certifying the same model `model_describes_run` binds
-  to the run, at a version the reviewer admits.
+Reviewer authority is supplied separately to the exporter. Each
+`model_checker_admitted` row must match the model, operation, checker name,
+version, native binary digest, and semantic certificate digest of one exact
+`model_operation_checked` row. Receipt-local `model_checkers.json` is ignored,
+and placeholder reviewer names contribute no authority. Structural validity,
+operation coverage, and reviewer admission remain positive premises with no
+closure relation.
 
-The consequence for the real receipts is that `op_qualified` is **unresolved
-with `model_well_formed` as its missing premise**, and the join reports
-`model_well_formed: "missing"`.  That state is not the same as a finding
-against the port, so it is reported apart from one:
+A receipt from a real system with no checker observations or caller
+admissions remains pending at the first missing checker-authority premise;
+such receipts stay with the system that produced them and none is committed
+here. That is distinct from a finding against the port:
+the checker premises stay last in `_BLOCKING_ORDER`, the summary reports
+`pending <premise>`, and `scripts/compiled_checker.py` exits **5** when every
+required operation reaches only a pending checker premise. Exit **1** wins
+when an operation has a real blocker such as `undeclared_any`.
 
-* `replay.join.PENDING_PREMISES` names the premises nothing can satisfy yet,
-  and they sit **last** in `_BLOCKING_ORDER` — an op reported as pending is one
-  where every other premise was checked and held.
-* the per-op summary (and `judge.json`) carries
-  `qualification: "pending model_well_formed"`, distinct from `"qualified"` and
-  from `"unsupported"`;
-* `scripts/compiled_checker.py` exits **5** (`EXIT_PENDING_PREMISE`) rather than
-  1 when every op the verdict turns on is pending, so a consumer gate can tell
-  "the checker does not exist yet" from "this port is not qualified".  Exit 1
-  still wins whenever any op has a real blocker, such as `undeclared_any`.
-
-When Stage D emits a real certificate, drop it into `model_well_formed.json`,
-add its `(checker, checker_version)` to `model_checkers.json`, and flip these
-expectations back; nothing in the pack or the exporter has to change.
+`replay_receipt_min` and the corpus derived from it remain explicitly
+synthetic. Their made-up structural, operation, and reviewer rows exercise the
+positive join. Corpus case `32-partial-operation-check` has checker authority
+for `delete-issue` only; the other operations stay pending at
+`model_operation_checked`.
 
 ## Assumption registry and invalidation
 

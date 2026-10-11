@@ -414,13 +414,14 @@ class PackMutationsFailTheCorpus(unittest.TestCase):
                     rule["body"] = [a for a in rule["body"] if a.get("relation") != relation]
 
                 self.assertEqual(self._qualified_verdict(self._mutated(drop), stem), "supported")
-        # and dropping the model binding lets case 28's foreign certificate through
+        # Removing the run-to-model binding still cannot ground the operation-local
+        # checker tuple, which also joins on that model.
         def drop_binding(pack):
             rule = next(r for r in pack["rules"] if r["name"] == "op_qualified_rt")
             rule["body"] = [a for a in rule["body"] if a.get("relation") != "model_describes_run"]
 
         self.assertEqual(self._qualified_verdict(self._mutated(drop_binding), "28-well-formed-other-model"),
-                         "supported", "without the binding the certificate need not be this model's")
+                         "unresolved", "the operation-local tuple also needs the receipt model binding")
         self.assertEqual(self._qualified_verdict(self._mutated(drop_binding), "27-model-not-well-formed"),
                          "unresolved", "an absent certificate is absent however the join is written")
 

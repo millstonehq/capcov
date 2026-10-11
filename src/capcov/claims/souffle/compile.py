@@ -2,9 +2,12 @@
 
 The validated pack (replay or static) translates to a Souffle program whose
 text is fact-independent (``program_for_pack``).  ``compile_program``
-compiles that program once with ``souffle --no-preprocessor -j1 -o`` into a
+generates C++ with ``souffle --no-preprocessor -j1 -g``, canonicalizes the
+generated relation-I/O block order, and invokes the pinned sibling
+``souffle-compile.py`` into a
 native binary cached by ``compile_key`` = sha256 of (schema, program digest,
-souffle executable sha256, compile flags, ``souffle-compile.py`` sha256), and
+souffle executable sha256, compile flags, ``souffle-compile.py`` sha256, and
+canonicalizer schema), and
 records ``provenance.json`` next to it.  ``run_compiled`` then executes the binary on a bundle's TSV facts
 through the same temp-root / parse / claim-fold path the interpreter uses
 (``souffle._execute``), so the two Souffle kernels differ only in the process
@@ -29,9 +32,11 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 import hashlib
+import inspect
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import tempfile
@@ -43,10 +48,16 @@ from . import (MAX_OUTPUT_BYTES, MAX_PROCESSES, MAX_ROWS, MAX_SECONDS, PROGRAM_S
                SouffleProgram, SouffleResult, SouffleUnavailable, _ExecutionBudget,
                _executable_identity, _execute, _Limits, program_for_pack, translate_bundle)
 
-COMPILE_FLAGS: tuple[str, ...] = ("--no-preprocessor", "-j1", "-o")
+GENERATE_FLAGS = ("--no-preprocessor", "-j1", "-g")
+GENERATED_SOURCE = "checker.cpp"
+NATIVE_FLAGS = ("-o",)
+NATIVE_OUTPUT = "checker"
+COMPILER_CONFIG_NAME = "souffle-compile.py"
+COMPILE_FLAGS: tuple[str, ...] = (*GENERATE_FLAGS, GENERATED_SOURCE,
+                                 "canonicalizer-source-sha256", COMPILER_CONFIG_NAME,
+                                 *NATIVE_FLAGS, NATIVE_OUTPUT)
 COMPILE_TIMEOUT = 900.0
 VERSION_TIMEOUT = 30.0
-COMPILER_CONFIG_NAME = "souffle-compile.py"
 # Exactly the keys of provenance.json; ``compiled_at`` is deliberately absent so
 # the file is reproducible for one (program, souffle) pair.
 PROVENANCE_KEYS = frozenset({
@@ -110,10 +121,9 @@ def compile_key(program_digest: str, souffle_sha256: str,
                 compiler_config_sha256: str = "") -> str:
     """64-hex identity of a compiled checker: program, compiler and flags.
 
-    ``compiler_config_sha256`` is the sha256 of ``souffle-compile.py``, which
-    embeds the C++ toolchain the binary is actually built with: two toolchains
-    that share a souffle executable are two cache entries, and the recorded
-    ``compile_key`` binds the compiler as well as the program.
+    ``compiler_config_sha256`` binds ``souffle-compile.py`` (which embeds the
+    C++ toolchain) and the generated-C++ canonicalizer schema. Two toolchains
+    or canonicalizer revisions are therefore separate cache entries.
     """
     basis = {"schema": PROGRAM_SCHEMA, "program_digest": program_digest,
              "souffle_sha256": souffle_sha256, "compile_flags": list(flags),
@@ -153,11 +163,90 @@ def _compiler_config_sha256(resolved: str) -> str:
     """
     sibling = Path(resolved).resolve().parent / COMPILER_CONFIG_NAME
     try:
-        return _sha256_file(sibling)
+        identity = {
+            "canonicalizer": {
+                "source_sha256": hashlib.sha256(
+                    inspect.getsource(_canonicalize_output_blocks).encode("utf-8")).hexdigest(),
+                "patterns": {
+                    name: {"pattern": pattern.pattern, "flags": pattern.flags}
+                    for name, pattern in (
+                        ("file_output_name", _FILE_OUTPUT_NAME),
+                        ("stream_output_name", _STREAM_OUTPUT_NAME),
+                        ("io_block", _IO_BLOCK),
+                    )
+                },
+            },
+            "compile_recipe": list(COMPILE_FLAGS),
+            "souffle_compile_sha256": _sha256_file(sibling),
+        }
+        return hashlib.sha256(canonical_json(identity).encode("utf-8")).hexdigest()
     except OSError as exc:
         raise SouffleUnavailable(
             f"{COMPILER_CONFIG_NAME} is not readable beside the souffle executable: "
             f"{sibling}: {exc}") from exc
+
+
+_FILE_OUTPUT_NAME = re.compile(r'R"_\(name\)_",R"_\(([^)]*)\)_"')
+_STREAM_OUTPUT_NAME = re.compile(r'rwOperation\["name"\] = "([^"]+)";')
+_IO_BLOCK = re.compile(
+    r"^try \{.*\} catch \(std::exception& e\) \{.*\}$", re.DOTALL)
+
+
+def _canonicalize_output_blocks(source: str) -> str:
+    """Sort independent generated relation-I/O blocks by relation name.
+
+    Souffle 2.5 walks an address-sensitive container when emitting ``printAll``
+    and its corresponding input methods. The generated programs are equivalent,
+    but their C++ and native bytes differ between cold builds. Only relation-I/O
+    methods are normalized; evaluator code remains byte-for-byte as emitted.
+    """
+    for method, name_pattern in (("loadAll", _FILE_OUTPUT_NAME),
+                                 ("printAll", _FILE_OUTPUT_NAME),
+                                 ("dumpInputs", _STREAM_OUTPUT_NAME),
+                                 ("dumpOutputs", _STREAM_OUTPUT_NAME)):
+        signature = re.compile(
+            rf"(\nvoid Sf_checker::{method}\([^\n]*\)\{{\n)(.*?)(\n\}}\n)"
+            rf"(?=\n[^\n]*Sf_checker::)", re.DOTALL)
+        match = signature.search(source)
+        if match is None:
+            raise CompileError(f"generated C++ has no {method} method")
+        body = match.group(2)
+        raw_blocks = [block for block in re.split(r"(?=try \{)", body) if block]
+        blocks = [block.strip() for block in raw_blocks]
+        if not blocks or any(_IO_BLOCK.fullmatch(block) is None for block in blocks):
+            raise CompileError(f"generated C++ {method} body is not a sequence of output blocks")
+        named: list[tuple[str, str]] = []
+        for block in blocks:
+            relations = name_pattern.findall(block)
+            if len(relations) != 1:
+                raise CompileError(
+                    f"generated C++ {method} block must have exactly one relation name")
+            named.append((relations[0], block))
+        names = [name for name, _ in named]
+        if len(names) != len(set(names)):
+            raise CompileError(f"generated C++ {method} contains duplicate relation outputs")
+        replacement = (match.group(1) + "\n".join(block for _, block in sorted(named))
+                       + match.group(3))
+        source = source[:match.start()] + replacement + source[match.end():]
+    return source
+
+
+def _run_compile_step(argv: list[str], *, work: Path, timeout: float) -> tuple[str, str, float]:
+    started = time.monotonic()
+    try:
+        proc = subprocess.Popen(argv, cwd=work, stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE, text=True)
+    except OSError as exc:
+        raise SouffleUnavailable(f"compiler step could not be started: {argv[0]}: {exc}") from exc
+    try:
+        stdout, stderr = proc.communicate(timeout=timeout)
+    except subprocess.TimeoutExpired:
+        proc.kill(); proc.communicate()
+        raise CompileError(f"compiled-checker build exceeded {timeout:.0f}s")
+    elapsed = time.monotonic() - started
+    if proc.returncode:
+        raise CompileError((stderr or stdout)[-4000:])
+    return stdout, stderr, elapsed
 
 
 def _entry_dir(cache_dir: str | os.PathLike[str], key: str) -> Path:
@@ -284,25 +373,27 @@ def compile_program(program: SouffleProgram, *, executable: str = "souffle",
     work = Path(tempfile.mkdtemp(prefix="capcov-souffle-compile-"))
     try:
         (work / "program.dl").write_text(program.program, encoding="utf-8")
-        argv = [resolved, *COMPILE_FLAGS, "checker", "program.dl"]
-        started = time.monotonic()
+        compiler = Path(resolved).resolve().parent / COMPILER_CONFIG_NAME
+        _, generate_stderr, generate_seconds = _run_compile_step(
+            [resolved, *GENERATE_FLAGS, GENERATED_SOURCE, "program.dl"],
+            work=work, timeout=timeout)
+        generated = work / GENERATED_SOURCE
+        if not generated.is_file():
+            raise CompileError("souffle -g returned 0 but wrote no checker.cpp: "
+                               + generate_stderr[-4000:])
         try:
-            proc = subprocess.Popen(argv, cwd=work, stdout=subprocess.PIPE,
-                                    stderr=subprocess.PIPE, text=True)
-        except OSError as exc:
-            raise SouffleUnavailable(f"Souffle executable could not be started: {resolved}: {exc}") from exc
-        try:
-            stdout, stderr = proc.communicate(timeout=timeout)
-        except subprocess.TimeoutExpired:
-            proc.kill(); proc.communicate()
-            raise CompileError(f"souffle -o exceeded {timeout:.0f}s")
-        compile_seconds = time.monotonic() - started
-        if proc.returncode:
-            raise CompileError((stderr or stdout)[-4000:])
-        binary = work / "checker"
+            canonical = _canonicalize_output_blocks(generated.read_text(encoding="utf-8"))
+            generated.write_text(canonical, encoding="utf-8")
+        except (OSError, UnicodeError) as exc:
+            raise CompileError(f"generated C++ could not be canonicalized: {exc}") from exc
+        _, compile_stderr, native_seconds = _run_compile_step(
+            [os.fspath(compiler), GENERATED_SOURCE, *NATIVE_FLAGS, NATIVE_OUTPUT], work=work,
+            timeout=max(0.001, timeout - generate_seconds))
+        compile_seconds = generate_seconds + native_seconds
+        binary = work / NATIVE_OUTPUT
         if not binary.is_file():
             raise CompileError("souffle -o returned 0 but wrote no checker binary: "
-                               + (stderr or stdout)[-4000:])
+                               + compile_stderr[-4000:])
         binary.chmod(0o755)
         checker = CompiledChecker(
             program_digest=program.program_digest, binary_path=os.fspath(entry / "checker"),

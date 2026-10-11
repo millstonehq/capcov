@@ -1,0 +1,8 @@
+observation check role_list
+preflight: worktree clean, check source digest pinned
+fixture: tenant oracle, 4 stores reset
+incumbent: started, listening on the incumbent socket
+candidate: started, listening on the candidate socket
+scenarios: 12 declared, 12 put to both sides
+redaction: scanned for 5 credential markers, 0 hits
+terminal: compared
