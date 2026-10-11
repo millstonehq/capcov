@@ -1,0 +1,3 @@
+[capcov]
+adapter = "python-fastapi-sqlalchemy"
+source = "src"

@@ -1,0 +1,15 @@
+[project]
+name = "todo"
+version = "0"
+requires-python = ">=3.12"
+dependencies = ["fastapi", "sqlalchemy", "httpx"]
+
+[dependency-groups]
+dev = ["pytest", "capcov"]
+
+[tool.uv.sources]
+capcov = { path = "../..", editable = true }
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+addopts = "-p no:warnings"
