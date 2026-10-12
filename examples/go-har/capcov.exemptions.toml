@@ -1,0 +1,27 @@
+# Limits every route reader reports, because reading route declarations cannot
+# settle them. Each stays visible in the report; these say why this example
+# accepts it.
+
+[[exempt]]
+entity = "boundary:routes:called-function-branches"
+cell = "unresolved"
+date = "2026-10-12"
+reason = "The handlers call no functions with branches of their own."
+
+[[exempt]]
+entity = "boundary:routes:mounted-route-confirmation"
+cell = "unresolved"
+date = "2026-10-12"
+reason = "The HAR shows which routes were reached, not the full set the server mounted."
+
+[[exempt]]
+entity = "boundary:routes:roles-and-configurations"
+cell = "unresolved"
+date = "2026-10-12"
+reason = "The service has one anonymous caller and no configuration switches."
+
+[[exempt]]
+entity = "boundary:routes:external-effects"
+cell = "unresolved"
+date = "2026-10-12"
+reason = "The service keeps notes in memory and calls nothing outside itself."
