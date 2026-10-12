@@ -1,203 +1,245 @@
 # capcov
 
-capcov finds the parts of your application that no test exercises.
+capcov measures which of a system's capabilities were actually exercised.
 
-It reads your source to list what the application can do (its HTTP routes and the
-database tables behind them), runs your existing test suite with a probe to record
-what the tests actually touched, and fails the build on the difference. Every gap
-comes with the reason it was flagged and what to do about it.
+It builds two inventories of what a system can do. The static one comes from
+reading its source or its contracts: routes, commands, pipeline stages, and the
+data each one reaches. The runtime one comes from evidence of the system running:
+test suites, recorded browser sessions, traffic. capcov reconciles the two and
+fails the build on every capability that only one side knows about, with the
+reason it was flagged and what to do about it.
 
-Here is a three-endpoint FastAPI app whose tests never call the archive endpoint:
+The core is the same for every language. Reading a particular language, contract
+format or kind of runtime evidence is the job of an adapter (static) or a probe
+(runtime), and you choose the pair that fits the system.
+
+Here is a Go service with three routes. Tree-sitter reads the routes from source;
+a browser run recorded as a HAR file shows which ones were called:
 
 ```console
-$ capcov gate coverage.json
+$ capcov report coverage.json
+entity                         cell          tests  surfaces  operations
+http:GET /notes                both              1         1  read
+http:POST /notes               both              1         1  create
+http:POST /notes/{id}/archive  static_only       0         1  create
+
+both: 2, static_only: 1, runtime_only: 0, neither: 0
+
+surfaces no exercise reached (1):
+  http:POST /notes/{id}/archive
+
+$ capcov gate coverage.json --exemptions capcov.exemptions.toml
 capcov gate: FAIL -- 1 unexplained
 
-  unexplained-static_only: archived_todos
-    reachable from POST /todos/{todo_id}/archive and no exercise touched it. This is a coverage gap: write the test.
-
-Each of these is a question with an answer: write the test, fix the adapter, delete the dead entity, or record why in an exemptions file (--exemptions).
+  unexplained-static_only: http:POST /notes/{id}/archive
+    reachable from http:POST /notes/{id}/archive and no exercise touched it. This is a coverage gap: write the test.
 ```
 
-Add a test for that endpoint and the gate passes:
+Record a browser run that also archives a note and the gate passes:
 
 ```console
-$ capcov gate coverage.json
-capcov gate: PASS -- 2 capabilities covered, 0 exempted with reasons
+$ capcov gate coverage.json --exemptions capcov.exemptions.toml
+capcov gate: PASS -- 3 capabilities covered, 0 exempted with reasons
 ```
 
-Line coverage reports the same app and tests at 90%: the archive handler leaves only
-4 of 42 statements unexecuted. capcov counts the things a user can do and the data each one writes,
-so a whole untested endpoint is one finding, named.
+capcov knows nothing about Go beyond the tree-sitter query in `capcov.toml`, and
+nothing about the browser beyond the HAR file.
 
-## Highlights
+## How it works
 
-- **Static discovery without running your code.** Routes, tables and the call paths
-  between them come from parsing source. The default resolver uses only the Python
-  standard library.
-- **Runtime evidence from the tests you already have.** `capcov observe` wraps your
-  pytest command; there is no separate test harness to write.
-- **Explained results.** Each entity lands in one of four cells and the gate says
-  which, why, and what fixes it.
-- **Blind spots are listed, not dropped.** `getattr`, `eval`, dynamic imports and
-  computed SQL are reported with file and line, so a clean result cannot hide what
-  the analysis could not see.
-- **Exemptions need a written reason.** An exemption without one is rejected, and
-  one that no longer matches anything fails the build.
-- **Optional type-aware call graphs.** `--resolver scip` follows calls across
-  modules and interfaces using a [SCIP](https://github.com/sourcegraph/scip) index.
+```
+ source, contracts ──► adapter ──► what the system can do     (static)
+                                             │
+ tests, browser runs,                        │
+ traffic, logs ─────► probe ────► what it was seen doing      (runtime)
+                                             │
+                                             ▼
+                              reconcile: one cell per capability
+                                             │
+                                             ▼
+                              gate: fail on anything unexplained
+```
+
+A *surface* is a way into the system: an HTTP route, a command, a pipeline stage.
+An *entity* is what a surface reads or changes: a table, a resource, a sink, or
+the surface itself when the adapter sees no further. Adapters emit surfaces,
+entities and the paths between them; probes emit which surfaces and entities a
+run touched, as route templates and names only, never parameters or values.
+Reconciliation puts each entity in one cell:
+
+| Cell | Static analysis | Runtime evidence | What it usually means |
+| --- | --- | --- | --- |
+| `both` | reaches it | touched it | covered |
+| `static_only` | reaches it | never touched it | a missing test or scenario |
+| `runtime_only` | finds no path | touched it | an entry point the adapter missed, or dynamic access |
+| `neither` | finds no path | never touched it | dead code, or a gap in discovery |
+
+Everything except `both` fails the gate unless an exemptions file records a
+reason. Anything an adapter cannot resolve, such as a route built from a variable
+or a call through `getattr`, is reported with its file and line and counts
+against the gate too, so a clean result cannot hide what the analysis could not
+see. The design follows the software reflexion model (Murphy, Notkin and Sullivan,
+1995); the other sources are in
+[foundations](https://github.com/millstonehq/capcov/blob/main/docs/foundations.md).
+
+## Adapters and probes
+
+Static adapters:
+
+| Adapter | Reads | Scope |
+| --- | --- | --- |
+| `treesitter-routes` | route declarations, matched by a tree-sitter query you supply, plus the branches and exception handlers inside each handler | any language with a tree-sitter grammar |
+| `structured-spec` | operations in an OpenAPI 3.0 or 3.1 JSON document | any HTTP service with a contract |
+| `python-fastapi-sqlalchemy` | FastAPI routes, SQLAlchemy models and the call graph between them, optionally through a [SCIP](https://github.com/sourcegraph/scip) index | Python |
+| plugin | anything else, through a callable you write | any source; see [plugins](https://github.com/millstonehq/capcov/blob/main/src/capcov/PLUGINS.md) |
+
+Runtime probes:
+
+| Probe | Observes | Scope |
+| --- | --- | --- |
+| `har` | requests in HAR files from an existing browser or HTTP run, such as Playwright's `recordHar` | any HTTP service |
+| `browser` | scenarios capcov plans from a behaviour model, executed by your browser runner | any web application |
+| `pytest` | requests and ORM operations during your pytest suite, correlated per request | Python, run inside the test environment |
+| `load` | stages, tables and sinks a data pipeline moved; the contract ships, the driver does not yet | data pipelines |
+
+Several commands take runtime evidence from other sources: application logs
+(`capcov capabilities`), and recorded database effects in MySQL, MongoDB, Redis
+and S3 (`capcov.vectors`).
+
+## Capability lenses
+
+The same static-against-runtime reconciliation answers other questions:
+
+| Command | Question it answers | Guide |
+| --- | --- | --- |
+| `capcov capabilities` | Do the specified, implemented and exercised capabilities agree? Reads OpenSpec specifications, discovered surfaces and logs. | [capabilities](https://github.com/millstonehq/capcov/blob/main/docs/capabilities.md) |
+| `capcov flows` | Did each planned user journey run, and assert its outcome, against every route and branch it should reach? | [flows](https://github.com/millstonehq/capcov/blob/main/docs/flows.md) |
+| `capcov features` | Does coverage roll up correctly across a feature model? | [features](https://github.com/millstonehq/capcov/blob/main/src/capcov/features/README.md) |
+| `capcov.vectors` | Does a rewrite behave like the system it replaces, on the same inputs and starting state? | [vectors](https://github.com/millstonehq/capcov/blob/main/skills/capcov-vectors/SKILL.md) |
+| `capcov outcomes` | Did the exact test cases that prove each business outcome pass? | [outcomes](https://github.com/millstonehq/capcov/blob/main/docs/outcomes.md) |
+| `capcov faults` | Did a run under injected faults and crashes keep its invariants? | [faults](https://github.com/millstonehq/capcov/blob/main/docs/faults.md) |
 
 ## Installation
 
-capcov needs Python 3.12 or newer and is installed from GitHub; it is not on PyPI.
-Install it into the same environment your tests run in: `capcov observe` loads a
-probe inside the test process, and the probe has to be importable there.
+capcov needs Python 3.12 or newer to run, whatever language the target is
+written in. It is installed from GitHub; it is not on PyPI.
 
 ```sh
-# With uv, as a development dependency of your project
-uv add --dev "capcov @ git+https://github.com/millstonehq/capcov"
-
-# With pip, in your test virtualenv
-pip install "capcov @ git+https://github.com/millstonehq/capcov"
+uv tool install "capcov[treesitter] @ git+https://github.com/millstonehq/capcov"
 ```
 
-To pin a version, add `@<commit>` to the URL. The static commands (`discover`,
-`reconcile`, `gate`, `report`) also run from a standalone install, for example
-`uv tool install` or `nix run github:millstonehq/capcov -- --help`.
+`pip install` takes the same argument. To pin a version, add `@<commit>` to the
+URL. Nix users can run it without installing:
+`nix run github:millstonehq/capcov -- --help`.
 
 The core has no dependencies. Extras:
 
 | Extra | Adds | Needed for |
 | --- | --- | --- |
-| `treesitter` | tree-sitter and its language pack | route discovery in Go, JavaScript and other non-Python sources (`capcov flows`) |
+| `treesitter` | tree-sitter and its language pack | the `treesitter-routes` adapter |
 | `faults-property` | Hypothesis | property-based schedules in the fault-injection harness |
+
+A probe that runs inside the target's own process needs capcov installed there
+as well. For the `pytest` probe, add capcov as a development dependency of the
+Python project under test. The `har` probe reads files and needs nothing in the
+target.
 
 ## Quick start
 
-The app above is in [`examples/quickstart`](https://github.com/millstonehq/capcov/tree/main/examples/quickstart).
+The Go service above is in
+[`examples/go-har`](https://github.com/millstonehq/capcov/tree/main/examples/go-har),
+with the HAR file its browser run recorded.
 
 ```sh
 git clone https://github.com/millstonehq/capcov
-cd capcov/examples/quickstart
-uv sync    # installs the app, pytest and capcov from this checkout
+cd capcov/examples/go-har
 ```
 
-Tell capcov which adapter reads your code and where the source is, in `capcov.toml`:
+`capcov.toml` names the adapter and the tree-sitter query that finds route
+declarations, here calls to the service's `route` helper:
 
 ```toml
-[capcov]
-adapter = "python-fastapi-sqlalchemy"
-source = "src"
+[[adapters]]
+name = "treesitter-routes"
+language = "go"
+globs = ["*.go"]
+query = '''
+(call_expression
+  function: (identifier) @fn (#eq? @fn "route")
+  arguments: (argument_list (interpreted_string_literal) @path . (identifier) @handler))
+'''
 ```
 
-Then run the four steps. Each writes a JSON artifact the next one reads.
+Run the four steps. Each writes a JSON file the next one reads.
 
 ```console
-$ uv run capcov discover --target . --out capabilities.json
-capcov discover: 2 entities, 3 surfaces, 2 entities bound, history 2 -> 2 -> 2, 0 blind spots
-capcov discover: call edges 12 by import, 0 by name; residue 0 ambiguous (5 external, 1 chained, 0 builtin-shadowed; none of these are residue)
+$ capcov discover --target . --out capcov.capabilities.json
+capcov discover: 3 entities, 3 surfaces, 3 entities bound, history 3, 0 blind spots
 
-$ uv run capcov observe --target . --out observed.json -- uv run pytest -q
-.                                                                        [100%]
-1 passed in 0.83s
-capcov observe: uv run pytest -q
+$ capcov observe --target . --probe har --out observed.json -- e2e/run.har
 
-$ uv run capcov reconcile capabilities.json observed.json --out coverage.json
-capcov reconcile: both 1, static_only 1, runtime_only 0, neither 0
+$ capcov reconcile capcov.capabilities.json observed.json --out coverage.json
+capcov reconcile: both 2, static_only 1, runtime_only 0, neither 0
 
-$ uv run capcov report coverage.json
-entity          cell          tests  surfaces  operations
-archived_todos  static_only       0         1  create
-todos           both              1         2  create,read
-
-both: 1, static_only: 1, runtime_only: 0, neither: 0
-
-surfaces no exercise reached (1):
-  POST /todos/{todo_id}/archive
+$ capcov gate coverage.json --exemptions capcov.exemptions.toml
+capcov gate: FAIL -- 1 unexplained
 ```
 
-`uv run capcov gate coverage.json` prints the failure shown at the top and exits 1.
-Add a test that calls `POST /todos/{id}/archive`, rerun the steps, and it exits 0.
+The exemptions file accepts, with a reason each, the four limits that reading
+route declarations cannot settle, such as whether the server mounts every route
+it declares. To close the gap, add the archive request to `e2e/run.mjs` and record
+again with the service running:
 
-## How it works
-
-```
- your source ──► discover ──► what the code can reach   (surfaces → entities)
-                                        │
- your tests ───► observe ───► what the tests touched    (surfaces → entities)
-                                        │
-                                        ▼
-                               reconcile: one cell per entity
-                                        │
-                                        ▼
-                               gate: fail on any unexplained cell
+```sh
+PORT=8080 go run . &
+(cd e2e && npm install)
+PW_CHANNEL=chrome BASE_URL=http://127.0.0.1:8080 node e2e/run.mjs
 ```
 
-A *surface* is an entry point, such as `POST /todos`. An *entity* is something the
-application stores, such as the `todos` table. Reconciliation compares the two maps
-and puts each entity in one cell:
+`PW_CHANNEL=chrome` uses an installed Google Chrome; without it, Playwright needs
+its own browser (`npx playwright install chromium`). Then rerun the steps.
 
-| Cell | Static analysis | Tests | What it usually means |
-| --- | --- | --- | --- |
-| `both` | reaches it | touched it | covered |
-| `static_only` | reaches it | never touched it | a missing test |
-| `runtime_only` | finds no path | touched it | a route the adapter missed, or dynamic access; check the blind-spot list |
-| `neither` | finds no path | never touched it | dead code, or a gap in discovery |
-
-Everything except `both` fails the gate unless an exemptions file records why. The
-design follows the software reflexion model (Murphy, Notkin and Sullivan, 1995); the
-other sources are in [foundations](https://github.com/millstonehq/capcov/blob/main/docs/foundations.md).
-
-## Beyond entity coverage
-
-The same discover, observe, reconcile, gate shape applies to other questions:
-
-| Command | Question it answers | Guide |
-| --- | --- | --- |
-| `capcov flows` | Did each route, branch and planned user journey actually run and assert its outcome? Reads any tree-sitter language or an OpenAPI document. | [flows](https://github.com/millstonehq/capcov/blob/main/docs/flows.md) |
-| `capcov capabilities` | Do the specified, implemented and exercised capabilities agree? Reads OpenSpec specs and logs. | [capabilities](https://github.com/millstonehq/capcov/blob/main/docs/capabilities.md) |
-| `capcov outcomes` | Did the exact pytest cases that prove each business outcome pass? | [outcomes](https://github.com/millstonehq/capcov/blob/main/docs/outcomes.md) |
-| `capcov features` | Does coverage roll up correctly across a feature model? | [features](https://github.com/millstonehq/capcov/blob/main/src/capcov/features/README.md) |
-| `capcov faults` | Did a run under injected faults and crashes keep its invariants? | [faults](https://github.com/millstonehq/capcov/blob/main/docs/faults.md) |
-| `capcov.vectors` | Does a rewrite behave like the system it replaces on the same inputs? | [vectors](https://github.com/millstonehq/capcov/blob/main/skills/capcov-vectors/SKILL.md) |
-
-Adapters for sources capcov cannot parse can be added without changing capcov; see
-[plugins](https://github.com/millstonehq/capcov/blob/main/src/capcov/PLUGINS.md).
+The same steps run a Python service with the `python-fastapi-sqlalchemy` adapter
+and the `pytest` probe: see
+[`examples/python-pytest`](https://github.com/millstonehq/capcov/tree/main/examples/python-pytest),
+where `capcov observe` wraps `uv run pytest -q`.
 
 ## Continuous integration
 
-With capcov as a development dependency, CI runs the same commands as the quick
-start and fails on the gate's exit status:
+Run the four commands after the job that produces your runtime evidence, and let
+the gate's exit status fail the build. In GitHub Actions, the repository is also
+an action that puts `capcov` on `PATH`:
 
-```sh
-uv run capcov discover --target . --out capabilities.json
-uv run capcov observe --target . --out observed.json -- uv run pytest -q
-uv run capcov reconcile capabilities.json observed.json --out coverage.json
-uv run capcov gate coverage.json --exemptions capcov.exemptions.toml
+```yaml
+- uses: millstonehq/capcov@<commit>
+  with:
+    extras: treesitter
+- run: |
+    capcov discover --target . --out capcov.capabilities.json
+    capcov observe --target . --probe har --out observed.json -- e2e/*.har
+    capcov reconcile capcov.capabilities.json observed.json --out coverage.json
+    capcov gate coverage.json --exemptions capcov.exemptions.toml
 ```
-
-For jobs that only need the static commands, the repository is also a GitHub
-Action that puts `capcov` on `PATH`: `uses: millstonehq/capcov@<commit>`, with an
-optional `extras` input such as `treesitter`.
 
 ## Limitations
 
-- Entity discovery reads Python with FastAPI and SQLAlchemy. Route discovery for
-  `capcov flows` covers any tree-sitter language and OpenAPI, but table-level
-  coverage for other stacks is not implemented.
-- The runtime probe observes SQLAlchemy. Direct `sqlite3` calls can be declared
-  ([details](https://github.com/millstonehq/capcov/blob/main/docs/entity-coverage.md#direct-sqlite-declarations))
-  but are not observed.
-- Routes built from variables or string concatenation are not resolved. They are
-  reported as unresolved obligations rather than counted.
-- A passing gate means the code, the tests and your exemptions agree on what exists
-  and what was exercised. It does not mean the behaviour is correct; assertions in
-  your tests still decide that.
+- A tree-sitter adapter sees what its query matches. Routes registered through
+  configuration or reflection need a query that finds them, a plugin, or an
+  exemption; the ones it cannot resolve are reported, not dropped.
+- Entities beyond the route itself, such as the tables a request writes, are
+  discovered for Python with FastAPI and SQLAlchemy only. Other adapters bind each
+  route to itself.
+- The `har` probe sees requests, not what the server did with them. A route in
+  `both` was called; whether it behaved correctly is for your tests' assertions.
+- A passing gate means the code, the runtime evidence and your exemptions agree
+  on what exists and what was exercised. It does not mean the behaviour is
+  correct.
 
 ## Documentation
 
 - [Entity coverage](https://github.com/millstonehq/capcov/blob/main/docs/entity-coverage.md): exemptions, the SCIP resolver, SQLite declarations
-- [Flows](https://github.com/millstonehq/capcov/blob/main/docs/flows.md), [capabilities](https://github.com/millstonehq/capcov/blob/main/docs/capabilities.md), [outcomes](https://github.com/millstonehq/capcov/blob/main/docs/outcomes.md), [faults](https://github.com/millstonehq/capcov/blob/main/docs/faults.md)
+- [Capabilities](https://github.com/millstonehq/capcov/blob/main/docs/capabilities.md), [flows](https://github.com/millstonehq/capcov/blob/main/docs/flows.md), [outcomes](https://github.com/millstonehq/capcov/blob/main/docs/outcomes.md), [faults](https://github.com/millstonehq/capcov/blob/main/docs/faults.md)
+- [Plugins](https://github.com/millstonehq/capcov/blob/main/src/capcov/PLUGINS.md) for adapters capcov does not ship
 - [Development](https://github.com/millstonehq/capcov/blob/main/docs/development.md): the pinned toolchain, running the suite, releases
 - [Design decisions](https://github.com/millstonehq/capcov/tree/main/docs/adr) and [foundations](https://github.com/millstonehq/capcov/blob/main/docs/foundations.md)
 

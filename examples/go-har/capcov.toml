@@ -1,0 +1,12 @@
+[capcov]
+source = "."
+
+[[adapters]]
+name = "treesitter-routes"
+language = "go"
+globs = ["*.go"]
+query = '''
+(call_expression
+  function: (identifier) @fn (#eq? @fn "route")
+  arguments: (argument_list (interpreted_string_literal) @path . (identifier) @handler))
+'''
