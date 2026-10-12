@@ -205,9 +205,9 @@ test-shard:
     SAVE ARTIFACT shard.json
 
 # test-pinned is the one full run of the suite: every family in its own image,
-# the souffle and shen families in SOUFFLE_SHARDS and SHEN_SHARDS parts. Shen runs
-# after the other families so its latency assertions do not compete with their
-# compilers. The gate over their union in the base image discovers the suite again and fails
+# the souffle and shen families in SOUFFLE_SHARDS and SHEN_SHARDS parts, all at
+# once, which keeps the job inside its twelve-minute limit. Shen's only latency
+# assertion allows 15s for a 2s timeout, so the shared load does not threaten it. The gate over their union in the base image discovers the suite again and fails
 # unless the shards ran every discovered test exactly once, and unless the tests
 # that skipped are exactly the ones tests/skips-allowed.json lists. It saves the
 # timings of the run in the form of tests/shard-timings.json.
@@ -226,9 +226,9 @@ test-pinned:
         FOR shard IN $(seq 1 ${SOUFFLE_SHARDS})
             BUILD +test-shard --SRC_PATH=${SRC_PATH} --FAMILY=souffle --IMAGE=${SOUFFLE_IMAGE} --SHARDS=${SOUFFLE_SHARDS} --SHARD=${shard}
         END
-    END
-    FOR shard IN $(seq 1 ${SHEN_SHARDS})
-        BUILD +test-shard --SRC_PATH=${SRC_PATH} --FAMILY=shen --IMAGE=${SHEN_IMAGE} --SHARDS=${SHEN_SHARDS} --SHARD=${shard}
+        FOR shard IN $(seq 1 ${SHEN_SHARDS})
+            BUILD +test-shard --SRC_PATH=${SRC_PATH} --FAMILY=shen --IMAGE=${SHEN_IMAGE} --SHARDS=${SHEN_SHARDS} --SHARD=${shard}
+        END
     END
     COPY (+test-shard/shard.json --SRC_PATH=${SRC_PATH} --FAMILY=base --IMAGE=${BASE_IMAGE}) shards/base.json
     COPY (+test-shard/shard.json --SRC_PATH=${SRC_PATH} --FAMILY=indexers --IMAGE=${INDEXERS_IMAGE}) shards/indexers.json

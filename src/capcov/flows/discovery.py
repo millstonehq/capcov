@@ -526,19 +526,17 @@ def _discover_from_config(config: dict, base: Path, config_name: str) -> dict:
                                 surface=name,
                             )
             if not route_boundaries_added:
-                # These limits describe what static route reading cannot resolve;
-                # emitted once even across several route adapters. The ids retain
-                # the `boundary:python:` token because model.reconcile credits the
-                # literal `boundary:python:mounted-route-confirmation` when a
-                # runtime mount census clears it -- renaming here without model.py
-                # would silently drop that credit.
+                # These limits describe what static route reading cannot resolve,
+                # in any language; emitted once even across several route adapters.
+                # model.reconcile credits `boundary:routes:mounted-route-confirmation`
+                # when a runtime mount census clears it.
                 for category in (
                     "called-function-branches",
                     "mounted-route-confirmation",
                     "roles-and-configurations",
                     "external-effects",
                 ):
-                    add(f"boundary:python:{category}", "unresolved", config_name, 1)
+                    add(f"boundary:routes:{category}", "unresolved", config_name, 1)
                 route_boundaries_added = True
         elif kind == "openapi-json":
             relative = adapter["document"]

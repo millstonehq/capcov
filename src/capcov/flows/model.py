@@ -390,6 +390,8 @@ def reconcile(
             static_http and mounted == static_http and run.get("status") == "passed"
             and execution_scope == "full"
         ):
+            resolved_boundaries.add("boundary:routes:mounted-route-confirmation")
+            # Route plugins written before the language-neutral name still emit it.
             resolved_boundaries.add("boundary:python:mounted-route-confirmation")
         elif mounted:
             for name in sorted(mounted - static_http):

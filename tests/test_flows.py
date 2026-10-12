@@ -168,7 +168,7 @@ class FlowTests(unittest.TestCase):
         inventory, model = fixture()
         inventory["obligations"].extend([
             {"id": "http:GET /", "kind": "surface"},
-            {"id": "boundary:python:mounted-route-confirmation", "kind": "unresolved"},
+            {"id": "boundary:routes:mounted-route-confirmation", "kind": "unresolved"},
         ])
         generated = plan(model, "browser")
         run = evidence(inventory, generated)
@@ -184,6 +184,21 @@ class FlowTests(unittest.TestCase):
             with self.subTest(scope=scope), self.assertRaisesRegex(ValueError, "execution scope"):
                 run["execution_scope"] = scope
                 reconcile(inventory, model, generated, run)
+
+    def test_mount_credit_accepts_the_legacy_boundary_name(self) -> None:
+        # Route plugins written against the earlier name emit
+        # boundary:python:mounted-route-confirmation; a full mount census still clears it.
+        inventory, model = fixture()
+        inventory["obligations"].extend([
+            {"id": "http:GET /", "kind": "surface"},
+            {"id": "boundary:python:mounted-route-confirmation", "kind": "unresolved"},
+        ])
+        generated = plan(model, "browser")
+        run = evidence(inventory, generated)
+        run["mounted_surfaces"] = ["http:GET /"]
+        run["execution_scope"] = "full"
+        result = reconcile(inventory, model, generated, run)
+        self.assertTrue(any(row["resolution"] == "runtime-mount-census" for row in result["rows"]))
 
     def test_every_declared_outcome_requires_its_own_evidence(self) -> None:
         inventory, model = fixture()
@@ -701,7 +716,7 @@ class FlowTests(unittest.TestCase):
             self.assertEqual({o["surface"] for o in branches}, surfaces)
             limits = [o for o in inventory["obligations"] if o["kind"] == "unresolved"]
             self.assertEqual(len(limits), 4)
-            self.assertIn("boundary:python:mounted-route-confirmation", {o["id"] for o in limits})
+            self.assertIn("boundary:routes:mounted-route-confirmation", {o["id"] for o in limits})
             # Only global discovery limits are shared. Colliding route declarations
             # still fail instead of silently shrinking the coverage denominator.
             settings["adapters"][1]["id_prefix"] = "portal:"
