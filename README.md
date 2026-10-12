@@ -1,13 +1,20 @@
 # capcov
 
-capcov measures which of a system's capabilities were actually exercised.
+capcov is a capability coverage tool. It reads a system's source or API contracts
+to list what the system can do (HTTP routes, commands, pipeline stages and the data
+they reach), collects what the system actually did from test runs, browser
+recordings or traffic, and fails the build when something on the first list never
+appears in the second.
 
-It builds two inventories of what a system can do. The static one comes from
-reading its source or its contracts: routes, commands, pipeline stages, and the
-data each one reaches. The runtime one comes from evidence of the system running:
-test suites, recorded browser sessions, traffic. capcov reconciles the two and
-fails the build on every capability that only one side knows about, with the
-reason it was flagged and what to do about it.
+Line coverage does not catch this. In
+[`examples/python-pytest`](https://github.com/millstonehq/capcov/tree/main/examples/python-pytest)
+the tests pass with 90% line coverage and the archive endpoint is never called;
+capcov reports the endpoint by name.
+
+It was built for rewrites: checking that a new system does everything the old one
+did, including by replaying recorded inputs against both
+([vectors](https://github.com/millstonehq/capcov/blob/main/skills/capcov-vectors/SKILL.md)).
+It is also useful as a CI gate against new routes that land without tests.
 
 The core is the same for every language. Reading a particular language, contract
 format or kind of runtime evidence is the job of an adapter (static) or a probe
