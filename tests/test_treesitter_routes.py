@@ -273,7 +273,7 @@ class TreesitterRoutesTests(unittest.TestCase):
         # No obligation-KIND regression: from one Python decorator fixture with an
         # if/else and a try/except, the generic adapter emits every kind the retired
         # per-language Python route adapter did and no other -- surface,
-        # branch-candidate, exception-candidate, and the boundary:python:* boundaries
+        # branch-candidate, exception-candidate, and the boundary:routes:* boundaries
         # (kind unresolved).
         self.assertEqual(
             set(kinds),
@@ -294,9 +294,8 @@ class TreesitterRoutesTests(unittest.TestCase):
                 ("exception-candidate", ":except:L"),
             },
         )
-        # The route-reading boundaries are present, once each, not language-keyed
-        # per file. They retain the boundary:python: token so model.reconcile's
-        # mount-census credit keeps matching.
+        # The route-reading boundaries are present, once each, and named for route
+        # reading rather than for a language.
         ids = {o["id"] for o in treesitter["obligations"]}
         for category in (
             "called-function-branches",
@@ -304,7 +303,7 @@ class TreesitterRoutesTests(unittest.TestCase):
             "roles-and-configurations",
             "external-effects",
         ):
-            self.assertIn(f"boundary:python:{category}", ids)
+            self.assertIn(f"boundary:routes:{category}", ids)
 
     def test_dynamic_path_capture_is_unresolved(self) -> None:
         # The query captures the path arg broadly; a non-literal path yields an
