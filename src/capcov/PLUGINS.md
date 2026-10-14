@@ -189,3 +189,11 @@ unconditional `str_replace('-', '_')` applies, so `work-orders` yields
 English gives no structural way to separate those from `statuses`, so the reader
 does NOT trade one mis-fire for another: it keeps the rule, documents the miss,
 and reads Laravel's own override when the app declares one.
+
+## REA saved-evidence reader
+
+`capcov_contrib.rea:discover` imports saved REA Evidence via the CORE seam;
+`capcov_contrib.rea:discover_flows` uses the flow seam. JavaScript application
+nodes and HAR API-view groups become review candidates, with explicit discovery
+and acceptance limits. Standalone native/.NET records remain unresolved.
+See [configuration, supported mappings and integrity limits](../capcov_contrib/REA.md).

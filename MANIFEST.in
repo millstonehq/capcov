@@ -5,3 +5,5 @@ recursive-include src/capcov/claims/static *.json
 recursive-include src/capcov/claims/replay *.json
 recursive-include src/capcov/claims/observation *.json
 recursive-include src/capcov/faults *.json
+include tests/fixtures/rea-api-view.json tests/fixtures/rea-api-view.README.md
+include src/capcov_contrib/REA.md

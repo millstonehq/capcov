@@ -1,0 +1,93 @@
+{
+  "evidence_id": "ev_6f705da74de4c9d0b70fcc9879845c3bbae044dd1a04774269f52be4efac7c45",
+  "subject": {
+    "name": "session.har",
+    "digest": {
+      "sha256": "1830010f32a7cbefb3bf72bec1441de5fb66d35ff4e1e5ce3f13e62333aa2a20"
+    },
+    "local_path": "/fixtures/session.har",
+    "format": "file",
+    "architecture": null
+  },
+  "provider": {
+    "id": "rea-view",
+    "name": "REA analysis view",
+    "version": "6.5.0"
+  },
+  "analysis_profile": null,
+  "predicate_type": "rea.analysis",
+  "operation": "inspect_analysis_view",
+  "parameters": {},
+  "raw_result": null,
+  "normalized_result": {
+    "kind": "api-surface",
+    "view": {
+      "kind": "api-surface",
+      "offset": 0,
+      "limit": 50
+    },
+    "parent_evidence_id": "ev_34305e00b420463dce538875c11376c0ef2b1fb368a638f44d6cb80368e8a152",
+    "parent_operation": "inspect_web_network_capture",
+    "parent_digest": "34305e00b420463dce538875c11376c0ef2b1fb368a638f44d6cb80368e8a152",
+    "artifact": {
+      "path": "/fixtures/session.har",
+      "sha256": "1830010f32a7cbefb3bf72bec1441de5fb66d35ff4e1e5ce3f13e62333aa2a20"
+    },
+    "records": {
+      "examined": 1,
+      "total": 1,
+      "excluded": 0
+    },
+    "coverage": {
+      "status": "page",
+      "examined": 1,
+      "total": 1,
+      "next_offset": null,
+      "exhausted": true
+    },
+    "groups": [
+      {
+        "method": "GET",
+        "origin": "https://example.invalid",
+        "path_template": "/api/items/{numeric}",
+        "templated_segments": [
+          {
+            "segment_index": 2,
+            "rule": "numeric",
+            "basis": "inferred",
+            "observed_values": [
+              "42"
+            ]
+          }
+        ],
+        "record_ordinals": [
+          0
+        ],
+        "statuses": [
+          200
+        ],
+        "content_types": [
+          "application/json"
+        ],
+        "flags": [
+          "single-sample"
+        ]
+      }
+    ],
+    "templated_groups": 1,
+    "excluded_records": [],
+    "limitations": [
+      "Grouping does not establish handler identity, URL-space schemas or causality."
+    ],
+    "unknowns": []
+  },
+  "confidence": "inferred",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Grouping does not establish handler identity, URL-space schemas or causality."
+  ],
+  "relationship_coverage": null,
+  "locations": [],
+  "evidence_links": []
+}
