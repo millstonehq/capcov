@@ -250,6 +250,13 @@ an action that puts `capcov` on `PATH`:
 - [Development](https://github.com/millstonehq/capcov/blob/main/docs/development.md): the pinned toolchain, running the suite, releases
 - [Design decisions](https://github.com/millstonehq/capcov/tree/main/docs/adr) and [foundations](https://github.com/millstonehq/capcov/blob/main/docs/foundations.md)
 
+## Optional REA discovery
+
+[The REA importer](src/capcov_contrib/REA.md) reads saved reverse-engineering
+Evidence through the plugin seam. It adds packaged JavaScript application and HAR
+API candidates with provenance and unresolved findings. Imported findings never
+supply passing runtime evidence or inferred CRUD coverage.
+
 ## Contributing
 
 See [CONTRIBUTING.md](https://github.com/millstonehq/capcov/blob/main/CONTRIBUTING.md).
