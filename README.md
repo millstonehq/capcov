@@ -262,30 +262,11 @@ supply passing runtime evidence or inferred CRUD coverage.
 See [CONTRIBUTING.md](https://github.com/millstonehq/capcov/blob/main/CONTRIBUTING.md).
 Tests use synthetic fixtures only: no private source, real data or credentials.
 
-## License and history
+## Acknowledgements
 
-MIT; see [LICENSE](https://github.com/millstonehq/capcov/blob/main/LICENSE).
+Thanks to [Reuben (@pyrex41)](https://github.com/pyrex41) for his contributions to
+the claims engine, static evidence, replay verification and incremental caching.
 
-capcov began as `packages/capabilities` in
-[millstonehq/synapse](https://github.com/millstonehq/synapse), distributed as
-`synapse-capabilities`, and moved here at synapse commit `649be7f`. The
-`synapse-capabilities` command remains an alias for `capcov` until 0.3.0.
-Reuben's GitHub username is [@pyrex41](https://github.com/pyrex41). His work
-includes behavioral backpressure ([#46](https://github.com/millstonehq/synapse/pull/46)),
-incremental snapshots ([#49](https://github.com/millstonehq/synapse/pull/49)),
-the claim semantics engine and static evidence ([#50](https://github.com/millstonehq/synapse/pull/50)),
-blob-keyed caching ([#51](https://github.com/millstonehq/synapse/pull/51)),
-vector claims ([#54](https://github.com/millstonehq/synapse/pull/54)), and the
-observation judge and reviewer admissions from
-[pyrex41/synapse-capcov](https://github.com/pyrex41/synapse-capcov).
-Boundary vectors ([#53](https://github.com/millstonehq/synapse/pull/53)) were
-committed by [@c-p-b](https://github.com/c-p-b), who also maintained the migration,
-publication cleanup and subsequent integration.
+## License
 
-The initial export flattened the source history. A selective replay now credits
-59 source commits to their original author, retaining their author dates and
-source commit references. Each replay includes only surviving file versions
-already published here; it does not reproduce full source patches, intermediate
-experiments or unrelated repository history. The seven original published
-snapshots are preserved exactly in the rewritten lineage. The pre-replay public
-history remains available at the `archive/pre-reuben-attribution` tag.
+[MIT](LICENSE).
