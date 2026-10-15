@@ -1,24 +1,31 @@
 # capcov
 
-capcov is a capability coverage tool. It reads a system's source or API contracts
-to list what the system can do (HTTP routes, commands, pipeline stages and the data
-they reach), collects what the system actually did from test runs, browser
-recordings or traffic, and fails the build when something on the first list never
-appears in the second.
+capcov compares the capabilities described by a system's source or API contracts
+with the behavior observed in test runs, browser recordings or traffic. It reports
+where the two diverge: capabilities with no execution evidence, and observed
+behavior that static discovery did not account for.
 
-Line coverage does not catch this. In
-[`examples/python-pytest`](https://github.com/millstonehq/capcov/tree/main/examples/python-pytest)
-the tests pass with 90% line coverage and the archive endpoint is never called;
-capcov reports the endpoint by name.
+It tracks HTTP routes, commands, pipeline stages and the data they reach, linking
+each finding to the discovery and runtime evidence behind it. Reports help you
+investigate those gaps; an optional CI gate can enforce your coverage policy.
 
-It was built for rewrites: checking that a new system does everything the old one
-did, including by replaying recorded inputs against both
-([vectors](https://github.com/millstonehq/capcov/blob/main/skills/capcov-vectors/SKILL.md)).
-It is also useful as a CI gate against new routes that land without tests.
+## Why capability coverage?
 
-The core is the same for every language. Reading a particular language, contract
-format or kind of runtime evidence is the job of an adapter (static) or a probe
-(runtime), and you choose the pair that fits the system.
+Line and branch coverage measure which implementation code your tests execute.
+Shared handlers and data-access code can produce high coverage while a particular
+endpoint, command or data operation remains untested.
+
+capcov makes those missing capabilities explicit. In
+[`examples/python-pytest`](examples/python-pytest), the tests create and read todos
+but never call the archive endpoint. capcov reports that endpoint by name, so the
+gap is visible without inferring it from a code coverage percentage.
+
+Use it alongside code coverage and assertions: execution evidence shows that a
+capability was exercised; assertions check its results. For rewrites,
+[replay comparisons](skills/capcov-vectors/SKILL.md) can also compare responses and
+data effects across the old and new implementations.
+
+## Example
 
 Here is a Go service with three routes. Tree-sitter reads the routes from source;
 a browser run recorded as a HAR file shows which ones were called:
@@ -64,7 +71,7 @@ nothing about the browser beyond the HAR file.
                               reconcile: one cell per capability
                                              │
                                              ▼
-                              gate: fail on anything unexplained
+                              report divergence; optional gate
 ```
 
 A *surface* is a way into the system: an HTTP route, a command, a pipeline stage.
@@ -81,9 +88,10 @@ Reconciliation puts each entity in one cell:
 | `runtime_only` | finds no path | touched it | an entry point the adapter missed, or dynamic access |
 | `neither` | finds no path | never touched it | dead code, or a gap in discovery |
 
-Everything except `both` fails the gate unless an exemptions file records a
-reason. Anything an adapter cannot resolve, such as a route built from a variable
-or a call through `getattr`, is reported with its file and line and counts
+Reports retain every cell. If you enable the gate, anything outside `both`
+fails unless an exemptions file records a reason. Anything an adapter cannot
+resolve, such as a route built from a variable or a call through `getattr`, is
+reported with its file and line and counts
 against the gate too, so a clean result cannot hide what the analysis could not
 see. The design follows the software reflexion model (Murphy, Notkin and Sullivan,
 1995); the other sources are in
