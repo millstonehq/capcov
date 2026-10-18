@@ -406,6 +406,10 @@ class WorkerPool:
         self.pending = list(units)
         self.jobs = max(1, min(jobs, len(units)))
         self.replies: list[tuple[str, dict]] = []
+        # The classes that were handed out and came back with no reply.
+        self.lost: list[str] = []
+        # The class each worker is running.
+        self.running: dict[int, str] = {}
         self.problems: list[str] = []
         self.done = 0
         self.lock = threading.Lock()
@@ -452,30 +456,59 @@ class WorkerPool:
             self.processes.discard(process)
         return code
 
+    @staticmethod
+    def _read(replies) -> dict | None:
+        """The next whole JSON line a worker wrote, or None when it ended or broke off."""
+        try:
+            line = replies.readline()
+            return json.loads(line) if line.endswith("\n") else None
+        except (OSError, ValueError):
+            return None
+
+    def _lose(self, name: str, text: str) -> None:
+        with self.lock:
+            self.lost.append(name)
+        self._problem(text)
+
     def _drive(self, slot: int, temp_root: Path, total: int) -> None:
+        try:
+            self._serve(slot, temp_root, total)
+        except BaseException as exc:  # a thread that fails must not lose its class silently
+            with self.lock:
+                name = self.running.pop(slot, None)
+            if name is not None:
+                self._lose(name, f"worker {slot} failed while it ran {name}: {exc!r}")
+            else:
+                self._problem(f"worker {slot} failed: {exc!r}")
+
+    def _serve(self, slot: int, temp_root: Path, total: int) -> None:
         while True:
             process, requests, replies = self._start(slot, temp_root)
-            hello = replies.readline()
-            if not hello or json.loads(hello).get("suite") != self.digest:
+            hello = self._read(replies)
+            if hello is None or hello.get("suite") != self.digest:
                 code = self._stop(process, requests, replies)
                 self._problem(f"worker {slot} " + ("discovered another suite" if hello
                               else f"exited with {code} before it was ready"))
                 return
             while (unit := self._next()) is not None:
                 name, positions, _ = unit
+                with self.lock:
+                    self.running[slot] = name
                 try:
                     requests.write(json.dumps(positions) + "\n")
                     requests.flush()
-                    line = replies.readline()
                 except OSError:
-                    line = ""
-                if not line:
+                    pass
+                reply = self._read(replies)
+                if reply is None:
                     code = self._stop(process, requests, replies)
-                    self._problem(f"worker {slot} exited with {code} while it ran {name}; "
-                                  f"its {len(positions)} test(s) did not run")
+                    with self.lock:
+                        del self.running[slot]
+                    self._lose(name, f"worker {slot} exited with {code} while it ran {name}; "
+                                     f"its {len(positions)} test(s) did not run")
                     break
-                reply = json.loads(line)
                 with self.lock:
+                    del self.running[slot]
                     self.replies.append((name, reply))
                     self.done += 1
                     done = self.done
@@ -502,7 +535,7 @@ class WorkerPool:
                     process.kill()
             shutil.rmtree(temp_root, ignore_errors=True)
         for name, positions, _ in self.pending:
-            self._problem(f"no worker ran {name}; its {len(positions)} test(s) did not run")
+            self._lose(name, f"no worker ran {name}; its {len(positions)} test(s) did not run")
 
 
 def run_parallel(tests: list[unittest.TestCase], selected: list[int], jobs: int,
@@ -518,6 +551,10 @@ def run_parallel(tests: list[unittest.TestCase], selected: list[int], jobs: int,
     seconds: dict[str, float] = {}
     skipped: dict[str, str] = {}
     problems = list(pool.problems)
+    # Every class came back once, or was reported lost; nothing else may happen to one.
+    accounted = Counter([name for name, _ in pool.replies] + pool.lost)
+    if accounted != Counter(name for name, _, _ in units):
+        problems.append("the classes the workers answered for are not the classes the shard sent")
     wanted = {pool.test_ids[position] for position in selected}
     errors, unexpected = [], []
     for _, reply in pool.replies:

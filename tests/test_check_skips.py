@@ -475,6 +475,21 @@ class ParallelShardTest(unittest.TestCase):
         self.assertEqual(done.returncode, 1, done.stderr)
         self.assertIn("ran in no shard", done.stderr)
 
+    def test_a_worker_that_dies_halfway_through_its_reply_fails_the_shard(self) -> None:
+        source = self.root / "tests" / "test_m0.py"
+        source.write_text(source.read_text(encoding="utf-8").replace(
+            "def test_b(self):\n        self._check()",
+            "def test_b(self):\n"
+            "        import sys\n"
+            "        reply = int(sys.argv[sys.argv.index('--worker') + 1].split(',')[1])\n"
+            "        os.write(reply, b'{\"seconds\": {\"tests.test_m0.First0.test_a\"')\n"
+            "        os._exit(9)", 1), encoding="utf-8")
+        document = self._shard("partial.json", "--jobs", "2", code=1)
+        self.assertFalse(document["successful"])
+        self.assertIn("exited with 9 while it ran tests.test_m0.First0", self.stderr)
+        self.assertFalse([t for t in document["ran"] if t.startswith("tests.test_m0.First0.")])
+        self.assertEqual(len(document["ran"]), 9)
+
     def test_the_heaviest_class_is_handed_out_first(self) -> None:
         ids = ["t.A.test_1", "t.A.test_2", "t.B.test_1", "t.C.test_1"]
         units = check_skips.class_units([0, 1, 2, 3], ids, {"t.C": 9.0, "t.A.test_2": 5.0, "t.B": 1.0})
