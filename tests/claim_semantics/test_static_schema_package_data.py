@@ -21,6 +21,7 @@ from importlib import resources
 from pathlib import Path
 
 from capcov.claims import static as static_pkg
+from tests.support import build_tree
 
 PACKAGE_ROOT = Path(__file__).resolve().parents[2]
 PYPROJECT = PACKAGE_ROOT / "pyproject.toml"
@@ -47,10 +48,12 @@ class StaticSchemaPackageDataTest(unittest.TestCase):
                          "pip and setuptools are not importable in this interpreter (the nix devShell "
                          "python ships neither); the installed-distribution layer is unverified here")
     def test_installed_distribution_carries_the_schema(self) -> None:
-        with tempfile.TemporaryDirectory(prefix="capcov-wheel-") as target:
+        with tempfile.TemporaryDirectory(prefix="capcov-wheel-") as scratch:
+            target = str(Path(scratch) / "target")
+            source = build_tree(PACKAGE_ROOT, Path(scratch) / "source")
             install = subprocess.run(
                 [sys.executable, "-m", "pip", "install", "--quiet", "--no-deps", "--no-build-isolation",
-                 "--target", target, str(PACKAGE_ROOT)],
+                 "--target", target, str(source)],
                 capture_output=True, text=True, timeout=600)
             self.assertEqual(install.returncode, 0, install.stderr[-2000:])
             probe = subprocess.run(

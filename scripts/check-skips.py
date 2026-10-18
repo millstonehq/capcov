@@ -36,6 +36,16 @@ file names is assigned on its own, so the tests of such a class can go to differ
 shards; each of those shards sets up the class fixture. A class or test the file
 does not name is assigned with its class, at the median time.
 
+--jobs N runs a shard's test classes in N worker processes (default: the number of
+CPUs, or $CAPCOV_TEST_JOBS). A class runs whole in one worker, so its class fixture
+is set up once, in the process its tests run in; the classes are handed out
+heaviest first by the same timings. Each worker discovers the suite itself and
+must find the one the shard discovered, gets a TMPDIR of its own, and runs with
+CAPCOV_TEST_JOBS=1. A worker that dies fails the shard, and the tests of the class
+it was running are left out of what the shard ran. --jobs 1 runs the shard in this
+process, in discovery order, as plain unittest does. The seconds a parallel run
+records include the contention between its workers.
+
 Allowlist format (JSON):
 
     {"version": 1,
@@ -44,9 +54,16 @@ Allowlist format (JSON):
 from __future__ import annotations
 
 import argparse
+import hashlib
+import io
 import json
+import os
+import shutil
 import statistics
+import subprocess
 import sys
+import tempfile
+import threading
 import time
 import unittest
 from collections import Counter
@@ -58,6 +75,8 @@ DEFAULT_TIMINGS = Path("tests") / "shard-timings.json"
 DEFAULT_FAMILIES = Path("tests") / "tool-families.json"
 # A class above this share of a run's time is recorded, and assigned, test by test.
 SPLIT_SHARE = 0.1
+# The number of worker processes a shard runs its classes in, when --jobs is not given.
+JOBS_ENV = "CAPCOV_TEST_JOBS"
 
 
 class AllowlistError(ValueError):
@@ -284,8 +303,260 @@ def check_partition(discovered: list[str], shards: list[dict]) -> list[str]:
     return problems
 
 
+def parse_jobs(text: str, source: str) -> int:
+    """Read a worker count of at least 1."""
+    try:
+        jobs = int(text)
+    except ValueError:
+        jobs = 0
+    if jobs < 1:
+        raise ShardError(f"{source} wants a whole number of at least 1, got {text!r}")
+    return jobs
+
+
+def default_jobs() -> int:
+    text = os.environ.get(JOBS_ENV, "").strip()
+    return parse_jobs(text, f"${JOBS_ENV}") if text else os.cpu_count() or 1
+
+
+def suite_digest(test_ids: list[str]) -> str:
+    """What a worker and its shard compare to know they discovered the same suite."""
+    return hashlib.sha256("\n".join(test_ids).encode("utf-8")).hexdigest()
+
+
+def class_units(positions: list[int], test_ids: list[str],
+                timings: dict[str, float]) -> list[tuple[str, list[int], float]]:
+    """Group the selected tests by class: (class id, positions in discovery order, weight).
+
+    A class is weighed as the timings name it, as the sum of its tests the timings
+    name, or at the median; the heaviest comes first.
+    """
+    members: dict[str, list[int]] = {}
+    for position in positions:
+        members.setdefault(class_of(test_ids[position]), []).append(position)
+    default = statistics.median(timings.values()) if timings else 1.0
+    units = []
+    for name, group in members.items():
+        named = [timings[test_ids[p]] for p in group if test_ids[p] in timings]
+        weight = timings.get(name, sum(named) if named else default)
+        units.append((name, group, weight))
+    return sorted(units, key=lambda unit: (-unit[2], unit[0]))
+
+
+def run_class(tests: list[unittest.TestCase]) -> dict:
+    """Run the tests of one class as a suite of their own; return what the shard records.
+
+    A fresh result per class, so that the class fixture is torn down at the end of
+    this class and its time is not charged to the next one.
+    """
+    stream = io.StringIO()
+    result = unittest.TextTestRunner(stream=stream, verbosity=1, resultclass=TimedResult).run(
+        unittest.TestSuite(tests))
+    errors = [[flavour, result.getDescription(test), text]
+              for flavour, listed in (("ERROR", result.errors), ("FAIL", result.failures))
+              for test, text in listed]
+    return {
+        "seconds": result.seconds,
+        "skipped": [[test.id(), message] for test, message in result.skipped],
+        "errors": errors,
+        "unexpected_successes": [result.getDescription(test) for test in result.unexpectedSuccesses],
+        "expected_failures": len(result.expectedFailures),
+        "tests_run": result.testsRun,
+        "successful": result.wasSuccessful(),
+    }
+
+
+def serve_worker(suite: unittest.TestSuite, channel: str) -> int:
+    """The worker side of --jobs: run the classes the shard sends until it closes the pipe.
+
+    The shard and the worker talk over two pipes the shard opened, one JSON line at a
+    time, so that nothing a test prints or reads on the standard streams reaches them.
+    """
+    read_fd, write_fd = (int(fd) for fd in channel.split(","))
+    for fd in (read_fd, write_fd):
+        os.set_inheritable(fd, False)
+    tests = list(iter_tests(suite))
+    with os.fdopen(read_fd, "r", encoding="utf-8") as requests, \
+            os.fdopen(write_fd, "w", encoding="utf-8") as replies:
+        replies.write(json.dumps({"suite": suite_digest([test.id() for test in tests])}) + "\n")
+        replies.flush()
+        for line in requests:
+            reply = run_class([tests[position] for position in json.loads(line)])
+            replies.write(json.dumps(reply) + "\n")
+            replies.flush()
+    return 0
+
+
+class WorkerPool:
+    """Run classes in worker processes, each class once, and gather what they report.
+
+    One thread per worker hands it the next class, heaviest first, and reads the
+    reply. A worker that dies is replaced; the class it was running is reported as
+    crashed and not run again. A worker that cannot start, or discovers another
+    suite, ends its thread, and a class no worker took is reported as never run.
+    """
+
+    def __init__(self, tests: list[unittest.TestCase], units: list[tuple[str, list[int], float]],
+                 jobs: int) -> None:
+        self.test_ids = [test.id() for test in tests]
+        self.digest = suite_digest(self.test_ids)
+        self.pending = list(units)
+        self.jobs = max(1, min(jobs, len(units)))
+        self.replies: list[tuple[str, dict]] = []
+        self.problems: list[str] = []
+        self.done = 0
+        self.lock = threading.Lock()
+        self.processes: set[subprocess.Popen] = set()
+
+    def _next(self) -> tuple[str, list[int], float] | None:
+        with self.lock:
+            return self.pending.pop(0) if self.pending else None
+
+    def _problem(self, text: str) -> None:
+        with self.lock:
+            self.problems.append(text)
+        print(f"check-skips: {text}", file=sys.stderr, flush=True)
+
+    def _start(self, slot: int, temp_root: Path):
+        to_worker, from_shard = os.pipe()
+        to_shard, from_worker = os.pipe()
+        temp = Path(tempfile.mkdtemp(prefix=f"w{slot}-", dir=temp_root))
+        env = {**os.environ, JOBS_ENV: "1", "TMPDIR": str(temp), "CAPCOV_TEST_WORKER": str(slot)}
+        try:
+            process = subprocess.Popen(
+                [sys.executable, str(Path(__file__).resolve()), "--worker", f"{to_worker},{from_worker}"],
+                stdin=subprocess.DEVNULL, pass_fds=(to_worker, from_worker), env=env)
+        finally:
+            os.close(to_worker)
+            os.close(from_worker)
+        with self.lock:
+            self.processes.add(process)
+        return (process, os.fdopen(from_shard, "w", encoding="utf-8"),
+                os.fdopen(to_shard, "r", encoding="utf-8"))
+
+    def _stop(self, process: subprocess.Popen, requests, replies) -> int:
+        for pipe in (requests, replies):
+            try:
+                pipe.close()
+            except OSError:
+                pass
+        try:
+            code = process.wait(timeout=60)
+        except subprocess.TimeoutExpired:
+            process.kill()
+            code = process.wait()
+        with self.lock:
+            self.processes.discard(process)
+        return code
+
+    def _drive(self, slot: int, temp_root: Path, total: int) -> None:
+        while True:
+            process, requests, replies = self._start(slot, temp_root)
+            hello = replies.readline()
+            if not hello or json.loads(hello).get("suite") != self.digest:
+                code = self._stop(process, requests, replies)
+                self._problem(f"worker {slot} " + ("discovered another suite" if hello
+                              else f"exited with {code} before it was ready"))
+                return
+            while (unit := self._next()) is not None:
+                name, positions, _ = unit
+                try:
+                    requests.write(json.dumps(positions) + "\n")
+                    requests.flush()
+                    line = replies.readline()
+                except OSError:
+                    line = ""
+                if not line:
+                    code = self._stop(process, requests, replies)
+                    self._problem(f"worker {slot} exited with {code} while it ran {name}; "
+                                  f"its {len(positions)} test(s) did not run")
+                    break
+                reply = json.loads(line)
+                with self.lock:
+                    self.replies.append((name, reply))
+                    self.done += 1
+                    done = self.done
+                mark = "" if reply["successful"] else "  FAILED"
+                print(f"check-skips: [{done}/{total}] {sum(reply['seconds'].values()):6.1f} s  "
+                      f"{name} ({reply['tests_run']} tests){mark}", file=sys.stderr, flush=True)
+            else:
+                self._stop(process, requests, replies)
+                return
+
+    def run(self) -> None:
+        total = len(self.pending)
+        temp_root = Path(tempfile.mkdtemp(prefix="check-skips-"))
+        threads = [threading.Thread(target=self._drive, args=(slot, temp_root, total), daemon=True)
+                   for slot in range(1, self.jobs + 1)]
+        try:
+            for thread in threads:
+                thread.start()
+            for thread in threads:
+                thread.join()
+        finally:
+            with self.lock:
+                for process in self.processes:
+                    process.kill()
+            shutil.rmtree(temp_root, ignore_errors=True)
+        for name, positions, _ in self.pending:
+            self._problem(f"no worker ran {name}; its {len(positions)} test(s) did not run")
+
+
+def run_parallel(tests: list[unittest.TestCase], selected: list[int], jobs: int,
+                 timings: dict[str, float]) -> tuple[dict[str, float], dict[str, str], bool]:
+    """Run the selected tests class by class in worker processes; (seconds, skipped, successful)."""
+    units = class_units(selected, [test.id() for test in tests], timings)
+    pool = WorkerPool(tests, units, jobs)
+    print(f"check-skips: {len(units)} classes in {pool.jobs} worker processes", file=sys.stderr)
+    started = time.perf_counter()
+    pool.run()
+    elapsed = time.perf_counter() - started
+
+    seconds: dict[str, float] = {}
+    skipped: dict[str, str] = {}
+    problems = list(pool.problems)
+    wanted = {pool.test_ids[position] for position in selected}
+    errors, unexpected = [], []
+    for _, reply in pool.replies:
+        for test_id in reply["seconds"]:
+            if test_id in seconds or test_id not in wanted:
+                problems.append(f"a worker reported {test_id} twice, or a test the shard did not send")
+        seconds.update(reply["seconds"])
+        skipped.update(dict(reply["skipped"]))
+        errors.extend(reply["errors"])
+        unexpected.extend(reply["unexpected_successes"])
+
+    # The report a TextTestRunner prints at the end of a run, for the run as a whole.
+    stream = sys.stderr
+    print(file=stream)
+    for flavour, description, text in errors:
+        print(unittest.TextTestResult.separator1, file=stream)
+        print(f"{flavour}: {description}", file=stream)
+        print(unittest.TextTestResult.separator2, file=stream)
+        print(text, file=stream)
+    if unexpected:
+        print(unittest.TextTestResult.separator1, file=stream)
+        for description in unexpected:
+            print(f"UNEXPECTED SUCCESS: {description}", file=stream)
+    for problem in problems:
+        print(f"check-skips: {problem}", file=stream)
+    tests_run = sum(reply["tests_run"] for _, reply in pool.replies)
+    print(unittest.TextTestResult.separator2, file=stream)
+    print(f"Ran {tests_run} test{'s' if tests_run != 1 else ''} in {elapsed:.3f}s", file=stream)
+    print(file=stream)
+    successful = not problems and all(reply["successful"] for _, reply in pool.replies)
+    failures = sum(1 for flavour, _, _ in errors if flavour == "FAIL")
+    infos = [f"{label}={n}" for label, n in (
+        ("failures", failures), ("errors", len(errors) - failures), ("skipped", len(skipped)),
+        ("expected failures", sum(reply["expected_failures"] for _, reply in pool.replies)),
+        ("unexpected successes", len(unexpected)), ("worker problems", len(problems))) if n]
+    print(("OK" if successful else "FAILED") + (f" ({', '.join(infos)})" if infos else ""), file=stream)
+    return seconds, skipped, successful
+
+
 def run_shard(suite: unittest.TestSuite, index: int, count: int, timings: dict[str, float],
-              result_path: Path, family: str = "", families: Families | None = None) -> int:
+              result_path: Path, family: str = "", families: Families | None = None,
+              jobs: int = 1) -> int:
     tests = list(iter_tests(suite))
     discovered = [test.id() for test in tests]
     if family:
@@ -301,22 +572,30 @@ def run_shard(suite: unittest.TestSuite, index: int, count: int, timings: dict[s
     print(f"check-skips: {label}shard {index}/{count} runs {len(selected)} of {len(discovered)} tests",
           file=sys.stderr)
     started = time.perf_counter()
-    result = unittest.TextTestRunner(verbosity=1, resultclass=TimedResult).run(
-        unittest.TestSuite(selected))
+    if jobs > 1 and selected:
+        chosen = {id(test) for test in selected}
+        seconds, skipped, successful = run_parallel(
+            tests, [position for position, test in enumerate(tests) if id(test) in chosen], jobs, timings)
+    else:
+        result = unittest.TextTestRunner(verbosity=1, resultclass=TimedResult).run(
+            unittest.TestSuite(selected))
+        seconds = result.seconds
+        skipped = {test.id(): message for test, message in result.skipped}
+        successful = result.wasSuccessful()
     document = {
         "version": 1,
         "family": family,
         "index": index,
         "count": count,
         "discovered": discovered,
-        "ran": sorted(result.seconds),
-        "skipped": {test.id(): message for test, message in result.skipped},
-        "seconds": result.seconds,
+        "ran": sorted(seconds),
+        "skipped": skipped,
+        "seconds": seconds,
         "wall_seconds": time.perf_counter() - started,
-        "successful": result.wasSuccessful(),
+        "successful": successful,
     }
     result_path.write_text(json.dumps(document, indent=1, sort_keys=True) + "\n", encoding="utf-8")
-    return 0 if result.wasSuccessful() else 1
+    return 0 if successful else 1
 
 
 def stale_family_classes(discovered: list[str], families: Families | None) -> list[str]:
@@ -385,8 +664,14 @@ def main(argv: list[str] | None = None) -> int:
                         help="judge the shard results in these files as one run")
     parser.add_argument("--write-timings", type=Path, metavar="FILE",
                         help="with --merge: write the seconds per test class of this run")
+    parser.add_argument("--jobs", metavar="N",
+                        help=f"with --shard: run the test classes in N worker processes "
+                             f"(default: ${JOBS_ENV}, else the number of CPUs)")
+    parser.add_argument("--worker", metavar="R,W", help=argparse.SUPPRESS)
     parser.add_argument("modules", nargs="*", help="test modules; default: discover tests/")
     args = parser.parse_args(argv)
+    if args.jobs and not args.shard:
+        parser.error("--jobs needs --shard; use --shard 1/1 for the whole suite")
     if (args.shard or args.merge) and args.modules:
         parser.error("--shard and --merge work on the discovered suite; give no MODULE")
     if bool(args.shard) != bool(args.result) or (args.shard and args.merge):
@@ -396,7 +681,7 @@ def main(argv: list[str] | None = None) -> int:
 
     try:
         # A shard does not judge its skips, so it reads no allowlist.
-        accepted = {} if args.shard else load_allowlist(args.allowlist)
+        accepted = {} if args.shard or args.worker else load_allowlist(args.allowlist)
     except AllowlistError as exc:
         print(f"check-skips: {exc}", file=sys.stderr)
         return 2
@@ -409,12 +694,15 @@ def main(argv: list[str] | None = None) -> int:
         suite = loader.loadTestsFromNames(args.modules)
     else:
         suite = loader.discover("tests", top_level_dir=".")
+    if args.worker:
+        return serve_worker(suite, args.worker)
     if args.shard:
         try:
             index, count = parse_shard(args.shard)
+            jobs = parse_jobs(args.jobs, "--jobs") if args.jobs else default_jobs()
             families = load_families(args.families) if args.family else None
             return run_shard(suite, index, count, load_timings(args.timings), args.result,
-                             args.family or "", families)
+                             args.family or "", families, jobs)
         except ShardError as exc:
             print(f"check-skips: {exc}", file=sys.stderr)
             return 2

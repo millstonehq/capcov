@@ -29,6 +29,19 @@ built inside it as one container image per tool family: `earth +test-pinned` is
 the suite, each family's tests in that family's image, with the skip gate, and
 `earth +checks` is lint, the wheel, the three check scripts and the flake checks.
 
+A CI shard is `scripts/check-skips.py --family <family> --shard <i>/<n> --result <file>`
+in that family's dev shell; `--merge <file> ...` judges the shards as one run. A shard
+runs its test classes in worker processes, one per CPU unless `--jobs N` or
+`CAPCOV_TEST_JOBS` says otherwise, heaviest class first by `tests/shard-timings.json`.
+A class runs whole in one worker, each worker has its own `TMPDIR`, and a worker that
+dies fails the shard. `--jobs 1` is plain serial unittest, for a test that relies on
+running alone. Run a whole family locally with `--shard 1/1`:
+
+```sh
+nix develop --no-update-lock-file .#souffle --command bash -lc \
+  'PYTHONPATH=src uv run --frozen --extra probe-python --extra treesitter --extra faults-property --group packaging python scripts/check-skips.py --family souffle --shard 1/1 --result souffle.json'
+```
+
 To release, update `version` in `pyproject.toml` and `src/capcov/__init__.py`,
 refresh `uv.lock`, and merge the reviewed change. Push a tag `v<version>` at that
 commit. CI checks the tag against the package version and publishes the tested

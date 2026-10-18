@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -356,6 +357,129 @@ class ShardedRunTest(unittest.TestCase):
 
     def test_the_committed_timings_load(self) -> None:
         self.assertTrue(check_skips.load_timings(ROOT / "tests" / "shard-timings.json"))
+
+
+class ParallelShardTest(unittest.TestCase):
+    """--jobs N: the classes of a shard run in N worker processes, each class in one."""
+
+    def setUp(self) -> None:
+        self._directory = tempfile.TemporaryDirectory()
+        self.addCleanup(self._directory.cleanup)
+        self.root = Path(self._directory.name)
+        tests = self.root / "tests"
+        tests.mkdir()
+        (tests / "__init__.py").write_text("", encoding="utf-8")
+        # Each class checks that its tests run in the process its fixture was set up in,
+        # and records where each test ran.
+        for module in range(3):
+            (tests / f"test_m{module}.py").write_text(textwrap.dedent(f"""
+                import os
+                import tempfile
+                import unittest
+
+                class Base(unittest.TestCase):
+                    @classmethod
+                    def setUpClass(cls):
+                        cls.pid = os.getpid()
+
+                    def _check(self):
+                        self.assertEqual(os.getpid(), self.pid)
+                        print(f"{{self.id()}} {{os.getpid()}} {{tempfile.gettempdir()}}",
+                              file=open(os.environ["WHERE_LOG"], "a"))
+
+                class First{module}(Base):
+                    def test_a(self):
+                        self._check()
+
+                    def test_b(self):
+                        self._check()
+
+                    @unittest.skip("tool is absent")
+                    def test_skips(self):
+                        pass
+
+                class Second{module}(Base):
+                    def test_a(self):
+                        self._check()
+
+                del Base
+            """), encoding="utf-8")
+        self.where = self.root / "where.log"
+
+    def _script(self, *arguments: str, **env: str) -> subprocess.CompletedProcess:
+        environment = {**os.environ, "WHERE_LOG": str(self.where), **env}
+        return subprocess.run([sys.executable, str(SCRIPT), *arguments], cwd=self.root, env=environment,
+                              capture_output=True, text=True, timeout=120)
+
+    def _shard(self, name: str, *arguments: str, code: int = 0, **env: str) -> dict:
+        done = self._script("--shard", "1/1", "--result", name, *arguments, **env)
+        self.assertEqual(done.returncode, code, done.stderr)
+        self.stderr = done.stderr
+        return json.loads((self.root / name).read_text(encoding="utf-8"))
+
+    def test_the_workers_run_each_test_once_and_record_what_one_process_records(self) -> None:
+        serial = self._shard("serial.json", "--jobs", "1")
+        self.where.unlink()
+        parallel = self._shard("parallel.json", "--jobs", "3")
+        self.assertIn("in 3 worker processes", self.stderr)
+        for key in ("ran", "skipped", "discovered", "successful", "family", "index", "count", "version"):
+            self.assertEqual(parallel[key], serial[key], key)
+        self.assertEqual(sorted(parallel), sorted(serial))
+        self.assertEqual(len(parallel["ran"]), 12)
+        lines = [line.split() for line in self.where.read_text(encoding="utf-8").splitlines()]
+        self.assertEqual(sorted(test_id for test_id, _, _ in lines),
+                         sorted(t for t in parallel["ran"] if not t.endswith("test_skips")))
+        # more than one worker took part, and each has a temporary directory of its own
+        pids = {pid for _, pid, _ in lines}
+        self.assertGreater(len(pids), 1)
+        self.assertEqual(len({temp for _, _, temp in lines}), len(pids))
+
+    def test_the_environment_sets_the_default_number_of_workers(self) -> None:
+        self._shard("env.json", CAPCOV_TEST_JOBS="2")
+        self.assertIn("in 2 worker processes", self.stderr)
+        self._shard("serial.json", CAPCOV_TEST_JOBS="1")
+        self.assertNotIn("worker processes", self.stderr)
+
+    def test_a_malformed_number_of_workers_is_refused(self) -> None:
+        for arguments, env in ((("--jobs", "0"), {}), (("--jobs", "x"), {}), ((), {"CAPCOV_TEST_JOBS": "-2"})):
+            with self.subTest(arguments=arguments, env=env):
+                done = self._script("--shard", "1/1", "--result", "x.json", *arguments, **env)
+                self.assertEqual(done.returncode, 2, done.stderr)
+
+    def test_a_failing_test_fails_the_shard_with_its_traceback(self) -> None:
+        source = self.root / "tests" / "test_m1.py"
+        source.write_text(source.read_text(encoding="utf-8").replace(
+            "def test_a(self):\n        self._check()",
+            "def test_a(self):\n        self.fail('broken on purpose')", 1), encoding="utf-8")
+        document = self._shard("failing.json", "--jobs", "3", code=1)
+        self.assertFalse(document["successful"])
+        self.assertIn("FAIL: test_a (tests.test_m1.First1.test_a)", self.stderr)
+        self.assertIn("AssertionError: broken on purpose", self.stderr)
+        self.assertEqual(len(document["ran"]), 12)
+
+    def test_a_worker_that_dies_fails_the_shard_and_its_class_did_not_run(self) -> None:
+        source = self.root / "tests" / "test_m2.py"
+        source.write_text(source.read_text(encoding="utf-8").replace(
+            "def test_b(self):\n        self._check()",
+            "def test_b(self):\n        os._exit(3)", 1), encoding="utf-8")
+        document = self._shard("crashed.json", "--jobs", "2", code=1)
+        self.assertFalse(document["successful"])
+        self.assertIn("exited with 3 while it ran tests.test_m2.First2", self.stderr)
+        self.assertFalse([t for t in document["ran"] if t.startswith("tests.test_m2.First2.")])
+        # the other classes still ran, in a replacement worker if need be
+        self.assertEqual(len(document["ran"]), 9)
+        allow = self.root / "allow.json"
+        allow.write_text(json.dumps({"version": 1, "accepted": [{"reason": "no such tool", "tests": [
+            f"tests.test_m{m}.First{m}.test_skips" for m in range(3)]}]}), encoding="utf-8")
+        done = self._script("--allowlist", str(allow), "--merge", "crashed.json")
+        self.assertEqual(done.returncode, 1, done.stderr)
+        self.assertIn("ran in no shard", done.stderr)
+
+    def test_the_heaviest_class_is_handed_out_first(self) -> None:
+        ids = ["t.A.test_1", "t.A.test_2", "t.B.test_1", "t.C.test_1"]
+        units = check_skips.class_units([0, 1, 2, 3], ids, {"t.C": 9.0, "t.A.test_2": 5.0, "t.B": 1.0})
+        self.assertEqual([(name, positions) for name, positions, _ in units],
+                         [("t.C", [3]), ("t.A", [0, 1]), ("t.B", [2])])
 
 
 if __name__ == "__main__":
