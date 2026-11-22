@@ -98,3 +98,7 @@ A reference consumer records a ~1,800-operation PHP incumbent (Laravel HTTP, a
 legacy dispatcher, console jobs) and replays it against a Go rewrite, driving
 the loop from `tools/vectors/` with a `burn-down` goal document and the vectors
 dimension of a product-breadth report.
+
+## Finding an additional replay input
+
+For string-boundary operations, the [synthetic prefix experiment](../../experiments/boundary-learning/README.md) shows how to infer a missing input from recorded pairs and ask each implementation for its output. Record those observations before selecting an expected result.
