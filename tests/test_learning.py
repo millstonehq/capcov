@@ -39,7 +39,7 @@ def test_evaluator_does_not_leak_holdout_and_classifies_mismatch():
                                  "candidate_observations": [["!a", "a"], ["!b", "WRONG"]]}
     result = evaluate_document({"operations": operations}, holdout_mod=2, holdout_value=0)
     assert set(result["split"]["training_operations"]).isdisjoint(result["split"]["holdout_operations"])
-    assert result["counts"]["candidate_mismatch"] > 0
+    assert result["candidate_status_counts"]["mismatch"] > 0
     assert all(r["operation"] in result["split"]["holdout_operations"] for r in result["results"])
 
 
@@ -52,5 +52,27 @@ def test_evaluator_checks_named_cells_and_preserves_incumbent_exception():
             "candidate_observations": [{"cell": "ok", "input": "x", "output": "500"}],
         }
     result = evaluate_document({"operations": operations}, holdout_mod=2)
-    assert result["counts"]["candidate_mismatch"] > 0
-    assert result["counts"].get("incumbent_exception", 0) == 0
+    assert result["candidate_status_counts"]["mismatch"] > 0
+    assert result["rule_status_counts"].get("exception", 0) == 0
+
+
+def test_statuses_are_orthogonal_and_missing_candidate_is_unknown():
+    operations = {}
+    for index in range(10):
+        operations[f"op-{index}"] = {
+            "family": "docs",
+            "observations": [{"cell": "ok", "input": "x", "output": "different"}],
+            "candidate_observations": [{"cell": "ok", "input": "x", "output": "wrong"}],
+        }
+    full = evaluate_document({"operations": operations}, holdout_mod=2)
+    rows = [r for r in full["results"] if "rule_status" in r]
+    assert any(r["rule_status"] == "supported" and r["candidate_status"] == "mismatch" for r in rows)
+    prefix_ops = {f"op-{i}": {"observations": [["!a", "a"], ["!b", "different" if i == 0 else "b"]],
+                              "candidate_observations": [["!a", "a"], ["!b", "wrong"]]} for i in range(10)}
+    prefix = evaluate_document({"operations": prefix_ops}, holdout_mod=2)
+    assert any(r.get("rule_status") == "exception" and r.get("candidate_status") == "mismatch"
+               for r in prefix["results"])
+    for value in operations.values():
+        value.pop("candidate_observations")
+    missing = evaluate_document({"operations": operations}, holdout_mod=2)
+    assert missing["candidate_status_counts"]["unknown"] > 0

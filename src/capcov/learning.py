@@ -99,6 +99,7 @@ def learn_document(document: Any, *, max_prefix: int = 64) -> dict[str, Any]:
     for operation in sorted(operations):
         value = operations[operation]
         source = None
+        family = None
         if isinstance(value, dict):
             source = value.get("source")
             family = value.get("family")
@@ -106,6 +107,8 @@ def learn_document(document: Any, *, max_prefix: int = 64) -> dict[str, Any]:
             value = raw_value
         try:
             rows = _observations(value, source)
+            if not rows:
+                raise ValueError("observations must not be empty")
             if isinstance(family, str):
                 cells: dict[str, list[str]] = defaultdict(list)
                 for row in value:
@@ -113,10 +116,10 @@ def learn_document(document: Any, *, max_prefix: int = 64) -> dict[str, Any]:
                         cells[row["cell"]].append(str(row.get("output", "")))
                 family_cells[family][operation] = {cell: tuple(outputs) for cell, outputs in cells.items()}
             rules = mine(rows, max_prefix=max_prefix)
-            learned.append({"operation": operation, "status": "learned", "rules": rules,
+            learned.append({"operation": operation, "family": family, "status": "learned", "rules": rules,
                             "observation_count": len(rows)})
         except ValueError as error:
-            learned.append({"operation": operation, "status": "unresolved",
+            learned.append({"operation": operation, "family": family, "status": "unresolved",
                             "reason": str(error), "rules": []})
     relations: list[dict[str, Any]] = []
     for family in sorted(family_cells):
@@ -127,7 +130,7 @@ def learn_document(document: Any, *, max_prefix: int = 64) -> dict[str, Any]:
         for cell in sorted(by_cell):
             supports = by_cell[cell]
             ordered = sorted(supports.items(), key=lambda item: (item[0], item[1]))
-            if sum(len(ops) for _, ops in ordered) < 2:
+            if max((len(ops) for _, ops in ordered), default=0) < 2:
                 continue
             relations.append({
                 "family": family,
@@ -176,10 +179,10 @@ def evaluate_document(document: Any, *, holdout_mod: int = 5,
     for operation, value in operations.items():
         (heldout if _split(operation, holdout_mod, holdout_value) == "holdout" else training)[operation] = value
     learned = learn_document({"operations": training}, max_prefix=max_prefix)
-    rules_by_prefix: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    rules_by_prefix: dict[tuple[str | None, str], list[dict[str, Any]]] = defaultdict(list)
     for item in learned["operations"]:
         for rule in item["rules"]:
-            rules_by_prefix[rule["prefix"]].append(rule)
+            rules_by_prefix[(item.get("family"), rule["prefix"])].append(rule)
     relations_by_family: dict[str, dict[str, dict[str, Any]]] = defaultdict(dict)
     for relation in learned["relations"]:
         relations_by_family[relation["family"]][relation["cell"]] = relation
@@ -191,12 +194,14 @@ def evaluate_document(document: Any, *, holdout_mod: int = 5,
             continue
         incumbent = value.get("observations")
         candidate = value.get("candidate_observations")
-        if not isinstance(incumbent, list) or not isinstance(candidate, list):
-            results.append({"operation": operation, "status": "unknown", "reason": "missing incumbent or candidate"})
+        if not isinstance(incumbent, list):
+            results.append({"operation": operation, "status": "unknown", "reason": "missing incumbent"})
             continue
         inc_rows = _observations(incumbent)
-        cand_rows = _observations(candidate)
-        cand_by_input = {row.operand: row.output for row in cand_rows}
+        cand_rows = _observations(candidate) if isinstance(candidate, list) else []
+        cand_by_input: dict[str, list[str]] = defaultdict(list)
+        for row in cand_rows:
+            cand_by_input[row.operand].append(row.output)
         applicable = 0
         family = value.get("family")
         if isinstance(family, str):
@@ -214,44 +219,39 @@ def evaluate_document(document: Any, *, holdout_mod: int = 5,
                 supported = any(item["sequence"] == incumbent_sequence for item in relation["support"])
                 candidate_sequence = tuple(cand_cells[cell]) if cell in cand_cells else None
                 applicable += 1
-                if not supported:
-                    status = "incumbent_exception"
-                elif candidate_sequence is None:
-                    status = "unknown"
-                elif candidate_sequence != incumbent_sequence:
-                    status = "candidate_mismatch"
-                else:
-                    status = "pass"
+                rule_status = "ambiguous" if relation["ambiguous"] else ("supported" if supported else "exception")
+                candidate_status = "unknown" if not isinstance(candidate, list) else ("match" if candidate_sequence == incumbent_sequence else "mismatch")
                 results.append({"operation": operation, "family": family, "cell": cell,
                                 "incumbent": list(incumbent_sequence),
                                 "candidate": None if candidate_sequence is None else list(candidate_sequence),
-                                "status": status, "rule_ambiguous": relation["ambiguous"]})
+                                "rule_status": rule_status, "candidate_status": candidate_status})
         for row in inc_rows:
-            rules = rules_by_prefix.get(row.operand[:-1], []) if len(row.operand) > 1 else []
+            rules = rules_by_prefix.get((family, row.operand[:-1]), []) if len(row.operand) > 1 else []
             if not any(row.operand in rule["support"] for rule in rules):
                 continue
             applicable += 1
-            candidate_output = cand_by_input.get(row.operand)
-            if row.output != row.operand[-1]:
-                status = "incumbent_exception"
-            elif candidate_output is None:
-                status = "unknown"
-            elif candidate_output != row.output:
-                status = "candidate_mismatch"
-            else:
-                status = "pass"
+            candidate_outputs = cand_by_input.get(row.operand, [])
+            rule_status = "supported" if row.output == row.operand[-1] else "exception"
+            candidate_status = "unknown" if not isinstance(candidate, list) or not candidate_outputs else ("match" if candidate_outputs == [row.output] else "mismatch")
             results.append({"operation": operation, "input": row.operand,
-                            "incumbent": row.output, "candidate": candidate_output,
-                            "status": status})
+                            "incumbent": row.output, "candidate": candidate_outputs,
+                            "rule_status": rule_status, "candidate_status": candidate_status})
         if not applicable:
             results.append({"operation": operation, "status": "unknown",
                             "reason": "no learned rule applies"})
     counts: dict[str, int] = defaultdict(int)
+    rule_counts: dict[str, int] = defaultdict(int)
+    candidate_counts: dict[str, int] = defaultdict(int)
     for result in results:
-        counts[result["status"]] += 1
+        if "rule_status" in result:
+            rule_counts[result["rule_status"]] += 1
+            candidate_counts[result["candidate_status"]] += 1
+        else:
+            counts[result["status"]] += 1
     return {"schema": "capcov/behavioral-learning-evaluation/v1",
             "split": {"holdout_mod": holdout_mod, "holdout_value": holdout_value,
                       "training_operations": sorted(training), "holdout_operations": sorted(heldout)},
-            "counts": dict(sorted(counts.items())), "results": results[:max_results],
+            "counts": dict(sorted(counts.items())), "rule_status_counts": dict(sorted(rule_counts.items())),
+            "candidate_status_counts": dict(sorted(candidate_counts.items())), "results": results[:max_results],
             "results_truncated": len(results) > max_results,
             "training": learned}
