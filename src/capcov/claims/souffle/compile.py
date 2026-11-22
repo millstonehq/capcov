@@ -414,6 +414,13 @@ def compile_program(program: SouffleProgram, *, executable: str = "souffle",
             (staging / "provenance.json").write_text(
                 json.dumps(checker.provenance(), indent=1, sort_keys=True) + "\n", encoding="utf-8")
             if entry.exists():
+                # A concurrent compile of the same key may have installed the
+                # entry since the miss above, and its process may be about to
+                # run it: keep a valid entry, and only replace one that is not.
+                concurrent = _cached_checker(entry, expected)
+                if concurrent is not None:
+                    shutil.rmtree(staging, ignore_errors=True)
+                    return concurrent
                 shutil.rmtree(entry, ignore_errors=True)
             os.replace(staging, entry)
         except OSError as exc:

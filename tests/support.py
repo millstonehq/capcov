@@ -3,6 +3,7 @@ files and a real parse rather than against hand-built AST nodes."""
 
 from __future__ import annotations
 
+import shutil
 import tempfile
 from pathlib import Path
 
@@ -122,3 +123,24 @@ class Project:
 
     def __exit__(self, *exc: object) -> None:
         self.close()
+
+
+# What a setuptools build of the checkout reads: the project metadata and src/.
+BUILD_INPUTS = ("pyproject.toml", "MANIFEST.in", "README.md", "LICENSE", "capcov.toml",
+                "capcov.outcomes.json", "uv.lock")
+
+
+def build_tree(root: Path, into: Path) -> Path:
+    """Copy what building the package at ``root`` reads into ``into``; return ``into``.
+
+    A setuptools build writes ``build/`` and ``src/*.egg-info`` next to its sources.
+    Building a copy keeps those out of the checkout, where two builds at once (the
+    suite runs classes in parallel) would remove each other's files.
+    """
+    into.mkdir(parents=True, exist_ok=True)
+    for name in BUILD_INPUTS:
+        if (root / name).is_file():
+            shutil.copy2(root / name, into / name)
+    shutil.copytree(root / "src", into / "src",
+                    ignore=shutil.ignore_patterns("__pycache__", "*.egg-info"))
+    return into

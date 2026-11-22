@@ -486,6 +486,28 @@ class CompileProgramTests(unittest.TestCase):
                                          cache_dir=blocker)
         self.assertIn("cache directory is not usable", str(raised.exception))
 
+    def test_an_entry_a_concurrent_compile_installed_is_kept_not_replaced(self) -> None:
+        """Two processes miss the same key: the later one must not delete the binary the
+        earlier one installed, which that process may be running."""
+        first = self._compile()
+        installed = Path(first.binary_path)
+        inode = installed.stat().st_ino
+        real = compiled._cached_checker
+        lookups = []
+
+        def lookup(entry, expected):
+            # the first lookup misses, as it did before the other compile finished
+            lookups.append(entry)
+            return None if len(lookups) == 1 else real(entry, expected)
+
+        with patch.object(compiled, "_cached_checker", side_effect=lookup):
+            second = self._compile()
+        self.assertEqual(len(_FakeCompiler.calls), 4)
+        self.assertTrue(second.cache_hit)
+        self.assertEqual(second.binary_path, first.binary_path)
+        self.assertEqual(installed.stat().st_ino, inode)
+        self.assertEqual(sorted(p.name for p in self.cache_dir.iterdir()), [installed.parent.name])
+
     def test_a_failed_cache_write_leaves_no_partial_entry(self) -> None:
         """A simulated OSError mid-write: no ``compiled-*``, no ``.compiled-*`` residue."""
         with (patch.object(compiled.subprocess, "Popen", _FakeCompiler),
