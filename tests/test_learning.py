@@ -76,3 +76,18 @@ def test_statuses_are_orthogonal_and_missing_candidate_is_unknown():
         value.pop("candidate_observations")
     missing = evaluate_document({"operations": operations}, holdout_mod=2)
     assert missing["candidate_status_counts"]["unknown"] > 0
+
+
+def test_partial_candidate_report_preserves_missing_cell():
+    from capcov.learning import _split, evaluate_document
+
+    def sample(cell):
+        return {"cell": cell, "input": cell, "output": "observed"}
+
+    ops = {str(i): {"family": "f", "observations": [sample("a"), sample("b")]} for i in range(20)}
+    for name, op in ops.items():
+        if _split(name, 2, 0) == "holdout":
+            op["candidate_observations"] = [sample("a")]
+    result = evaluate_document({"operations": ops}, holdout_mod=2)
+    for row in result["results"]:
+        assert row["candidate_status"] == ("match" if row["cell"] == "a" else "unknown")

@@ -197,8 +197,12 @@ def evaluate_document(document: Any, *, holdout_mod: int = 5,
         if not isinstance(incumbent, list):
             results.append({"operation": operation, "status": "unknown", "reason": "missing incumbent"})
             continue
-        inc_rows = _observations(incumbent)
-        cand_rows = _observations(candidate) if isinstance(candidate, list) else []
+        try:
+            inc_rows = _observations(incumbent)
+            cand_rows = _observations(candidate) if isinstance(candidate, list) else []
+        except ValueError as error:
+            results.append({"operation": operation, "status": "unknown", "reason": str(error)})
+            continue
         cand_by_input: dict[str, list[str]] = defaultdict(list)
         for row in cand_rows:
             cand_by_input[row.operand].append(row.output)
@@ -221,7 +225,7 @@ def evaluate_document(document: Any, *, holdout_mod: int = 5,
                 candidate_sequence = tuple(cand_cells[cell]) if cell in cand_cells else None
                 applicable += 1
                 rule_status = "ambiguous" if relation["ambiguous"] else ("supported" if supported else "exception")
-                candidate_status = "unknown" if not isinstance(candidate, list) else ("match" if candidate_sequence == incumbent_sequence else "mismatch")
+                candidate_status = "unknown" if candidate_sequence is None else ("match" if candidate_sequence == incumbent_sequence else "mismatch")
                 results.append({"operation": operation, "family": family, "cell": cell,
                                 "incumbent": list(incumbent_sequence),
                                 "candidate": None if candidate_sequence is None else list(candidate_sequence),
