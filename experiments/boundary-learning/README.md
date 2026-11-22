@@ -38,7 +38,7 @@ PhpSpreadsheet 1.30.7 separately and pipe the same rules into its public API.
     php date_observations.php | python3 prefix_rules.py | php transfer_sheet.php /path/to/vendor/autoload.php
 
 The transfer preserves each supporting operand and the missing-operand probe.
-For cell value 45000.5 and mask prefix yyyy it is intended to yield 96 oracle
+For cell value 45000.5 and mask prefix yyyy the pinned run produced 96 oracle
 observations.
 Of the 95 single-character suffixes, 92 yield the year followed by the suffix.
 The three exceptions are double quote, at sign and underscore. The terminal
