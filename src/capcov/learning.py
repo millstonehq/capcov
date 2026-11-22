@@ -210,9 +210,10 @@ def evaluate_document(document: Any, *, holdout_mod: int = 5,
             for row in incumbent:
                 if isinstance(row, dict) and isinstance(row.get("cell"), str):
                     inc_cells[row["cell"]].append(str(row.get("output", "")))
-            for row in candidate:
-                if isinstance(row, dict) and isinstance(row.get("cell"), str):
-                    cand_cells[row["cell"]].append(str(row.get("output", "")))
+            if isinstance(candidate, list):
+                for row in candidate:
+                    if isinstance(row, dict) and isinstance(row.get("cell"), str):
+                        cand_cells[row["cell"]].append(str(row.get("output", "")))
             for cell in sorted(set(inc_cells) & set(relations_by_family.get(family, {}))):
                 relation = relations_by_family[family][cell]
                 incumbent_sequence = tuple(inc_cells[cell])
