@@ -15,12 +15,33 @@ jq '.search | {inventions, synthetic_tasks: .recognition_policy.synthetic_tasks,
                baseline: .evaluation.baseline, assisted: .evaluation.assisted}' receipt.json
 ```
 
-| Stage | What happens in this example | Evidence in the receipt |
-| --- | --- | --- |
-| Wake | Enumerate Boolean expressions against each sibling's observations. Keep one representative per distinct vector of outputs on that task. | `search.wake` contains the 20 search results. |
-| Invent | Find recurring expression trees up to variable renaming. Replace occurrences with calls if the rewritten programs plus the definition are smaller. | `search.inventions` records `invented_000(p0,p1,p2) = p0 OR (p1 AND p2)`, with 13 supporting tasks and a net saving of one size unit. |
-| Dream and learn a ranking | Sample 96 programs from the expanded grammar, execute them on small Boolean truth tables, and record each task's features and outermost operator. Similarity to these and the solved sibling tasks supplies votes for which operators to try first at a given cost. | `search.recognition_policy` contains the synthetic task count and labeled feature vectors. |
-| Use the learned language | Give the fresh target its full known contract. The original search builds the expression from primitives. The assisted search can also compose calls to the new function. Here the learned argument suffixes uniquely identify the target fields, making the bound call available at cost one. | `search.evaluation.assisted.program` has `op: "call"` and `name: "invented_000"`. The baseline AST has an `or` above an `and`. |
+### Follow one invocation through the Python code
+
+The caller supplies the measurement. For example, a test adapter could invoke a validator and project its errors to one Boolean, “did the required-field error occur?” In this public fixture the measurements are already in JSON. Running `reason run` reads them from disk. There is no application execution or LLM call during this search.
+
+**1. Read the answer column and try expressions.** For sibling `a`, the eight rows have these columns (read each string left to right, one character per row):
+
+```text
+a_guard     01010101
+a_right     00110011
+a_left      00001111
+want        01010111
+```
+
+`run_search` calls `boolean_search.search` with those rows and an empty library. Each column becomes a bit mask. Trying `a_guard` alone gives the wrong seventh answer. Trying `a_right AND a_left` gives `00000011`. OR that with `a_guard` and the result is `01010111`: all eight answers match. The enumerator reaches that expression on attempt 185 and saves its tree in `search.wake`. The target's answers play no part in this step.
+
+**2. Turn repeated trees into a callable definition.** The same search on sibling `b` saves `b_guard OR (b_right AND b_left)`. In `learn_library`, Capcov walks the trees and substitutes positional parameters for field names. The two trees now have the same representation. Thirteen of the twenty solutions match this shape; the other seven fit a simpler two-field OR. Capcov tries rewriting each of the thirteen matches as a call. Under its size function the original corpus costs 172 units. Each replacement saves one unit, the function body costs ten, and declaring it costs two. The new total is 171, so Capcov keeps the definition. Its library entry stores both the body and the suffixes that repeatedly filled its parameters:
+
+```text
+invented_000(p0, p1, p2) = p0 OR (p1 AND p2)
+p0 → guard      p1 → right      p2 → left
+```
+
+**3. Learn an ordering for later guesses.** In `recognition.sleep`, Capcov generates small programs using the primitive operators and the new function. For each program it creates its own examples by executing it across every Boolean assignment to two, three, or four inputs. It knows which operator produced each synthetic table because it constructed the program. It stores that label with a few measurements, such as the fraction of true answers and how often flipping an input changes an answer from false to true. At search time, similar tables vote for which operator to try first among expressions of equal cost. This changes the order of guesses. Every guess still has to match the target answers.
+
+**4. Try the function on an unseen operation.** For the fresh target, the assisted enumerator tries the three individual fields and the constants false and true. Those five guesses fail. The library's suffixes match exactly one target field apiece, so guess six is `invented_000(target_guard, target_right, target_left)`. Capcov executes the saved body on the target's columns and compares the result with all eight target answers. They match. Here the learned call succeeds before the operator ranking is needed. With the original grammar, the target search has to assemble the AND and OR again.
+
+The reported program is one Boolean predicate over the caller's features. For partially specified behavior, a separate step can take a caller-supplied reachable input, append the **opposite** of the fitted prediction as a temporary constraint, and run search again. If a second program fits, both satisfy every original answer; executing the distinguishing request or resolving product intent is now worthwhile. This particular eight-row fixture exhausts its three-Boolean domain and has no proposed probes.
 
 **Which mechanism helped here?** With the fixture's bounds and example order, the primitive search took 185 attempts. Applying the learned ranking to primitives took 116. Giving the search the learned library took six attempts with either ranking: the bound call already fit before the enumerator needed to rank larger expressions. All four runs produced the same answers on the known cases. The example demonstrates transfer of a new instruction. Its attempt counts measure search work on this fixture, not port quality. [Enumerator](../src/capcov/boolean_search.py) · [Recognition policy](../src/capcov/recognition.py) · [End-to-end example test](../tests/test_search_examples.py)
 

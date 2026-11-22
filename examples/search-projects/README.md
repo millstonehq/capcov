@@ -25,7 +25,7 @@ implementations disagree on the reachable `nbsp` input, so the next action is
 an intent decision. The seat case has a confirmed owner decision and no Go
 observation. It therefore emits a binding contract and asks the orchestrator
 to replay Go. The invention example has no intent packet and demonstrates the
-library-learning path alone. Its sibling truth tables all implement
+library-learning path alone. Thirteen sibling solutions implement
 `guard OR (left AND right)`. The run invents a reusable three-argument
 definition and solves the target with a `call` to that definition. The
 baseline remains the expanded expression, so the receipt makes the learned
