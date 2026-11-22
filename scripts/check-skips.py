@@ -355,7 +355,7 @@ def run_class(tests: list[unittest.TestCase]) -> dict:
     stream = io.StringIO()
     result = unittest.TextTestRunner(stream=stream, verbosity=1, resultclass=TimedResult).run(
         unittest.TestSuite(tests))
-    errors = [[flavour, result.getDescription(test), text]
+    errors = [[flavour, test.id(), text]
               for flavour, listed in (("ERROR", result.errors), ("FAIL", result.failures))
               for test, text in listed]
     return {
