@@ -95,7 +95,7 @@ def learn_document(document: Any, *, max_prefix: int = 64) -> dict[str, Any]:
     if not isinstance(operations, dict):
         raise ValueError("operations must be an object")
     learned: list[dict[str, Any]] = []
-    family_cells: dict[str, dict[str, dict[str, list[str]]]] = defaultdict(dict)
+    family_cells: dict[str, dict[str, dict[str, tuple[str, ...]]]] = defaultdict(dict)
     for operation in sorted(operations):
         value = operations[operation]
         source = None
@@ -103,15 +103,15 @@ def learn_document(document: Any, *, max_prefix: int = 64) -> dict[str, Any]:
             source = value.get("source")
             family = value.get("family")
             raw_value = value.get("observations")
-            if isinstance(family, str) and isinstance(raw_value, list):
-                cells: dict[str, list[str]] = defaultdict(list)
-                for row in raw_value:
-                    if isinstance(row, dict) and isinstance(row.get("cell"), str):
-                        cells[row["cell"]].append(str(row.get("output", "")))
-                family_cells[family][operation] = dict(cells)
             value = raw_value
         try:
             rows = _observations(value, source)
+            if isinstance(family, str):
+                cells: dict[str, list[str]] = defaultdict(list)
+                for row in value:
+                    if isinstance(row, dict) and isinstance(row.get("cell"), str):
+                        cells[row["cell"]].append(str(row.get("output", "")))
+                family_cells[family][operation] = {cell: tuple(outputs) for cell, outputs in cells.items()}
             rules = mine(rows, max_prefix=max_prefix)
             learned.append({"operation": operation, "status": "learned", "rules": rules,
                             "observation_count": len(rows)})
@@ -120,22 +120,24 @@ def learn_document(document: Any, *, max_prefix: int = 64) -> dict[str, Any]:
                             "reason": str(error), "rules": []})
     relations: list[dict[str, Any]] = []
     for family in sorted(family_cells):
-        members = family_cells[family]
-        names = sorted(members)
-        for left_index, left in enumerate(names):
-            for right in names[left_index + 1 :]:
-                common = sorted(set(members[left]) & set(members[right]))
-                equal = [cell for cell in common if members[left][cell] == members[right][cell]]
-                if len(equal) >= 2:
-                    relations.append({
-                        "family": family,
-                        "rule": "sibling operations preserve named cell output sequences",
-                        "operations": [left, right],
-                        "cells": equal,
-                        "observed": {left: {cell: members[left][cell] for cell in equal},
-                                     right: {cell: members[right][cell] for cell in equal}},
-                        "validation": "incumbent-only; candidate comparison required",
-                    })
+        by_cell: dict[str, dict[tuple[str, ...], list[str]]] = defaultdict(lambda: defaultdict(list))
+        for operation, cells in family_cells[family].items():
+            for cell, sequence in cells.items():
+                by_cell[cell][sequence].append(operation)
+        for cell in sorted(by_cell):
+            supports = by_cell[cell]
+            ordered = sorted(supports.items(), key=lambda item: (item[0], item[1]))
+            if sum(len(ops) for _, ops in ordered) < 2:
+                continue
+            relations.append({
+                "family": family,
+                "rule": "sibling operations preserve named cell output sequences",
+                "cell": cell,
+                "consensus": ordered[0][0] if len(ordered) == 1 else None,
+                "ambiguous": len(ordered) > 1,
+                "support": [{"sequence": sequence, "operations": sorted(ops)} for sequence, ops in ordered],
+                "validation": "incumbent-only; candidate comparison required",
+            })
     return {"schema": "capcov/behavioral-learning/v1", "operations": learned,
             "relations": relations}
 
@@ -178,6 +180,9 @@ def evaluate_document(document: Any, *, holdout_mod: int = 5,
     for item in learned["operations"]:
         for rule in item["rules"]:
             rules_by_prefix[rule["prefix"]].append(rule)
+    relations_by_family: dict[str, dict[str, dict[str, Any]]] = defaultdict(dict)
+    for relation in learned["relations"]:
+        relations_by_family[relation["family"]][relation["cell"]] = relation
     results: list[dict[str, Any]] = []
     for operation in sorted(heldout):
         value = heldout[operation]
@@ -193,6 +198,34 @@ def evaluate_document(document: Any, *, holdout_mod: int = 5,
         cand_rows = _observations(candidate)
         cand_by_input = {row.operand: row.output for row in cand_rows}
         applicable = 0
+        family = value.get("family")
+        if isinstance(family, str):
+            inc_cells: dict[str, list[str]] = defaultdict(list)
+            cand_cells: dict[str, list[str]] = defaultdict(list)
+            for row in incumbent:
+                if isinstance(row, dict) and isinstance(row.get("cell"), str):
+                    inc_cells[row["cell"]].append(str(row.get("output", "")))
+            for row in candidate:
+                if isinstance(row, dict) and isinstance(row.get("cell"), str):
+                    cand_cells[row["cell"]].append(str(row.get("output", "")))
+            for cell in sorted(set(inc_cells) & set(relations_by_family.get(family, {}))):
+                relation = relations_by_family[family][cell]
+                incumbent_sequence = tuple(inc_cells[cell])
+                supported = any(item["sequence"] == incumbent_sequence for item in relation["support"])
+                candidate_sequence = tuple(cand_cells[cell]) if cell in cand_cells else None
+                applicable += 1
+                if not supported:
+                    status = "incumbent_exception"
+                elif candidate_sequence is None:
+                    status = "unknown"
+                elif candidate_sequence != incumbent_sequence:
+                    status = "candidate_mismatch"
+                else:
+                    status = "pass"
+                results.append({"operation": operation, "family": family, "cell": cell,
+                                "incumbent": list(incumbent_sequence),
+                                "candidate": None if candidate_sequence is None else list(candidate_sequence),
+                                "status": status, "rule_ambiguous": relation["ambiguous"]})
         for row in inc_rows:
             rules = rules_by_prefix.get(row.operand[:-1], []) if len(row.operand) > 1 else []
             if not any(row.operand in rule["support"] for rule in rules):
