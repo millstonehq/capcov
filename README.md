@@ -267,6 +267,33 @@ supply passing runtime evidence or inferred CRUD coverage.
 
 ## Contributing
 
+## Behavioral rule mining
+
+`capcov learn` mines bounded, source-linked rules from observations that already
+exist in a capability or replay artifact. It is useful for turning repeated
+incumbent behavior into explicit probes and for comparing a candidate against
+the incumbent across held-out operations.
+
+```sh
+capcov learn observations.json --out behavioral-learning.json
+capcov learn evaluate observations.json --holdout-mod 5 --out evaluation.json
+```
+
+For example, observations `!a -> a` and `!b -> b` produce a rule whose shared
+prefix is `!`, whose two supporting suffixes are `a` and `b`, and whose proposed
+probe is the unobserved input `!`. An observed `!c -> different` is retained as
+an exception. The evaluator keeps training and holdout operations disjoint,
+reports rule support separately from candidate match or mismatch, and retains
+`unknown` when the candidate has no observation. It never executes source or
+turns an unobserved result into a pass.
+
+The output is evidence for selecting the next check. It is not a behavioral
+proof or a product requirement. Use an independent oracle or an accepted
+contract before promoting a mined rule to an assertion.
+
+See [the behavioral-learning guide](docs/behavioral-learning.md) and the
+[verification-triage skill](skills/verification-triage/SKILL.md).
+
 See [CONTRIBUTING.md](https://github.com/millstonehq/capcov/blob/main/CONTRIBUTING.md).
 Tests use synthetic fixtures only: no private source, real data or credentials.
 

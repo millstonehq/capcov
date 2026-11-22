@@ -691,7 +691,10 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser(
         "capabilities", help="reconcile specified, implemented and exercised capabilities"
     )
-    sub.add_parser("learn", help="mine bounded behavioral rules from incumbent observations")
+    sub.add_parser(
+        "learn",
+        help="mine bounded behavioral rules; evaluate candidates on held-out operations",
+    )
     sub.add_parser("faults", help="judge a recorded fault-injection run against the invariant pack")
 
     def common(p: argparse.ArgumentParser) -> None:

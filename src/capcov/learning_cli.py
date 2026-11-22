@@ -9,7 +9,11 @@ import json
 
 def main(argv: list[str] | None = None) -> int:
     if argv and argv[0] == "evaluate":
-        parser = argparse.ArgumentParser(prog="capcov learn evaluate")
+        parser = argparse.ArgumentParser(
+            prog="capcov learn evaluate",
+            description="Compare mined incumbent rules with candidate observations on a held-out operation split.",
+            epilog="Missing candidate observations remain unknown; this command does not establish behavioral correctness.",
+        )
         parser.add_argument("input", type=Path)
         parser.add_argument("--out", type=Path, default=Path("behavioral-learning-evaluation.json"))
         parser.add_argument("--holdout-mod", type=int, default=5)
@@ -22,7 +26,11 @@ def main(argv: list[str] | None = None) -> int:
                                    max_results=args.max_results)
         args.out.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
         return 0
-    parser = argparse.ArgumentParser(prog="capcov learn")
+    parser = argparse.ArgumentParser(
+        prog="capcov learn",
+        description="Mine bounded constant-prefix behavioral rules from incumbent observations.",
+        epilog="Use 'capcov learn evaluate' for a held-out candidate comparison. Mined rules are evidence, not requirements.",
+    )
     parser.add_argument("input", type=Path, help="JSON operation map with incumbent observations")
     parser.add_argument("--out", type=Path, default=Path("behavioral-learning.json"))
     parser.add_argument("--max-prefix", type=int, default=64)
