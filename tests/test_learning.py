@@ -1,6 +1,6 @@
 import json
 
-from capcov.learning import learn_document, mine
+from capcov.learning import evaluate_document, learn_document, mine
 
 
 def test_mine_retains_exception_and_missing_probe():
@@ -28,3 +28,15 @@ def test_inventory_emits_family_relation_and_unresolved():
     assert result["relations"][0]["cells"] == ["missing", "ok"]
     assert result["operations"][-1]["status"] == "unresolved"
     json.dumps(result)
+
+
+def test_evaluator_does_not_leak_holdout_and_classifies_mismatch():
+    operations = {}
+    for index in range(10):
+        operation = f"op-{index}"
+        operations[operation] = {"observations": [["!a", "a"], ["!b", "b"]],
+                                 "candidate_observations": [["!a", "a"], ["!b", "WRONG"]]}
+    result = evaluate_document({"operations": operations}, holdout_mod=2, holdout_value=0)
+    assert set(result["split"]["training_operations"]).isdisjoint(result["split"]["holdout_operations"])
+    assert result["counts"]["candidate_mismatch"] > 0
+    assert all(r["operation"] in result["split"]["holdout_operations"] for r in result["results"])

@@ -13,6 +13,7 @@ from dataclasses import dataclass
 import json
 from pathlib import Path
 from typing import Any, Iterable
+import hashlib
 
 
 @dataclass(frozen=True)
@@ -143,3 +144,77 @@ def run(input_path: Path, output_path: Path, *, max_prefix: int = 64) -> None:
     document = json.loads(input_path.read_text())
     output_path.write_text(json.dumps(learn_document(document, max_prefix=max_prefix),
                                       indent=2, sort_keys=True) + "\n")
+
+
+def _split(operation: str, holdout_mod: int, holdout_value: int) -> str:
+    digest = hashlib.sha256(operation.encode()).digest()
+    return "holdout" if int.from_bytes(digest[:8], "big") % holdout_mod == holdout_value else "train"
+
+
+def evaluate_document(document: Any, *, holdout_mod: int = 5,
+                      holdout_value: int = 0, max_prefix: int = 64) -> dict[str, Any]:
+    """Train on one deterministic operation partition and compare held-out cells.
+
+    Each operation may provide ``candidate_observations`` alongside incumbent
+    ``observations``.  The evaluator never learns from holdout rows. A result
+    is ``unknown`` when either side is absent, ``incumbent_exception`` when the
+    incumbent disagrees with an applicable learned rule, ``candidate_mismatch``
+    when incumbent and candidate differ, and ``pass`` when they agree.
+    """
+    if not isinstance(document, dict) or not isinstance(document.get("operations"), dict):
+        raise ValueError("input must contain an operations object")
+    if holdout_mod < 2 or not 0 <= holdout_value < holdout_mod:
+        raise ValueError("holdout requires mod >= 2 and 0 <= value < mod")
+    operations = document["operations"]
+    training: dict[str, Any] = {}
+    heldout: dict[str, Any] = {}
+    for operation, value in operations.items():
+        (heldout if _split(operation, holdout_mod, holdout_value) == "holdout" else training)[operation] = value
+    learned = learn_document({"operations": training}, max_prefix=max_prefix)
+    rules_by_prefix: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for item in learned["operations"]:
+        for rule in item["rules"]:
+            rules_by_prefix[rule["prefix"]].append(rule)
+    results: list[dict[str, Any]] = []
+    for operation in sorted(heldout):
+        value = heldout[operation]
+        if not isinstance(value, dict):
+            results.append({"operation": operation, "status": "unknown", "reason": "invalid operation"})
+            continue
+        incumbent = value.get("observations")
+        candidate = value.get("candidate_observations")
+        if not isinstance(incumbent, list) or not isinstance(candidate, list):
+            results.append({"operation": operation, "status": "unknown", "reason": "missing incumbent or candidate"})
+            continue
+        inc_rows = _observations(incumbent)
+        cand_rows = _observations(candidate)
+        cand_by_input = {row.operand: row.output for row in cand_rows}
+        applicable = 0
+        for row in inc_rows:
+            rules = rules_by_prefix.get(row.operand[:-1], []) if len(row.operand) > 1 else []
+            if not any(row.operand in rule["support"] for rule in rules):
+                continue
+            applicable += 1
+            candidate_output = cand_by_input.get(row.operand)
+            if row.output != row.operand[-1]:
+                status = "incumbent_exception"
+            elif candidate_output is None:
+                status = "unknown"
+            elif candidate_output != row.output:
+                status = "candidate_mismatch"
+            else:
+                status = "pass"
+            results.append({"operation": operation, "input": row.operand,
+                            "incumbent": row.output, "candidate": candidate_output,
+                            "status": status})
+        if not applicable:
+            results.append({"operation": operation, "status": "unknown",
+                            "reason": "no learned rule applies"})
+    counts: dict[str, int] = defaultdict(int)
+    for result in results:
+        counts[result["status"]] += 1
+    return {"schema": "capcov/behavioral-learning-evaluation/v1",
+            "split": {"holdout_mod": holdout_mod, "holdout_value": holdout_value,
+                      "training_operations": sorted(training), "holdout_operations": sorted(heldout)},
+            "counts": dict(sorted(counts.items())), "results": results,
+            "training": learned}
