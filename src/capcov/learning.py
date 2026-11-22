@@ -50,7 +50,7 @@ def mine(observations: Iterable[Observation], *, max_prefix: int = 64) -> list[d
     Duplicate observations do not increase support.  Rules are scoped to this
     operation by the caller.
     """
-    rows = list(observations)
+    rows = [row if isinstance(row, Observation) else Observation(*row) for row in observations]
     by_input: dict[str, set[str]] = defaultdict(set)
     for row in rows:
         by_input[row.operand].add(row.output)
