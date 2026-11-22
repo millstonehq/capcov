@@ -1,6 +1,6 @@
 ---
 name: capcov-vectors
-description: Prove a rebuild with boundary vectors — record what an incumbent system does at its edge, replay the same inputs against a candidate from the same state, and roll the difference up. Use when measuring how completely a rewrite reproduces an existing system, or when building a consumer of capcov.vectors.
+description: Prove a rebuild with boundary vectors — record what an incumbent system does at its edge, replay the same inputs against a candidate from the same state, and roll the difference up. Use when measuring how completely a rewrite reproduces an existing system, or when building a consumer of capcov.vectors, or replaying a distinguishing input proposed by Capcov synthesis.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
@@ -13,6 +13,10 @@ behaviour once, replay the same inputs against the candidate from the same
 starting state, and compare. `capcov.vectors` is the
 system-agnostic engine; a consumer supplies only its own operations, fixture and
 inputs.
+
+## Replaying a synthesized disagreement
+
+When two fitting programs predict different outputs, `capcov reason next --operation ID --project capcov.search.json --json` can return an `observe_disagreement` action. Translate its projected input to a reachable operation fixture, replay both implementations from matching initial state, and attach their observed outcomes to the intent packet. An accepted product rule supplies the expectation when it departs from the incumbent. [Verification triage](../verification-triage/SKILL.md) · [Synthesis workflow](../../docs/behavioral-synthesis.md)
 
 ## The design, fixed by the engine (do not work around these)
 

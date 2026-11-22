@@ -1,0 +1,21 @@
+{
+  "schema": "capcov/search-project/v1",
+  "operations": [
+    {
+      "id": "seat-allocation",
+      "revision": "synthetic-seat-v1",
+      "siblings": [],
+      "target": {
+        "id": "seat-write-on-exhaustion",
+        "examples": [{"input": {"exhausted": false}, "output": false}],
+        "reachable_inputs": [{"id": "exhausted", "input": {"exhausted": true}}]
+      },
+      "bounds": {"max_terms": 1000, "max_cost": 4, "max_probes": 4},
+      "intent": {
+        "packet": {"schema": "capcov/intent-packet/v1", "packet_id": "seat-intent", "question": "May allocation write when seats are exhausted?", "evidence": [{"id": "owner-seat", "kind": "owner_decision", "status": "confirmed", "revision": "synthetic-owner-revision", "path": "decisions.md:1"}], "cases": [{"id": "exhausted", "input": {"exhausted": true}}], "alternatives": [{"id": "refuse", "condition": "pool exhausted"}, {"id": "activate", "condition": "pool exhausted"}]},
+        "recommendation": {"source_ids": ["owner-seat"], "selected_rule": "refuse", "rationale": "The confirmed decision forbids writes.", "discriminating_cases": ["exhausted"], "uncertainty": ["candidate not replayed"]},
+        "accepted": {"accepted": true, "packet_schema": "capcov/intent-packet/v1", "packet_id": "seat-intent", "authority": "synthetic-owner", "source_ids": ["owner-seat"], "intended_outputs": {"exhausted": false}}
+      }
+    }
+  ]
+}

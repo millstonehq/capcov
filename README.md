@@ -265,6 +265,17 @@ Evidence through the plugin seam. It adds packaged JavaScript application and HA
 API candidates with provenance and unresolved findings. Imported findings never
 supply passing runtime evidence or inferred CRUD coverage.
 
+## DreamCoder-style program search (experimental)
+
+Capcov can learn a new instruction for its own program search. In the runnable example, it starts with Boolean operators and input/output observations for 20 sibling tasks. Several solutions contain the same expression under different field names. Capcov replaces that expression with a function and adds the function to the search language. On a fresh target, the two searches produce these programs (argument names shortened):
+
+```text
+Original language:  guard OR (right AND left)
+Learned language:   invented_000(guard, right, left)
+```
+
+Both pass the target's known examples. The evidence of learning is the new callable definition: it came from sibling solutions, and the target search actually chose it. Capcov also samples programs from the expanded language and uses the resulting synthetic tasks to learn which operators to try early. These two mechanisms motivate the term *DreamCoder-style*. The fork implements one bounded wake/sleep cycle over Boolean programs with a non-neural search policy. [Worked trace, comparison with DreamCoder, and reproduction command](docs/behavioral-synthesis.md#what-makes-this-dreamcoder-style)
+
 ## Contributing
 
 See [CONTRIBUTING.md](https://github.com/millstonehq/capcov/blob/main/CONTRIBUTING.md).
