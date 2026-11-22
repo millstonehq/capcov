@@ -152,7 +152,8 @@ def _split(operation: str, holdout_mod: int, holdout_value: int) -> str:
 
 
 def evaluate_document(document: Any, *, holdout_mod: int = 5,
-                      holdout_value: int = 0, max_prefix: int = 64) -> dict[str, Any]:
+                      holdout_value: int = 0, max_prefix: int = 64,
+                      max_results: int = 10000) -> dict[str, Any]:
     """Train on one deterministic operation partition and compare held-out cells.
 
     Each operation may provide ``candidate_observations`` alongside incumbent
@@ -165,6 +166,8 @@ def evaluate_document(document: Any, *, holdout_mod: int = 5,
         raise ValueError("input must contain an operations object")
     if holdout_mod < 2 or not 0 <= holdout_value < holdout_mod:
         raise ValueError("holdout requires mod >= 2 and 0 <= value < mod")
+    if max_results < 1:
+        raise ValueError("max_results must be positive")
     operations = document["operations"]
     training: dict[str, Any] = {}
     heldout: dict[str, Any] = {}
@@ -216,5 +219,6 @@ def evaluate_document(document: Any, *, holdout_mod: int = 5,
     return {"schema": "capcov/behavioral-learning-evaluation/v1",
             "split": {"holdout_mod": holdout_mod, "holdout_value": holdout_value,
                       "training_operations": sorted(training), "holdout_operations": sorted(heldout)},
-            "counts": dict(sorted(counts.items())), "results": results,
+            "counts": dict(sorted(counts.items())), "results": results[:max_results],
+            "results_truncated": len(results) > max_results,
             "training": learned}
