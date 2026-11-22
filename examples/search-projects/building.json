@@ -1,0 +1,30 @@
+{
+  "schema": "capcov/search-project/v1",
+  "operations": [
+    {
+      "id": "building-capacity",
+      "revision": "synthetic-building-v1",
+      "siblings": [
+        {"id": "name-a", "examples": [{"input": {"empty": true, "null": false, "blank": false, "present": false}, "output": true}, {"input": {"empty": false, "null": false, "blank": false, "present": true}, "output": false}]},
+        {"id": "name-b", "examples": [{"input": {"empty": false, "null": true, "blank": false, "present": false}, "output": true}, {"input": {"empty": false, "null": false, "blank": false, "present": true}, "output": false}]}
+      ],
+      "target": {
+        "id": "nested-building-capacity",
+        "examples": [
+          {"input": {"required": true, "empty": true, "null": false, "blank": false, "present": false}, "output": true},
+          {"input": {"required": true, "empty": false, "null": false, "blank": false, "present": true}, "output": false},
+          {"input": {"required": false, "empty": true, "null": false, "blank": false, "present": false}, "output": false}
+        ],
+        "reachable_inputs": [
+          {"id": "ordinary-present", "input": {"required": true, "empty": false, "null": false, "blank": false, "present": true}},
+          {"id": "nbsp", "input": {"required": true, "empty": false, "null": false, "blank": true, "present": false}}
+        ]
+      },
+      "bounds": {"max_terms": 10000, "max_cost": 6, "max_probes": 8},
+      "intent": {
+        "packet": {"schema": "capcov/intent-packet/v1", "packet_id": "building-capacity-intent", "question": "Should a supplied NBSP-only capacity be malformed or missing?", "evidence": [{"id": "us09", "kind": "product_requirement", "status": "draft", "revision": "synthetic", "path": "prd:US-09"}, {"id": "php", "kind": "incumbent_observation", "status": "observed", "revision": "synthetic", "path": "php:validator"}], "cases": [{"id": "nbsp", "input": {"required": true, "blank": true}, "php_output": "format"}], "alternatives": [{"id": "format", "condition": "supplied but not numeric"}, {"id": "missing", "condition": "blank-like"}]},
+        "recommendation": {"source_ids": ["us09", "php"], "selected_rule": "format", "rationale": "The field is supplied but cannot represent a numeric capacity.", "discriminating_cases": ["nbsp"], "uncertainty": ["raw whitespace is not specified"]}
+      }
+    }
+  ]
+}

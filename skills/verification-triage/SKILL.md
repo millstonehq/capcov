@@ -1,11 +1,21 @@
 ---
 name: verification-triage
-description: Use when clean-room reimplementing a system with a coverage tool (capcov) and deciding how to map its capabilities and prove the rebuild actually works — under time pressure, when a green gate tempts you to declare "done", when a state-mutating or auth path needs proving, or when you are about to wait on CI instead of iterating locally. Symptoms — "is the gate green enough to ship", "did I verify it or only map it", "how do I keep iteration fast", clean-room rebuild, differential/mutation testing, false green, capcov.toml, deep entity extraction, four-cell diff.
+description: Use when clean-room reimplementing a system with a coverage tool (capcov) and deciding how to map its capabilities and prove the rebuild actually works — under time pressure, when a green gate tempts you to declare "done", when a state-mutating or auth path needs proving, or when you are about to wait on CI instead of iterating locally. Symptoms — "is the gate green enough to ship", "did I verify it or only map it", "how do I keep iteration fast", clean-room rebuild, differential/mutation testing, false green, capcov.toml, deep entity extraction, four-cell diff, DreamCoder-style synthesis, sibling workflow rule invention, and competing port behaviors.
 ---
 
 # Verification Triage
 
 Bare-minimum, brutally pragmatic methodology to map a system's capabilities and prove a clean-room rebuild works. Grounded in capcov's real machinery, not a parallel theory. It is deliberately NOT formal verification.
+
+## When several implementations fit the known behavior
+
+Use the operation-scoped DreamCoder-style search when sibling workflows have Boolean examples and the target rule is open. Give the target every known acceptance case. Keep the target and its aliases out of sibling library invention.
+
+1. Run `capcov reason next --project capcov.search.json --operation ID --json`. Dispatch the returned `next_action`. For `run_synthesis`, execute its argv and retain the receipt.
+2. Inspect `search.inventions` and `search.evaluation.assisted.program` to see whether the target used a learned call. The wake search solves siblings, compression invents functions, and synthetic sleep tasks train an ordering for later search. Compare the fitted baseline and its stopping reason.
+3. For `observe_disagreement`, replay the supplied witness. For `request_expert_review`, give the evidence packet to a business-context reviewer. For `resolve_product_intent`, record the scoped authority before adding an expected output. For `replay_candidate`, collect actual candidate observations at the declared revision. A fit or exhausted bound alone gives no replay credit.
+
+Try `capcov reason run --project examples/search-projects/invention.json --operation invention-demo --json` from the checkout. [Worked trace and project format](../../docs/behavioral-synthesis.md)
 
 ## Quasi-formality and breadth-first work selection
 

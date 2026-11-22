@@ -651,6 +651,19 @@ def cmd_report(args: argparse.Namespace) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     actual = sys.argv[1:] if argv is None else argv
+    if actual and actual[0] == "reason":
+        from .operations.search_workflow import main as reason_main
+
+        return reason_main(actual[1:])
+    if actual and actual[0] == "synthesize":
+        from .synthesis_cli import main as synthesis_main
+        return synthesis_main(actual[1:])
+    if actual and actual[0] == "synthesize-batch":
+        from .synthesis_batch import main as batch_main
+        return batch_main(actual[1:])
+    if actual and actual[0] == "intent":
+        from .intent import main as intent_main
+        return intent_main(actual[1:])
     if actual and actual[0] == "outcomes":
         from .outcomes import main as outcomes_main
 
@@ -681,6 +694,10 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="capcov", description=__doc__)
     parser.add_argument("--quiet", action="store_true")
     sub = parser.add_subparsers(dest="cmd", required=True)
+    sub.add_parser("reason", help="DreamCoder-style search for agents (reason next/run)")
+    sub.add_parser("synthesize", help="invent Boolean functions from siblings and fit or challenge a full contract")
+    sub.add_parser("synthesize-batch", help="summarize bounded observation-only family synthesis inputs")
+    sub.add_parser("intent", help="prepare and adjudicate offline intent evidence packets")
     sub.add_parser("flows", help="source obligations, flow planning, and browser outcome evidence")
     sub.add_parser("outcomes", help="scoped behavior obligations and fresh pytest evidence")
     sub.add_parser("features", help="FODA feature-model validation, configuration check, coverage rollup")
