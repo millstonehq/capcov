@@ -21,3 +21,15 @@ must belong to one operation and environment per invocation.
 This is a deterministic, single-rule-family induction experiment. The
 rule family and the empty-operand strategy are hand-selected. Output is a
 hypothesis for differential testing and confers no Capcov qualification.
+
+To transfer the discovered inputs to a spreadsheet date mask, install
+PhpSpreadsheet 1.30.7 separately and pipe the same rules into its public API.
+
+    php date_observations.php | python3 prefix_rules.py | php transfer_sheet.php /path/to/vendor/autoload.php
+
+The transfer preserves each supporting operand and the missing-operand probe.
+For cell value 45000.5 and mask prefix yyyy it yields 96 oracle observations.
+Of the 95 single-character suffixes, 92 yield the year followed by the suffix.
+The three exceptions are double quote, at sign and underscore. The terminal
+escape yields the year alone. Compare candidate implementations against these
+observations, including the exceptions.
