@@ -9,6 +9,13 @@ Bare-minimum, brutally pragmatic methodology to map a system's capabilities and 
 
 ## Quasi-formality and breadth-first work selection
 
+For an observation-only rule-mining pass, use `capcov learn` after incumbent
+observations exist. It mines repeated behavior and proposes probes. Use
+`capcov learn evaluate` when candidate observations are available. Keep its
+rule status and candidate status separate, preserve `unknown` for missing
+candidate cells, and send proposed probes to an independent fixture or oracle.
+Mined behavior is evidence for the next check, not an accepted requirement.
+
 Quasi-formality means fast, executable, falsifiable claims that catch meaningful
 classes of bugs, with explicit limits. Optimize confidence gained per unit of work
 across the system; do not pursue exhaustive proof of one pilot while other
