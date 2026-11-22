@@ -316,7 +316,10 @@ def parse_jobs(text: str, source: str) -> int:
 
 def default_jobs() -> int:
     text = os.environ.get(JOBS_ENV, "").strip()
-    return parse_jobs(text, f"${JOBS_ENV}") if text else os.cpu_count() or 1
+    if text:
+        return parse_jobs(text, f"${JOBS_ENV}")
+    # The CPUs this process may run on (Python 3.13+), else all of them.
+    return getattr(os, "process_cpu_count", os.cpu_count)() or 1
 
 
 def suite_digest(test_ids: list[str]) -> str:
